@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Investor extends Model
 {
     //
-    protected $fillable = ['user_id', 'orginization', 'linkedin_url'];
-    public function user(){
+    protected $fillable = ['user_id', 'organization'];  
+    public function user(){ 
         return $this->belongsTo(User::class);
     }
+
 
 }

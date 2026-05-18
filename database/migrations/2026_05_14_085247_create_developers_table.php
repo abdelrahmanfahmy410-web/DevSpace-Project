@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('portfolio_url')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('specialization_id')->constrained('specializations')->onDelete('cascade');
+            $table->foreignId('specialization_id')->constrained()->onDelete('cascade');
 
 
         });

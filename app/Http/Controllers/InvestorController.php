@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Investor;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class InvestorController extends Controller
 {
@@ -20,7 +22,7 @@ class InvestorController extends Controller
      */
     public function create()
     {
-        //
+        return view('investor.register');
     }
 
     /**
@@ -28,9 +30,23 @@ class InvestorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      //save
+      $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+      User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+       'bio' => $request->bio,
+       'linkedin' => $request->linkedin,
+       'profile_picture' => $imagePath
+    ]);
+   $userid=User::where('email', $request->email)->first()->id;
+Investor::create([
+    'user_id' => $userid,
+    'organization' => $request->organization
+]);
+      return redirect('/');  
     }
-
     /**
      * Display the specified resource.
      */

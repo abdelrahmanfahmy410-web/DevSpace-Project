@@ -17,6 +17,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    //mennea.aml,abderahman,rehab
     /**
      * Get the attributes that should be cast.
      *
@@ -30,17 +31,20 @@ class User extends Authenticatable
         ];
     }
     protected $fillable = ['name', 'email', 'password', 'bio', 'linkedin_url', 'phonenumber', 'profile_picture'];
+    
     public function roles()
     {
         return $this->hasMany(Role::class, 'user_roles');
     }
+    //watchlist
+    public function watchlist()
+    {
+        return $this->hasMany(Project::class, 'watchlist');
+    }
+    //
     public function areaOfInterests()
     {
-        return $this->hasMany(AreaOfInterest::class);
-    }
-    public function mentor()
-    {
-        return $this->hasOne(Mentor::class);
+        return $this->hasMany(Specialization::class, 'area_of_interests');
     }
     public function messagesSent()
     {
@@ -50,6 +54,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     } 
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'TeamRole')->withPivot('role');
+    }
+    //is -a
+     public function mentor()
+    {
+        return $this->hasOne(Mentor::class);
+    }
     public function developer()
     {
         return $this->hasOne(Developer::class);
@@ -58,9 +71,7 @@ class User extends Authenticatable
         return $this->hasOne(Investor::class);
         
     } 
-    // public function projects()
-   public function projects()
-    {
-        return $this->hasMany(Project::class,'TeamRole');
-    }
+    
+  
+
 }

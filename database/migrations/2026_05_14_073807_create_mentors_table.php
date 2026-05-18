@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('orginization')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('specialization_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->integer('experience_years')->default(0);
             $table->timestamps();
 

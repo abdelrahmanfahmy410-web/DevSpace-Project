@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Mentor extends Model
 {
     //
-    protected $fillable = ['organization', 'user_id', 'experience_years'];
+    protected $fillable = ['organization', 'user_id', 'experience_years','specialization_id'];
     public function user()
     {
         return $this->belongsTo(User::class);
     }
     public function specializations()
     {
-        return $this->belongsTo(Specialization::class, 'mentor_specializations');
+        return $this->hasone(Specialization::class);
     }
 
     public function skills()

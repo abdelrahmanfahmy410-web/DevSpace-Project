@@ -30,7 +30,7 @@ class InvestorController extends Controller
      */
     public function store(Request $request)
     {
-      //save
+      //save img
       $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
       User::create([
         'name' => $request->name,

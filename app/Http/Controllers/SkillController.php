@@ -20,7 +20,7 @@ class SkillController extends Controller
      */
     public function create()
     {
-        //
+     return view('skill.add_skill');
     }
 
     /**
@@ -28,7 +28,13 @@ class SkillController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        Skill::create([
+            'name' => $request->name,
+        ]);
+        return redirect('/');
     }
 
     /**

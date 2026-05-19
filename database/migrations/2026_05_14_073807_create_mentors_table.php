@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mentors', function (Blueprint $table) {
             $table->id();
-            $table->string('orginization')->nullable();
+            $table->string('organization')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('specialization_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->integer('experience_years')->default(0);

@@ -20,7 +20,7 @@ class SpecializationController extends Controller
      */
     public function create()
     {
-        //
+        return view('specialization.add_specialization');
     }
 
     /**
@@ -28,7 +28,13 @@ class SpecializationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        Specialization::create([
+            'name' => $request->name,
+        ]);
+        return redirect('/');
     }
 
     /**

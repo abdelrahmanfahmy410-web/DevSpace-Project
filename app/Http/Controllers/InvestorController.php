@@ -30,15 +30,28 @@ class InvestorController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'bio' => 'nullable|string',
+            'linkedin' => 'nullable|url',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'organization' => 'required|string|max:255'
+        ]);
       //save img
-      $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-      User::create([
+      $imagePath = null;
+      if ($request->hasFile('profile_picture')) {
+        $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+    }     
+
+ User::create([
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
-       'bio' => $request->bio,
-       'linkedin' => $request->linkedin,
-       'profile_picture' => $imagePath
+        'bio' => $request->bio,
+        'linkedin' => $request->linkedin,
+        'profile_picture' => $imagePath
     ]);
    $userid=User::where('email', $request->email)->first()->id;
 Investor::create([

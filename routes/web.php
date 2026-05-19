@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InvestorController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\MentorController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,3 +14,6 @@ Route::post('/investor/register', [InvestorController::class, 'store']);
 
 Route::get('/role/add_role', [RoleController::class, 'create']);
 Route::post('/role/add_role', [RoleController::class, 'store']);
+
+Route::get('/mentor/register', [MentorController::class, 'create'])->name('mentor.register');
+Route::post('/mentor/register', [MentorController::class, 'store'])->name('mentor.store');

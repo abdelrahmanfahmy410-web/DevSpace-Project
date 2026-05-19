@@ -2,62 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Mentor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class MentorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('mentor.register');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'             => 'required|string|max:255',
+            'email'            => 'required|email|unique:users,email',
+            'password'         => 'required|string|min:8|confirmed',
+            'organization'     => 'nullable|string|max:255',
+            'experience_years' => 'required|integer|min:0|max:30',
+            'phone'            => 'nullable|string|max:20',
+            'bio'              => 'nullable|string|max:1000',
+            'linkedin_url'     => 'nullable|url|max:255',
+            'profile_photo'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $mentorData = [
+            'user_id'          => $user->id,
+            'experience_years' => $request->experience_years,
+            'organization'     => $request->organization,
+            'phone'            => $request->phone,
+            'bio'              => $request->bio,
+            'linkedin_url'     => $request->linkedin_url,
+        ];
+
+        if ($request->hasFile('profile_photo')) {
+            $mentorData['profile_photo'] = $request->file('profile_photo')->store('mentors/profiles', 'public');
+        }
+
+        Mentor::create($mentorData);
+
+        return redirect()->route('mentor.register')->with('success', 'Registered successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Mentor $mentor)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Mentor $mentor)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Mentor $mentor)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Mentor $mentor)
     {
         //

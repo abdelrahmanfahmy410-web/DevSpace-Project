@@ -20,7 +20,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        //show form to create new role
+        return view('Admin.add_role');
+
     }
 
     /**
@@ -29,6 +31,14 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles',
+        ]);
+        Role::create([
+            'name' => $request->name,
+        ]);
+        return redirect()->back()->with('success', 'Role created successfully!');
+
     }
 
     /**

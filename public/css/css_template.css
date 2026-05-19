@@ -747,7 +747,9 @@ h3,
   gap: var(--space-5);
 }
 
-.hero__text {}
+.hero__text {
+  max-width: 600px;
+}
 
 .hero__label {
   font-size: var(--font-size-meta);

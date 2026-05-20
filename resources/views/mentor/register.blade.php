@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mentor Registration — ITI Hive</title>
+    <title>Mentor Registration — DevSpace</title>
     <link rel="stylesheet" href="{{ asset('css/css_template.css') }}">
     <style>
         body {
@@ -304,16 +304,16 @@
             </div>
 
             <div class="form-group">
-                <label for="profile_photo">Profile Photo <span class="optional-label">(optional)</span></label>
+                <label for="profile_picture">Profile Photo <span class="optional-label">(optional)</span></label>
                 <input
                     type="file"
-                    id="profile_photo"
-                    name="profile_photo"
+                    id="profile_picture"
+                    name="profile_picture"
                     accept="image/*"
-                    aria-describedby="profile-photo-error"
+                    aria-describedby="profile-picture-error"
                 >
-                @error('profile_photo')
-                    <span id="profile-photo-error" class="form-error">{{ $message }}</span>
+                @error('profile_picture')
+                    <span id="profile-picture-error" class="form-error">{{ $message }}</span>
                 @enderror
             </div>
 

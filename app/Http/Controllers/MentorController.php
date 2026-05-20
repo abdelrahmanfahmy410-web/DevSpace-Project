@@ -12,6 +12,8 @@ class MentorController extends Controller
     public function index()
     {
         //
+        $mentors = Mentor::with('user')->get();
+        return view('mentor.register', compact('mentors'));
     }
 
     public function create()
@@ -30,26 +32,28 @@ class MentorController extends Controller
             'phone'            => 'nullable|string|max:20',
             'bio'              => 'nullable|string|max:1000',
             'linkedin_url'     => 'nullable|url|max:255',
-            'profile_photo'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_picture'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
+            'bio'      => $request->bio,
+            'linkedin_url'     => $request->linkedin_url,
+            'phonenumber'      => $request->phone
+
         ]);
 
         $mentorData = [
             'user_id'          => $user->id,
             'experience_years' => $request->experience_years,
             'organization'     => $request->organization,
-            'phone'            => $request->phone,
-            'bio'              => $request->bio,
-            'linkedin_url'     => $request->linkedin_url,
+            'specialization_id' => null
         ];
 
-        if ($request->hasFile('profile_photo')) {
-            $mentorData['profile_photo'] = $request->file('profile_photo')->store('mentors/profiles', 'public');
+        if ($request->hasFile('profile_picture')) {
+            $mentorData['profile_picture'] = $request->file('profile_picture')->store('mentors/profiles', 'public');
         }
 
         Mentor::create($mentorData);

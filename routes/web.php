@@ -24,3 +24,4 @@ Route::post('/skill/add_skill', [SkillController::class, 'store']);
 
 Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
 Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
+

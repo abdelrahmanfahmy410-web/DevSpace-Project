@@ -21,17 +21,74 @@
         <form method="POST" action="/specialization/add_specialization" enctype="multipart/form-data">
             @csrf
 
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input id="name" class="form-control" type="text" name="name" required autofocus>
+           <div class="form-group">
+
+    <label for="specialization">
+        Specialization
+    </label>
+
+    <select
+        id="specialization"
+        class="form-control"
+        name="name"
+        required
+    >
+
+        <option disabled selected>
+            Select Specialization
+        </option>
+
+        @foreach($specializations as $specialization)
+
+            <option value="{{ $specialization->name }}">
+
+                {{ $specialization->name }}
+
+            </option>
+
+        @endforeach
+
+    </select>
+
+</div>
+
+
+<div class="form-group">
+
+    <label>
+        Skills
+    </label>
+
+    <div class="skills-container">
+
+        @foreach($skills as $skill)
+
+            <div class="skill-item">
+
+                <input
+                    type="checkbox"
+                    name="skills[]"
+                    value="{{ $skill->id }}"
+                >
+
+                <label>
+
+                    {{ $skill->name }}
+
+                </label>
+
             </div>
 
-            <div class="footer-row">
-                <button class="btn" type="submit">Create Specialization</button>
-            </div>
-        </form>
+        @endforeach
+
     </div>
 
+</div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    Create Specialization
+                </button>
 </div>
 
 </body>

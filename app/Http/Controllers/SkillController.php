@@ -20,6 +20,7 @@ class SkillController extends Controller
      */
     public function create()
     {
+       
      return view('skill.add_skill');
     }
 
@@ -30,6 +31,8 @@ class SkillController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'skills' => 'array',
+            'skills.*' => 'exists:skills,id',
         ]);
         Skill::create([
             'name' => $request->name,

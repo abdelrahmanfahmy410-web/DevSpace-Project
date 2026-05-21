@@ -26,6 +26,11 @@
                 <input id="name" class="form-control" type="text" name="name" required autofocus>
             </div>
 
+        <select name="skills[]" multiple class="form-control">
+            @foreach($skills as $skill)
+            <option value="{{ $skill->id }}">{{ $skill->name }}</option>
+            @endforeach
+        </select>
             <div class="footer-row">
                 <button class="btn" type="submit">Create Skill</button>
             </div>

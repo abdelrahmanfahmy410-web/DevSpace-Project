@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SpecializationController;
+use App\Http\Controllers\AreaOfInterestController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,3 +26,5 @@ Route::post('/skill/add_skill', [SkillController::class, 'store']);
 Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
 Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
 
+Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
+Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');

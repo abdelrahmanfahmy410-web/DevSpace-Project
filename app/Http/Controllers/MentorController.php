@@ -67,7 +67,6 @@ class MentorController extends Controller
         }
 
         Mentor::create($mentorData);
-
         return redirect()->route('mentor.register')->with('success', 'Registered successfully!');
     }
 

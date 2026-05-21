@@ -6,6 +6,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SpecializationController;
+use App\Http\Controllers\ProjectController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,3 +26,6 @@ Route::post('/skill/add_skill', [SkillController::class, 'store']);
 
 Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
 Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
+
+Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
+Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');

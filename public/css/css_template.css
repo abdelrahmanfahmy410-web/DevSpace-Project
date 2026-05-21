@@ -835,7 +835,9 @@ h3,
   flex-wrap: wrap;
 }
 
-.cta-strip__text {}
+.cta-strip__text {
+  max-width: 480px;
+}
 
 .cta-strip__heading {
   font-size: var(--font-size-h2);

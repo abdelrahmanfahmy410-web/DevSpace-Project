@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
+
 
 class RoleController extends Controller
 {
@@ -33,6 +35,7 @@ class RoleController extends Controller
         //
         $request->validate([
             'name' => 'required|string|max:255|unique:roles',
+     
         ]);
         Role::create([
             'name' => $request->name,

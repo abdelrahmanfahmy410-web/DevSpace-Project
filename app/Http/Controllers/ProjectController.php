@@ -21,6 +21,7 @@ class ProjectController extends Controller
     public function create()
     {
         //
+        return view('project.add_project');
     }
 
     /**
@@ -29,6 +30,21 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'repository_link' => 'nullable|url',
+            'live_demo_link' => 'nullable|url',
+            'type' => 'required|string|max:100',
+        ]);
+        Project::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'repository_link' => $request->repository_link,
+            'live_demo_link' => $request->live_demo_link,
+            'type' => $request->type,
+        ]);
+        return redirect("/");
     }
 
     /**

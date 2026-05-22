@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area_of_interest;
 use Illuminate\Http\Request;
+use App\Models\Specialization;
 
 class AreaOfInterestController extends Controller
 {
@@ -21,6 +22,8 @@ class AreaOfInterestController extends Controller
     public function create()
     {
         //
+        $specializations = Specialization::all();
+        return view('add_area_of_interest',compact('specializations'));
     }
 
     /**
@@ -29,8 +32,22 @@ class AreaOfInterestController extends Controller
     public function store(Request $request)
     {
         //
-    }
+        $request->validate([
+            'areas_of_interest' => 'required|array|min:3',
+            'areas_of_interest.*' => 'exists:specializations,id',
+        ]);
 
+        auth()->user()->areasOfInterest()->sync(
+            $request->areas_of_interest
+        );
+
+        return redirect()
+            ->back()
+            ->with(
+                'success',
+                'Areas of interest saved successfully.'
+            );
+    }
     /**
      * Display the specified resource.
      */

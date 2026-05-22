@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('specializations', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->timestamps();
         });
     }
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'specializations_skills');
+    }   
 
     /**
      * Reverse the migrations.

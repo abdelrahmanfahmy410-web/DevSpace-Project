@@ -3,363 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mentor Registration — ITI Hive</title>
+    <title>Mentor Registration — DevSpace</title>
+
     <link rel="stylesheet" href="{{ asset('css/css_template.css') }}">
-    <style>
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: var(--space-5);
-        }
-        .form-container {
-            width: 100%;
-            max-width: 560px;
-        }
-        .form-header {
-            text-align: center;
-            margin-bottom: var(--space-7);
-        }
-        .form-header h1 {
-            margin: 0 0 var(--space-1);
-            font-size: var(--font-size-h1);
-            color: var(--color-dark-navy);
-            font-weight: var(--font-weight-bold);
-        }
-        .form-header p {
-            margin: 0;
-            color: var(--color-muted);
-            font-size: var(--font-size-body);
-        }
-        .alert {
-            margin-bottom: var(--space-5);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-card);
-        }
-        .alert-success {
-            background-color: var(--color-success-bg);
-            color: var(--color-success-text);
-        }
-        .form-group {
-            margin-bottom: var(--space-5);
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: var(--space-2);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-body-text);
-            font-size: var(--font-size-body);
-        }
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group input[type="password"],
-        .form-group input[type="url"],
-        .form-group input[type="tel"],
-        .form-group input[type="file"],
-        .form-group input[type="range"],
-        .form-group textarea {
-            width: 100%;
-            padding: var(--space-2) var(--space-3);
-            background-color: var(--color-white);
-            font-size: var(--font-size-body);
-            font-family: var(--font-family-base);
-            border: none;
-            border-radius: var(--radius-md);
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-            line-height: var(--line-height-base);
-        }
-        .form-group input[type="text"]:focus,
-        .form-group input[type="email"]:focus,
-        .form-group input[type="password"]:focus,
-        .form-group input[type="url"]:focus,
-        .form-group input[type="tel"]:focus,
-        .form-group textarea:focus {
-            outline: none;
-            background-color: var(--color-primary-bg);
-        }
-        .form-group input[type="file"] {
-            padding: var(--space-3);
-            cursor: pointer;
-        }
-        .form-group input[type="file"]::file-selector-button {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            padding: var(--space-1) var(--space-3);
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: var(--font-weight-medium);
-            margin-right: var(--space-2);
-        }
-        .form-group input[type="file"]::file-selector-button:hover {
-            background-color: var(--color-primary-light);
-        }
-        .form-group input[type="range"] {
-            padding: 0;
-            height: 6px;
-            accent-color: var(--color-primary);
-            border: none;
-            box-shadow: none;
-        }
-        .experience-display {
-            display: inline-block;
-            margin-left: var(--space-3);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-primary);
-            min-width: 60px;
-            font-size: var(--font-size-body);
-        }
-        .form-error {
-            display: block;
-            margin-top: var(--space-1);
-            color: var(--color-error-text);
-            font-size: var(--font-size-meta);
-        }
-        .form-divider {
-            margin: var(--space-6) 0;
-            border: none;
-            background: none;
-        }
-        .form-actions {
-            display: flex;
-            gap: var(--space-3);
-            margin-top: var(--space-6);
-        }
-        .btn {
-            flex: 1;
-            padding: var(--space-2) var(--space-4);
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-small);
-            font-weight: var(--font-weight-medium);
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-base);
-            border: none;
-        }
-        .btn-secondary {
-            background-color: var(--color-primary-bg);
-            color: var(--color-primary);
-        }
-        .btn-secondary:hover {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-        }
-        .btn-primary {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-        }
-        .btn-primary:hover {
-            background-color: var(--color-primary-light);
-        }
-        .optional-label {
-            font-weight: var(--font-weight-regular);
-            color: var(--color-muted);
-        }
-        fieldset {
-         border: none;
-         padding: 0;
-         margin: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/mentor_register.css') }}">
+
+
 </head>
+
 <body>
 
-<div class="form-container">
-    <div class="form-header">
-        <h1>Mentor Registration</h1>
-        <p>Create your mentor profile to get started</p>
-    </div>
+<div class="register-page">
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    <div class="register-container">
 
-    <form action="{{ route('mentor.store') }}" method="POST" novalidate enctype="multipart/form-data">
-        @csrf
+        {{-- HEADER --}}
+        <div class="register-header">
 
-        <!-- Account Information Section -->
-        <fieldset>
-            <legend style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; display: none;">Account Information</legend>
-
-            <div class="form-group">
-                <label for="name">Full Name <span aria-label="required">*</span></label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value="{{ old('name') }}"
-                    placeholder="e.g. Ahmed Hassan"
-                    required
-                    aria-describedby="name-error"
-                >
-                @error('name')
-                    <span id="name-error" class="form-error">{{ $message }}</span>
-                @enderror
+            <div class="register-eyebrow">
+                <span class="eyebrow-dot"></span>
+                Join as a Mentor
             </div>
 
-            <div class="form-group">
-                <label for="email">Email Address <span aria-label="required">*</span></label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    placeholder="you@example.com"
-                    required
-                    aria-describedby="email-error"
-                >
-                @error('email')
-                    <span id="email-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
+            <h1 class="register-title">
+                Mentor Registration
+            </h1>
 
-            <div class="form-group">
-                <label for="password">Password <span aria-label="required">*</span></label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="••••••••"
-                    required
-                    aria-describedby="password-error"
-                >
-                @error('password')
-                    <span id="password-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
+            <p class="register-subtitle">
+                Share your expertise and help the next generation of developers grow through DevSpace.
+            </p>
 
-            <div class="form-group">
-                <label for="password_confirmation">Confirm Password <span aria-label="required">*</span></label>
-                <input
-                    type="password"
-                    id="password_confirmation"
-                    name="password_confirmation"
-                    placeholder="••••••••"
-                    required
-                >
-            </div>
-        </fieldset>
-
-        <hr class="form-divider">
-
-        <!-- Professional Information Section -->
-        <fieldset>
-            <legend style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; display: none;">Professional Information</legend>
-
-            <div class="form-group">
-                <label for="organization">Organization <span class="optional-label">(optional)</span></label>
-                <input
-                    type="text"
-                    id="organization"
-                    name="organization"
-                    value="{{ old('organization') }}"
-                    placeholder="e.g. Google, ITI, Freelance"
-                    aria-describedby="organization-error"
-                >
-                @error('organization')
-                    <span id="organization-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="experience_years">Years of Experience <span aria-label="required">*</span></label>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <input
-                        type="range"
-                        id="experience_years"
-                        name="experience_years"
-                        min="0"
-                        max="30"
-                        value="{{ old('experience_years', 0) }}"
-                        required
-                        aria-describedby="experience-display experience-error"
-                    >
-                    <span id="experience-display" class="experience-display">{{ old('experience_years', 0) }} yrs</span>
-                </div>
-                @error('experience_years')
-                    <span id="experience-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Phone Number <span class="optional-label">(optional)</span></label>
-                <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value="{{ old('phone') }}"
-                    placeholder="e.g. +20 123 456 7890"
-                    aria-describedby="phone-error"
-                >
-                @error('phone')
-                    <span id="phone-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="profile_photo">Profile Photo <span class="optional-label">(optional)</span></label>
-                <input
-                    type="file"
-                    id="profile_photo"
-                    name="profile_photo"
-                    accept="image/*"
-                    aria-describedby="profile-photo-error"
-                >
-                @error('profile_photo')
-                    <span id="profile-photo-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="bio">Bio <span class="optional-label">(optional)</span></label>
-                <textarea
-                    id="bio"
-                    name="bio"
-                    placeholder="Tell us about yourself, your expertise, and what you're passionate about..."
-                    aria-describedby="bio-error"
-                >{{ old('bio') }}</textarea>
-                @error('bio')
-                    <span id="bio-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="linkedin_url">LinkedIn URL <span class="optional-label">(optional)</span></label>
-                <input
-                    type="url"
-                    id="linkedin_url"
-                    name="linkedin_url"
-                    value="{{ old('linkedin_url') }}"
-                    placeholder="https://www.linkedin.com/in/yourprofile"
-                    aria-describedby="linkedin-url-error"
-                >
-                @error('linkedin_url')
-                    <span id="linkedin-url-error" class="form-error">{{ $message }}</span>
-                @enderror
-            </div>
-        </fieldset>
-
-        <!-- Form Actions -->
-        <div class="form-actions">
-            <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
-            <button type="submit" class="btn btn-primary">Register as Mentor</button>
         </div>
 
-    </form>
+        @if(session('success'))
+            <div class="alert-success">
+                ✓ {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                     @foreach ($errors->all() as $error)
+                     <li>{{ $error }}</li>
+                     @endforeach
+                </ul>
+            </div>
+        @endif
+        <form
+            action="{{ route('mentor.store') }}"
+            method="POST"
+            enctype="multipart/form-data"
+            novalidate
+        >
+
+            @csrf
+
+            {{-- ACCOUNT CARD --}}
+            <div class="form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                        </svg>
+                    </div>
+
+                    <div>
+                        <div class="form-card-title">Account Information</div>
+                        <div class="form-card-sub">Your login credentials</div>
+                    </div>
+
+                </div>
+
+                <div class="form-card-body">
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Full Name <span class="required">*</span>
+                        </label>
+
+                        <input
+                            class="form-input"
+                            type="text"
+                            name="name"
+                            value="{{ old('name') }}"
+                            placeholder="Ahmed Hassan"
+                        >
+
+                        @error('name')
+                            <span class="form-error">{{ $message }}</span>
+                        @enderror
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Email Address <span class="required">*</span>
+                        </label>
+
+                        <input
+                            class="form-input"
+                            type="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            placeholder="you@example.com"
+                        >
+
+                        @error('email')
+                            <span class="form-error">{{ $message }}</span>
+                        @enderror
+
+                    </div>
+
+                    <div class="form-group-row">
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Password <span class="required">*</span>
+                            </label>
+
+                            <div class="password-wrapper">
+
+                                <input
+                                    class="form-input"
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="••••••••"
+                                >
+
+                                <button type="button" class="toggle-password">
+                                    👁
+                                </button>
+
+                            </div>
+
+                            @error('password')
+                                <span class="form-error">{{ $message }}</span>
+                            @enderror
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Confirm Password <span class="required">*</span>
+                            </label>
+
+                            <div class="password-wrapper">
+
+                                <input
+                                    class="form-input"
+                                    type="password"
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    placeholder="••••••••"
+                                >
+
+                                <button type="button" class="toggle-password">
+                                    👁
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- PROFESSIONAL CARD --}}
+            <div class="form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-card-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.05 15.96 0 13.5 0c-1.32 0-2.4.75-3.5 1.67C8.9.75 7.82 0 6.5 0 4.04 0 2 2.05 2 4.64c0 .48.11.92.18 1.36H0v14h24V6h-4zm-6.5-4c.83 0 1.5.67 1.5 1.5S14.33 5 13.5 5 12 4.33 12 3.5 12.67 2 13.5 2z"/>
+                        </svg>
+                    </div>
+
+                    <div>
+                        <div class="form-card-title">Professional Information</div>
+                        <div class="form-card-sub">Tell mentees about your expertise</div>
+                    </div>
+
+                </div>
+
+                <div class="form-card-body">
+
+                    <div class="form-group-row">
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Organization
+                                <span class="optional">(optional)</span>
+                            </label>
+
+                            <input
+                                class="form-input"
+                                type="text"
+                                name="organization"
+                                value="{{ old('organization') }}"
+                                placeholder="Google, ITI, Freelance..."
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Specialization
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                class="form-select"
+                                name="specialization_id"
+                            >
+
+                                <option value="">
+                                    Select specialization
+                                </option>
+
+                                @foreach($specializations as $specialization)
+
+                                    <option
+                                        value="{{ $specialization->id }}"
+                                        @selected(old('specialization_id') == $specialization->id)
+                                    >
+                                        {{ $specialization->name }}
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Years of Experience
+                        </label>
+
+                        <div class="range-row">
+
+                            <input
+                                class="form-range"
+                                type="range"
+                                id="experience_years"
+                                name="experience_years"
+                                min="0"
+                                max="30"
+                                value="{{ old('experience_years',0) }}"
+                            >
+
+                            <span
+                                id="experience-display"
+                                class="range-value"
+                            >
+                                {{ old('experience_years',0) }} yrs
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group-row">
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                Phone Number
+                            </label>
+
+                            <input
+                                class="form-input"
+                                type="tel"
+                                name="phone"
+                                value="{{ old('phone') }}"
+                                placeholder="+20 123 456 7890"
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                LinkedIn URL
+                            </label>
+
+                            <input
+                                class="form-input"
+                                type="url"
+                                name="linkedin_url"
+                                value="{{ old('linkedin_url') }}"
+                                placeholder="https://linkedin.com/in/yourprofile"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Profile Photo
+                        </label>
+
+                        <input
+                            class="form-file"
+                            type="file"
+                            id="profile_picture"
+                            name="profile_picture"
+                            accept="image/*"
+                        >
+
+                        <span class="input-note">
+                            Maximum size: 2 MB
+                        </span>
+
+                        <img id="profile-preview">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Bio
+                        </label>
+
+                        <textarea
+                            class="form-textarea"
+                            name="bio"
+                            placeholder="Tell us about yourself..."
+                        >{{ old('bio') }}</textarea>
+
+                    </div>
+
+                </div>
+
+                <div class="form-footer">
+
+                    <span class="form-footer-note">
+                        <span class="required">*</span>
+                        Required fields
+                    </span>
+
+                    <div class="form-footer-actions">
+
+                        <a
+                            href="{{ url()->previous() }}"
+                            class="btn"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Register as Mentor
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
 
 <script>
-    // Update experience display on input
-    document.getElementById('experience_years').addEventListener('input', function() {
-        document.getElementById('experience-display').textContent = this.value + ' yrs';
+
+    /* EXPERIENCE RANGE */
+
+    const range =
+        document.getElementById('experience_years');
+
+    const display =
+        document.getElementById('experience-display');
+
+    range.addEventListener('input', function () {
+
+        display.textContent =
+            this.value + ' yrs';
+
     });
+
+    /* PASSWORD TOGGLE */
+
+    document
+        .querySelectorAll('.toggle-password')
+        .forEach(button => {
+
+            button.addEventListener('click', () => {
+
+                const input =
+                    button.previousElementSibling;
+
+                input.type =
+                    input.type === 'password'
+                    ? 'text'
+                    : 'password';
+
+            });
+
+        });
+
+    /* IMAGE PREVIEW */
+
+    const profileInput =
+        document.getElementById('profile_picture');
+
+    const preview =
+        document.getElementById('profile-preview');
+
+    profileInput.addEventListener('change', function () {
+
+        if(!this.files || !this.files[0]) return;
+
+        const file = this.files[0];
+
+        preview.src =
+            URL.createObjectURL(file);
+
+        preview.style.display = 'block';
+
+    });
+
 </script>
 
 </body>

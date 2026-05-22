@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Specialization;
 use Illuminate\Http\Request;
+use App\Models\Skill;
 
 class SpecializationController extends Controller
 {
@@ -20,7 +21,9 @@ class SpecializationController extends Controller
      */
     public function create()
     {
-        return view('specialization.add_specialization');
+        $skills = Skill::all();
+         $specializations = Specialization::all();
+        return view('specialization.add_specialization', compact('skills', 'specializations'));
     }
 
     /**
@@ -29,11 +32,14 @@ class SpecializationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:specializations,name',
+            'skills' => 'array',
+            'skills.*' => 'exists:skills,id',
         ]);
-        Specialization::create([
+        $specialization = Specialization::create([
             'name' => $request->name,
         ]);
+        $specialization->skills()->attach($request->skills);
         return redirect('/');
     }
 

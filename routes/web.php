@@ -40,3 +40,6 @@ Route::post('/project', [ProjectController::class, 'store'])->name('projects.sto
 
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
+Route::get('/project/projects_show', [ProjectController::class, 'show'])->name('projects.show');
+
+Route::get('/projects/create/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('projects.getSkillsBySpecialization');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Specialization;
+use App\Models\team_role;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -13,7 +14,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        // $projects = Project::with(['skills', 'specializations', 'team_roles'])->get();
+        // return view('Project.index', compact('projects'));
     }
 
     /**
@@ -66,7 +68,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->load(['skills', 'specializations', 'member']);
+        $project->load(['skills', 'specializations', 'team_roles']);
         return view('Project.show', compact('project'));
     }
 
@@ -98,5 +100,14 @@ class ProjectController extends Controller
         $skills = $specialization->skills;
         $specializations = \App\Models\Specialization::all();
         return response()->json($skills);
-    }
+       }
+
+    public function show_projects($id){
+
+        
+        $project = Project::with(['skills', 'specializations', 'team_roles'])->findOrFail($id);
+        
+        return view('projects_show', compact('project'));
+        }
+
 }

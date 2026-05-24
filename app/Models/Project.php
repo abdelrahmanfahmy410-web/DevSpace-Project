@@ -9,9 +9,9 @@ class Project extends Model
     //
     protected $fillable = ['title','description','repository_link','live_demo_link','type'];
     //teamrole
-    public function member()
+    public function team_roles()
     {
-        return $this->belongsToMany(User::class, 'TeamRole');
+        return $this->belongsToMany(User::class, 'team_roles')->withPivot('role');
     }
     //watchlist
     public function watchers()

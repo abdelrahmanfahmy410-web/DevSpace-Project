@@ -72,16 +72,16 @@
             </div>
             @endif
 
-            @if($project->member && $project->member->count())
+            @if($project->team_roles && $project->team_roles->count())
             <div style="margin-top:18px;">
               <h4 class="card-sub">Team</h4>
               <div style="margin-top:8px; display:flex; gap:12px; flex-wrap:wrap;">
-                @foreach($project->member as $m)
+                @foreach($project->team_roles as $tr)
                   <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid var(--color-border);background:var(--color-white);">
-                    <div style="width:36px;height:36px;border-radius:50%;background:var(--color-primary-bg);display:grid;place-items:center;color:var(--color-primary);font-weight:700;">{{ strtoupper(substr($m->name,0,2)) }}</div>
+                    <div style="width:36px;height:36px;border-radius:50%;background:var(--color-primary-bg);display:grid;place-items:center;color:var(--color-primary);font-weight:700;">{{ strtoupper(substr($tr->name,0,2)) }}</div>
                     <div>
-                      <div style="font-weight:700;font-size:14px;">{{ $m->name }}</div>
-                      <div style="font-size:12px;color:var(--color-muted);">{{ $m->email }}</div>
+                      <div style="font-weight:700;font-size:14px;">{{ $tr->name }}</div>
+                      <div style="font-size:12px;color:var(--color-muted);">{{ $tr->email }}</div>
                     </div>
                   </div>
                 @endforeach

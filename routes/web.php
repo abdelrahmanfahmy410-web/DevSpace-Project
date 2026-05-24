@@ -37,9 +37,10 @@ Route::post('/developer/skills/{id}/update', [DeveloperSkillController::class, '
 
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
+Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
 
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
-Route::get('/project/projects_show', [ProjectController::class, 'show'])->name('projects.show');
 
+Route::get('/project/projects_show', [ProjectController::class, 'show_projects'])->name('projects.show_projects');
 Route::get('/projects/create/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('projects.getSkillsBySpecialization');

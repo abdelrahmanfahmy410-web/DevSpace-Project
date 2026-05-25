@@ -12,7 +12,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.app');
 });
 Route::get('/investor/register',[InvestorController::class, 'create']);
 Route::post('/investor/register', [InvestorController::class, 'store']);

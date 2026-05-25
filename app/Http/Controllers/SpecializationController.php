@@ -13,9 +13,16 @@ class SpecializationController extends Controller
      */
     public function index()
     {
-        //
+        $specializations = Specialization::all();
+    
+        return view('specialization.specialization', compact('specializations'));
     }
-
+     //display specialization with skills
+        public function specializationSkills( )
+        {
+            $specializations = Specialization::with('skills')->get();
+            return view('specialization.specialization_skills', compact('specializations'));
+        }
     /**
      * Show the form for creating a new resource.
      */
@@ -48,9 +55,8 @@ class SpecializationController extends Controller
      */
     public function show(Specialization $specialization)
     {
-        //
+      //
     }
-
     /**
      * Show the form for editing the specified resource.
      */

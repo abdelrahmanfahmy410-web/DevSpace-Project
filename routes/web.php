@@ -21,12 +21,16 @@ Route::post('/mentor/register', [MentorController::class, 'store'])->name('mento
 
 Route::get('/skill/add_skill', [SkillController::class, 'create']);
 Route::post('/skill/add_skill', [SkillController::class, 'store']);
+Route::get('/skill', [SkillController::class, 'index'])->name('skill.index');
 
 Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
 Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
+Route::get('/specialization', [SpecializationController::class, 'index'])->name('specialization.index');
 
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
+
+Route::get('/specialization/skills', [SpecializationController::class, 'specializationSkills'])->name('specialization.specializationSkills');

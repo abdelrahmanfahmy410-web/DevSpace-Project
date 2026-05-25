@@ -7,21 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     //
-    protected $fillable = [
-        'title',
-        'description',
-        'repository_link',
-        'live_demo_link',
-        'type'
-    ];
+    protected $fillable = ['title','description','repository_link','live_demo_link','type'];
     //teamrole
-    public function member()
+    public function team_roles()
     {
-        return $this->belongsToMany(User::class, 'TeamRole');
+        return $this->belongsToMany(User::class, 'team_roles')->withPivot('role');
     }
     //watchlist
     public function watchers()
     {
         return $this->belongsToMany(User::class, 'project_user_watchlist');
+    }
+
+    public function skills()
+     {
+         return $this->belongsToMany(Skill::class, 'project_skills', 'project_id', 'skill_id');
+    }
+    
+    public function specializations()
+    {
+        return $this->belongsToMany(Specialization::class, 'project_specializations', 'project_id', 'specialization_id');
     }
 } 

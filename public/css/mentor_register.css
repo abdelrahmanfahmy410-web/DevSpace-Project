@@ -1,5 +1,7 @@
 
-        :root{
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap');
+
+:root{
             --primary:#1a7a4a;
             --primary-light:#25a55f;
             --primary-bg:#edf8f1;
@@ -22,7 +24,7 @@
 
         body{
             min-height:100vh;
-            font-family:Inter, sans-serif;
+            font-family:"DM Sans", system-ui, sans-serif;
 
             background:
                 radial-gradient(circle at top left, rgba(26,122,74,.12), transparent 30%),

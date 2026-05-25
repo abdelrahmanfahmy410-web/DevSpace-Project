@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="{{ asset('assets/add_project.css') }}" />
+
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 </head>
 <body>
 
@@ -269,6 +272,30 @@
 
           </div>
         </div>
+        <!-- حقل التخصصات بعد تعديله للاختيار المتعدد -->
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" for="specializations">
+            Specializations<span class="req">*</span>
+          </label>
+          <div class="input-icon-wrap">
+            <!-- أضفنا multiple وغيرنا الاسم إلى مصفوفة [] -->
+            <select id="specializations" name="specializations[]" class="form-input" multiple style="height: auto; min-height: 100px;">
+              @foreach($specializations as $specialization)
+                <option value="{{ $specialization->id }}">{{ $specialization->name }}</option>
+              @endforeach
+            </select>
+          </div>
+          <p class="form-hint"></p>
+        </div>
+        <!-- select skills -->
+<div class="form-group" style="margin-bottom:0;">
+  <label class="form-label">Skills</label>
+  
+  <!-- الحاوية التي سيتم ضخ الـ Checkboxes داخلها عبر جافاسكريبت -->
+  <div id="skills-checkbox-container" class="skills-checkbox-grid">
+    <p class="form-hint">Please select the new specialization to view the available skills...</p>
+  </div>
+</div>
 
         <!-- ── LIVE PREVIEW ── -->
         <div class="preview-panel">
@@ -307,6 +334,70 @@
 </div>
 
 <script>
+var selected_specializations = document.getElementById('specializations');
+
+selected_specializations.addEventListener('change', function() {
+  // 1. تجميع كل الـ IDs الخاصة بالتخصصات التي حددها المستخدم
+  const selectedOptions = Array.from(this.selectedOptions).map(option => option.value);
+  const skillsContainer = document.getElementById('skills-checkbox-container');
+  
+  if (selectedOptions.length === 0) {
+    skillsContainer.innerHTML = '<p class="form-hint">الرجاء اختيار تخصص واحد على الأقل لتظهر المهارات المتاحة...</p>';
+    return;
+  }
+
+  // 2. تجهيز مصفوفة لجمع كل الوعود (Promises) لتشغيل الـ AJAX لكل تخصص معاً
+  const fetchPromises = selectedOptions.map(specId => 
+    fetch(`/projects/create/${specId}`).then(response => {
+      if(!response.ok) throw new Error('Network error');
+      return response.json();
+    })
+  );
+
+  // 3. انتهاء جلب البيانات من كافة التخصصات المحددة
+  Promise.all(fetchPromises)
+    .then(results => {
+      skillsContainer.innerHTML = ''; // تفريغ الحاوية لبناء المهارات الجديدة
+      
+      // دمج كافة المهارات القادمة في مصفوفة واحدة واستبعاد المهارات المكررة
+      let allSkills = [];
+      let uniqueSkillIds = new Set();
+
+      results.forEach(skillsArray => {
+        skillsArray.forEach(skill => {
+          if (!uniqueSkillIds.has(skill.id)) {
+            uniqueSkillIds.add(skill.id);
+            allSkills.push(skill);
+          }
+        });
+      });
+
+      // 4. بناء الـ Checkboxes للمهارات المدمجة
+      if(allSkills.length > 0) {
+        allSkills.forEach(skill => {
+          const label = document.createElement('label');
+          label.className = 'skill-checkbox-item';
+          
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.name = 'skills[]';
+          checkbox.value = skill.id;
+          
+          const text = document.createTextNode(' ' + skill.name);
+          
+          label.appendChild(checkbox);
+          label.appendChild(text);
+          skillsContainer.appendChild(label);
+        });
+      } else {
+        skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">لا توجد مهارات مسجلة لهذه التخصصات.</p>';
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching skills:', error);
+      skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">حدث خطأ أثناء تحميل المهارات.</p>';
+    });
+});
 function onTitleInput(el) {
   document.getElementById('titleCount').textContent = el.value.length;
   const cc = document.getElementById('titleCount').parentElement;
@@ -402,6 +493,12 @@ document.getElementById('title').addEventListener('input', function() {
 document.getElementById('description').addEventListener('input', function() {
   this.classList.remove('error');
   document.getElementById('descError').classList.remove('show');
+});
+
+new TomSelect("#specializations", {
+    plugins: ['remove_button'], // يضيف زر X صغير لحذف التخصص المختار بسهولة
+    create: false,
+    placeholder: "Choose your majors..."
 });
 </script>
 </body>

@@ -27,6 +27,10 @@ class Specialization extends Model
     {
         return $this->hasMany(Mentor::class);
     }
+            public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_specializations');
+    }
 
   
 }

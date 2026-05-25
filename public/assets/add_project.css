@@ -367,3 +367,45 @@ button { font-family: var(--font); cursor: pointer; }
   .footer-actions .btn { width: 100%; justify-content: center; }
 }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+
+.skills-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+  padding: 10px;
+  background: #f9f9f9; /* أو أي لون يناسب DevSpace */
+  border-radius: 6px;
+}
+.skill-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Multi-select (specializations) styling */
+.form-input[multiple] {
+  min-height: 100px;
+  max-height: 260px;
+  padding: 10px 14px;
+  overflow: auto;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+}
+
+.form-input[multiple] option {
+  padding: 8px 10px;
+}
+
+/* remove custom arrow for multiple selects */
+.form-input[multiple] {
+  background-image: none;
+}
+
+.form-input[multiple]:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(26,122,74,0.06);
+}

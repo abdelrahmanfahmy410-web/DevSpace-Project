@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Specialization;
+use App\Models\team_role;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -12,7 +14,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        // $projects = Project::with(['skills', 'specializations', 'team_roles'])->get();
+        // return view('Project.index', compact('projects'));
     }
 
     /**
@@ -20,8 +23,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
-        return view('project.add_project');
+        $specializations = \App\Models\Specialization::all();
+        $skills = [];
+        return view('project.add_project', compact('specializations', 'skills'));
     }
 
     /**
@@ -32,18 +36,30 @@ class ProjectController extends Controller
         //
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'repository_link' => 'nullable|url',
-            'live_demo_link' => 'nullable|url',
-            'type' => 'required|string|max:100',
+         'description' => 'required|string',
+         'type' => 'required|string|max:100',
+         
+         'specializations' => 'required|array', // تعديل: يجب أن تكون مصفوفة
+         'specializations.*' => 'exists:specializations,id', // التأكد من صحة كل تخصص
+         'skills' => 'nullable|array', // المهارات القادمة من الـ Checkboxes
+         'skills.*' => 'exists:skills,id',
+     ]);
+        $project = Project::create([
+         'title' => $request->title,
+         'description' => $request->description,
+         'repository_link' => $request->repository_link,
+         'live_demo_link' => $request->live_demo_link,
+         'type' => $request->type,
         ]);
-        Project::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'repository_link' => $request->repository_link,
-            'live_demo_link' => $request->live_demo_link,
-            'type' => $request->type,
-        ]);
+
+        // ارتباط التخصصات بالمشروع
+        $project->specializations()->attach($request->specializations);
+
+        // ارتباط المهارات بالمشروع
+        if ($request->has('skills')) {
+            $project->skills()->attach($request->skills);
+        }
+
         return redirect("/");
     }
 
@@ -52,7 +68,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        $project->load(['skills', 'specializations', 'team_roles']);
+        return view('Project.show', compact('project'));
     }
 
     /**
@@ -78,4 +95,19 @@ class ProjectController extends Controller
     {
         //
     }
+    public function getSkillsBySpecialization(Specialization $specialization)
+    {
+        $skills = $specialization->skills;
+        $specializations = \App\Models\Specialization::all();
+        return response()->json($skills);
+       }
+
+    public function show_projects($id){
+
+        
+        $project = Project::with(['skills', 'specializations', 'team_roles'])->findOrFail($id);
+        
+        return view('projects_show', compact('project'));
+        }
+
 }

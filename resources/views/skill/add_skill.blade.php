@@ -15,7 +15,7 @@
     </div>
 
     <div class="card">
-        <div class="card-title">Skill Details</div>
+        <div class="card-title">Skill </div>
         <div class="card-sub">Provide the name of the skill</div>
 
         <form method="POST" action="/skill/add_skill" enctype="multipart/form-data">
@@ -26,11 +26,7 @@
                 <input id="name" class="form-control" type="text" name="name" required autofocus>
             </div>
 
-        <select name="skills[]" multiple class="form-control">
-            @foreach($skills as $skill)
-            <option value="{{ $skill->id }}">{{ $skill->name }}</option>
-            @endforeach
-        </select>
+
             <div class="footer-row">
                 <button class="btn" type="submit">Create Skill</button>
             </div>

@@ -1,7 +1,13 @@
-<a href="{{ url('/') }}" class="logo-link">
+{{-- <a href="{{ url('/') }}" class="logo-link">
     <img
         src="{{ asset('logo.png') }}"
         alt="DevSpace"
         class="logo__icon"
     />
-</a>
+</a> --}}
+{{-- layouts/logo.blade.php --}}
+@if($darkMode ?? false)
+  <img src="{{ asset('logo-dark.png') }}" alt="DevSpace" />
+@else
+  <img src="{{ asset('logo.png') }}" alt="DevSpace" />
+@endif

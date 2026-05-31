@@ -99,28 +99,54 @@ class DeveloperController extends Controller
 
     /**
      * Display the specified resource.
-     
-    public function show(Developer $developer)
-    {
-        //
-    }
 
-    /**
+
      * Show the form for editing the specified resource.
-     */
-    public function edit(Developer $developer)
-    {
-        //
+//      */
+
+public function show()
+{ 
+    $developer = Developer::with(['user', 'specialization'])->first();
+
+    if (!$developer) {
+        return "جدول المطورين (developers) فارغ في قاعدة البيانات. برجاء إضافة مطور أولاً للتجربة.";
     }
 
+    return view('developer.profile', compact('developer'));
+}
+ public function edit()
+{
+    $user = auth()->user()->load('developer');
+    $specializations = Specialization::all(); 
+
+    return view('developer.edit', compact('user', 'specializations'));
+}
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Developer $developer)
-    {
-        //
+ public function update(Request $request)
+{
+    $developer = auth()->user()->developer;
+
+    $validatedData = $request->validate([
+        'portfolio_url' => 'nullable|url',
+        'bio' => 'nullable|string',
+        'linkedin_url' => 'nullable|url',
+        'phone_number' => 'nullable|string|max:20',
+        'specialization_id' => 'required|exists:specializations,id',
+        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // لو رفع صورة جديدة، امسحي القديمة وخزني الجديدة
+    if ($request->hasFile('profile_picture')) {
+        $validatedData['profile_picture'] = $request->file('profile_picture')->store('profiles', 'public');
     }
 
+    // تحديث البيانات في الجدول
+    $developer->update($validatedData);
+
+    return redirect()->route('developer.profile')->with('success', 'تم تحديث البروفايل بنجاح');
+}
     /**
      * Remove the specified resource from storage.
      */

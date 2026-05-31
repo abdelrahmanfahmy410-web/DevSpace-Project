@@ -1,0 +1,100 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background:#eef2f4;
+    padding:40px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.profile-card{
+    background:#fff;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+.header{
+    text-align:center;
+    padding:40px;
+    background:linear-gradient(
+        135deg,
+        #1f9d55,
+        #27ae60
+    );
+    color:white;
+}
+
+.profile-image{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid white;
+    margin-bottom:15px;
+}
+
+.header h1{
+    margin-bottom:10px;
+}
+
+.specialization{
+    display:inline-block;
+    background:white;
+    color:#1f9d55;
+    padding:8px 20px;
+    border-radius:30px;
+    font-weight:bold;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+    padding:30px;
+}
+
+.info-box{
+    background:#f8faf8;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #e5e7eb;
+}
+
+.info-box h4{
+    color:#1f9d55;
+    margin-bottom:10px;
+}
+
+.linkedin,
+.bio-section{
+    padding:30px;
+}
+
+.linkedin h4,
+.bio-section h3{
+    color:#1f9d55;
+    margin-bottom:10px;
+}
+
+.linkedin a{
+    color:#2563eb;
+    text-decoration:none;
+}
+
+.bio-section{
+    border-top:1px solid #eee;
+}
+
+.bio-section p{
+    line-height:1.8;
+    color:#555;
+}

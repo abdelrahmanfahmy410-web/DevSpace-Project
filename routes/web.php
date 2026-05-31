@@ -22,9 +22,13 @@ Route::get('/developer/register', [DeveloperController::class, 'create']);
 Route::post('/developer/register', [DeveloperController::class, 'store']);
 Route::get('/role/add_role', [RoleController::class, 'create']);
 Route::post('/role/add_role', [RoleController::class, 'store']);
+Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
+Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('developer.edit');
+Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
 
 Route::get('/mentor/register', [MentorController::class, 'create'])->name('mentor.register');
 Route::post('/mentor/register', [MentorController::class, 'store'])->name('mentor.store');
+Route::get('/mentor/{mentor}', [MentorController::class, 'show'])->name('mentor.show');
 
 Route::get('/skill/add_skill', [SkillController::class, 'create']);
 Route::post('/skill/add_skill', [SkillController::class, 'store']);

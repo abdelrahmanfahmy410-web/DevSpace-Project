@@ -72,7 +72,8 @@ class MentorController extends Controller
 
     public function show(Mentor $mentor)
     {
-        //
+       
+    return view('mentor.profile', compact('mentor'));
     }
 
     public function edit(Mentor $mentor)

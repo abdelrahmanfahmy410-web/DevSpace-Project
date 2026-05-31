@@ -13,7 +13,7 @@ class Developer extends Model
     }
     public function specialization()
     {
-        return $this->hasone(Specialization::class);
+        return $this->belongsTo(Specialization::class, 'specialization_id');
     }   
 
     public function skills()

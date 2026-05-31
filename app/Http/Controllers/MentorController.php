@@ -70,10 +70,10 @@ class MentorController extends Controller
         return redirect()->route('mentor.register')->with('success', 'Registered successfully!');
     }
 
-    public function show($id)
+    public function show(Mentor $mentor)
     {
-        $mentor = Mentor::with('specialization')->findOrFail($id);
-        return view('mentor.profile', compact('mentor'));
+       
+    return view('mentor.profile', compact('mentor'));
     }
 
     public function edit(Mentor $mentor)

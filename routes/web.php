@@ -25,7 +25,7 @@ Route::post('/role/add_role', [RoleController::class, 'store']);
 
 Route::get('/mentor/register', [MentorController::class, 'create'])->name('mentor.register');
 Route::post('/mentor/register', [MentorController::class, 'store'])->name('mentor.store');
-Route::get('/mentor/{id}', [MentorController::class, 'show'])->name('mentor.show');
+Route::get('/mentor/{mentor}', [MentorController::class, 'show'])->name('mentor.show');
 
 Route::get('/skill/add_skill', [SkillController::class, 'create']);
 Route::post('/skill/add_skill', [SkillController::class, 'store']);

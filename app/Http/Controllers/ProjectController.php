@@ -33,51 +33,6 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $request->validate([
-            'title' => 'required|string|max:255',
-         'description' => 'required|string',
-         'type' => 'required|string|max:100',
-         
-         'specializations' => 'required|array', // تعديل: يجب أن تكون مصفوفة
-         'specializations.*' => 'exists:specializations,id', // التأكد من صحة كل تخصص
-         'skills' => 'nullable|array', // المهارات القادمة من الـ Checkboxes
-         'skills.*' => 'exists:skills,id',
-         'team_members' => 'nullable|array',
-         'team_members.*.user_id' => 'exists:users,id',
-         'team_members.*.role' => 'nullable|string|max:255',
-     ]);
-        $project = Project::create([
-         'title' => $request->title,
-         'description' => $request->description,
-         'repository_link' => $request->repository_link,
-         'live_demo_link' => $request->live_demo_link,
-         'type' => $request->type,
-        ]);
-
-        // ارتباط التخصصات بالمشروع
-        $project->specializations()->attach($request->specializations);
-
-        // ارتباط المهارات بالمشروع
-        if ($request->has('skills')) {
-            $project->skills()->attach($request->skills);
-        }
-
-        // Add team members
-        dd($request->team_members);
-        if ($request->has('team_members') && is_array($request->team_members)) {
-            foreach ($request->team_members as $member) {
-                if (isset($member['user_id'])) {
-                    team_role::create([
-                        'user_id' => $member['user_id'],
-                        'project_id' => $project->id,
-                        'role' => $member['role'] ?? null,
-                    ]);
-                }
-            }
-        }
-
-        return redirect("/");
     }
 
     /**

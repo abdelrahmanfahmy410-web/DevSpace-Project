@@ -44,13 +44,27 @@ class SpecializationController extends Controller
             'skills.*' => 'exists:skills,id',
         ]);
         //get or create specialization
-        $specialization = Specialization::create([
-            'name' => $request->name,
-        ]);
-        $specialization->skills()->attach($request->skills);
-        return redirect('/');
-    }
 
+      if ($request->name == 'Other') {
+        $request->validate([
+            'other_specialization' => 'required|string|max:255',
+        ]);
+        
+        $specialization = Specialization::create([
+            'name' => $request->other_specialization,
+        ]);
+    }
+    else {
+        $specialization = Specialization::where('name', $request->name)->first();
+         if (!$specialization) {
+            return back()->withErrors(['name' => 'Specialization not found']);
+        }
+    }
+        $specialization->skills()->sync($request->skills);
+    
+        return redirect('/')->with('success', 'Specialization created successfully!');
+    }
+     
     /**
      * Display the specified resource.
      */

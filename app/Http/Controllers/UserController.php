@@ -15,11 +15,14 @@ class UserController extends Controller
      */
     public function login(){
 
+
     }
 public function savelogin(Request $request){
 
-//
+// Validate the incoming request data
+
 Auth::login($user);
+
 
 }
     public function search(Request $request)

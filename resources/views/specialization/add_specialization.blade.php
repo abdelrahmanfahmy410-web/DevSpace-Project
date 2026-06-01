@@ -63,21 +63,24 @@
                 {{ $specialization->name }}
 
             </option>
+            @endforeach
             <option value="Other" >
 
                 Other
              </option>
 
-        @endforeach
 
     </select>
-  <div> id="other-specialization" style="display:none; margin-top:10px;">
-        <input
+  <div  id="other-specialization" style="display:none; margin-top:10px;">
+    
+       <input
             type="text"
             name="other_specialization"
             class="form-control"
             placeholder="Enter other specialization"
         >
+            
+       
     </div>
 </div>
 
@@ -122,14 +125,16 @@
 
 </body>
 <script>
-function showspecilization(){
-    var specialization=documents.getElementById("specialization").value;
-    if(specialization=="Other"){
-        document.getElementById("other-specialization").style.display="block";
-    else{
-        document.getElementById("other-specialization").style.display="none";
-    }
+function showspecilization() {
 
+    var specialization =
+        document.getElementById("specialization").value;
+
+    if (specialization == "Other") {
+        document.getElementById("other-specialization").style.display = "block";
+    } else {
+        document.getElementById("other-specialization").style.display = "none";
+    }
 }
- </script>
+</script>
 </html>

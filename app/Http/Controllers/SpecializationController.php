@@ -38,11 +38,7 @@ class SpecializationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:specializations,name',
-            'skills' => 'array',
-            'skills.*' => 'exists:skills,id',
-        ]);
+       
         //get or create specialization
 
       if ($request->name == 'Other') {
@@ -57,12 +53,19 @@ class SpecializationController extends Controller
     else {
         $specialization = Specialization::where('name', $request->name)->first();
          if (!$specialization) {
-            return back()->withErrors(['name' => 'Specialization not found']);
-        }
+            $specialization = Specialization::create([
+                'name' => $request->other_specialization,
+            ]);
+             $request->validate([
+            'name' => 'required|string|max:255|unique:specializations,name',
+            'skills' => 'array',
+            'skills.*' => 'exists:skills,id',
+        ]);
+         }
     }
         $specialization->skills()->sync($request->skills);
     
-        return redirect('/')->with('success', 'Specialization created successfully!');
+        return redirect('/')->with('success');
     }
      
     /**

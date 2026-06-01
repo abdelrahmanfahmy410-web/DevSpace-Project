@@ -85,17 +85,21 @@
 </div>
 
 
-<div class="form-group">
+<div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
 
-    <label>
+    <label style="margin: 0; font-weight: 600;">
         Skills
     </label>
 
-    <div class="skills-container">
+    <a href="{{ url('/skill/add_skill') }}" class="btn btn-secondary" style="white-space: nowrap;">
+        Add Skill
+    </a>
+
+    <div class="skills-container" style="width: 100%; margin-top: 12px;">
 
         @foreach($skills as $skill)
 
-            <div class="skill-item">
+            <div class="skill-item" data-skill-id="{{ $skill->id }}">
 
                 <input
                     type="checkbox"
@@ -104,9 +108,7 @@
                 >
 
                 <label>
-
                     {{ $skill->name }}
-
                 </label>
 
             </div>
@@ -121,9 +123,11 @@
                 <button type="submit" class="btn btn-primary">
                     Create Specialization
                 </button>
+            </div>
+        </form>
+    </div>
 </div>
 
-</body>
 <script>
 function showspecilization() {
 
@@ -136,5 +140,7 @@ function showspecilization() {
         document.getElementById("other-specialization").style.display = "none";
     }
 }
+
 </script>
+</body>
 </html>

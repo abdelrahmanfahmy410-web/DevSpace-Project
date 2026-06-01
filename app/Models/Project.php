@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    //
+    use HasFactory;
+
     protected $fillable = ['title','description','repository_link','live_demo_link','type'];
     //teamrole
     public function team_roles()

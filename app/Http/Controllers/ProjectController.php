@@ -25,7 +25,7 @@ class ProjectController extends Controller
     {
         $specializations = \App\Models\Specialization::all();
         $skills = [];
-        return view('project.add_project', compact('specializations', 'skills'));
+        return view('Project.project_add', compact('specializations', 'skills'));
     }
 
     /**
@@ -43,6 +43,9 @@ class ProjectController extends Controller
          'specializations.*' => 'exists:specializations,id', // التأكد من صحة كل تخصص
          'skills' => 'nullable|array', // المهارات القادمة من الـ Checkboxes
          'skills.*' => 'exists:skills,id',
+         'team_members' => 'nullable|array',
+         'team_members.*.user_id' => 'exists:users,id',
+         'team_members.*.role' => 'nullable|string|max:255',
      ]);
         $project = Project::create([
          'title' => $request->title,
@@ -58,6 +61,20 @@ class ProjectController extends Controller
         // ارتباط المهارات بالمشروع
         if ($request->has('skills')) {
             $project->skills()->attach($request->skills);
+        }
+
+        // Add team members
+        
+        if ($request->has('team_members') && is_array($request->team_members)) {
+            foreach ($request->team_members as $member) {
+                if (isset($member['user_id'])) {
+                    team_role::create([
+                        'user_id' => $member['user_id'],
+                        'project_id' => $project->id,
+                        'role' => $member['role'] ?? null,
+                    ]);
+                }
+            }
         }
 
         return redirect("/");
@@ -78,6 +95,7 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         //
+        
     }
 
     /**
@@ -109,5 +127,10 @@ class ProjectController extends Controller
         
         return view('projects_show', compact('project'));
         }
+
+    public function addMedia(Project $project)
+    {
+        return view('project.add_media', compact('project'));
+    }
 
 }

@@ -10,19 +10,24 @@
 </head>
 
 <body>
+    <div>
+        @include('layouts.toaster')
+    </div>
 
     <nav class="navbar">
         <div class="navbar__logo">
-            @include('layouts.logo')
+            @include('layouts.logo', ['darkMode' => false])
         </div>
         <div class="navbar__links" id="navLinks">
             <a href="#" class="navbar__link is-active">Home</a>
             <a href="#" class="navbar__link">Projects</a>
             <a href="#" class="navbar__link">Mentors</a>
-            <a href="#" class="navbar__link">Investors</a>
+            <a href="#" class="navbar__link">Developers</a>
             <a href="#" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
-            <a href="#" class="btn btn-primary">Join the Space</a>
+            
+            <a href="#" class="btn btn-primary">Join the Space </a>
         </div>
+
         <button class="navbar__mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>
@@ -40,7 +45,9 @@
             <div class="footer-grid">
 
                 <div class="footer-brand">
-                    <div class="footer-brand-name">Dev<span>Space</span></div>
+                    <div class="footer-brand-name">
+                      @include('layouts.logo', ['darkMode' => true])
+                    </div>
                     <p class="footer-brand-desc">Where developers showcase their work, connect with mentors, and turn
                         side projects into real products.</p>
                     <div class="social-links">
@@ -98,7 +105,7 @@
         </div>
     </footer>
 
-    <script src="./js_template.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

@@ -6,7 +6,8 @@ use App\Models\Investor;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\UserRole;
+use App\Models\Role;
 
 class InvestorController extends Controller
 {
@@ -45,7 +46,7 @@ class InvestorController extends Controller
       $imagePath = null;
       if ($request->hasFile('profile_picture')) {
         $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-         User::create([
+        $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -63,7 +64,7 @@ class InvestorController extends Controller
                 'user_id' => $userid,
                 'role_id' => Role::where('name','investor')->first()->id
               ]);
-
+              auth()->login($user);
               return redirect('/');  
     }     
     }

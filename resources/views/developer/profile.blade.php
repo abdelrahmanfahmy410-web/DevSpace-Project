@@ -12,23 +12,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body style="background-color: var(--color-bg-light, #f8fafc); margin: 0; padding: 0; font-family: sans-serif;">
-
 <div class="container section" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
     {{-- تقسيم الصفحة لعمودين باستخدام الـ Grid الخاص بيكِ --}}
     <div class="grid-2">
-        
         <div class="card text-center" style="padding: var(--space-5, 24px); height: fit-content; background: #ffffff; border: 1px solid var(--color-border, #e2e8f0); border-radius: var(--radius-md, 8px);">
             
             <div class="avatar avatar--lg mb-4" style="width: 120px; height: 120px; margin: 0 auto var(--space-4, 16px) auto; display: block; border-radius: 50%; overflow: hidden;">
-                @if($developer->profile_picture)
-                    <img src="{{ asset('storage/' . $developer->profile_picture) }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+               @if($developer->user?->profile_picture)
+                    <img src="{{ asset('/storage/' . $developer->user?->profile_picture) }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
                 @else
                     <img src="https://ui-avatars.com/api/?name={{ urlencode($developer->user?->name ?? 'DevSpace') }}&background=1A7A4A&color=fff" alt="Default Avatar" style="width: 100%; height: 100%; object-fit: cover;">
                 @endif
             </div>
             
             <h1 class="heading-2 mb-1" style="color: var(--color-dark-navy, #0f172a); font-weight: 600; margin-bottom: var(--space-1, 4px);">
-                {{ $developer->user?->name ?? 'Amal Saleh' }}
+                {{ $developer->user?->name ?? 'Not found' }}
             </h1>
             
             <span class="badge" style="background-color: var(--color-primary-bg, #e6f4ea); color: var(--color-primary, #1A7A4A); display: inline-block; padding: 4px 12px; border-radius: 4px; font-weight: 600; margin-bottom: var(--space-4, 16px); font-size: 14px;">
@@ -42,8 +40,8 @@
                     <i class="fas fa-phone" style="margin-right: 6px;"></i> {{ $developer->phone_number ?? 'No phone added' }}
                 </span>
                 
-                @if($developer->linkedin_url)
-                    <a href="{{ $developer->linkedin_url }}" target="_blank" style="font-size: var(--font-size-small, 14px); color: var(--color-primary, #1A7A4A); text-decoration: none;">
+                @if($developer->user?->linkedin_url)
+                    <a href="{{ $developer->user?->linkedin_url }}" target="_blank" style="font-size: var(--font-size-small, 14px); color: var(--color-primary, #1A7A4A); text-decoration: none;">
                         <i class="fab fa-linkedin" style="margin-right: 6px;"></i> LinkedIn Profile
                     </a>
                 @endif
@@ -67,7 +65,7 @@
                     Biography
                 </h2>
                 <p class="text-body" style="color: var(--color-body-text, #334155); line-height: 1.6; font-size: 15px; margin-top: var(--space-3, 12px);">
-                    {{ $developer->bio ?? 'Welcome to DevSpace! No biography added yet.' }}
+                    {{ $developer->user?->bio ?? 'Welcome to DevSpace! No biography added yet.' }}
                 </p>
             </div>
 

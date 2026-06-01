@@ -65,15 +65,19 @@ class MentorController extends Controller
         if ($request->hasFile('profile_picture')) {
             $mentorData['profile_picture'] = $request->file('profile_picture')->store('mentors/profiles', 'public');
         }
-
+        auth()->login($user);
         Mentor::create($mentorData);
-        return redirect()->route('mentor.register')->with('success', 'Registered successfully!');
+         UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => Role::where('name','mentor')->first()->id
+          ]);
+        return redirect('/')->with('success', 'Registered successfully!');
     }
 
-    public function show($id)
+    public function show(Mentor $mentor)
     {
-        $mentor = Mentor::with('specialization')->findOrFail($id);
-        return view('mentor.profile', compact('mentor'));
+       
+    return view('mentor.profile', compact('mentor'));
     }
 
     public function edit(Mentor $mentor)

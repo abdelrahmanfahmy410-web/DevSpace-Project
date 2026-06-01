@@ -7,6 +7,22 @@
         <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 </head>
 <body>
+    <div>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
 <div class="page-wrap">
     <div class="page-header">
         <span class="badge">SPECIALIZATION</span>
@@ -32,11 +48,13 @@
         class="form-control"
         name="name"
         required
+    onchange="showspecilization()"
     >
 
         <option disabled selected>
             Select Specialization
         </option>
+
 
         @foreach($specializations as $specialization)
 
@@ -45,11 +63,22 @@
                 {{ $specialization->name }}
 
             </option>
+            <option value="Other" >
+
+                Other
+             </option>
 
         @endforeach
 
     </select>
-
+  <div> id="other-specialization" style="display:none; margin-top:10px;">
+        <input
+            type="text"
+            name="other_specialization"
+            class="form-control"
+            placeholder="Enter other specialization"
+        >
+    </div>
 </div>
 
 
@@ -92,4 +121,15 @@
 </div>
 
 </body>
+<script>
+function showspecilization(){
+    var specialization=documents.getElementById("specialization").value;
+    if(specialization=="Other"){
+        document.getElementById("other-specialization").style.display="block";
+    else{
+        document.getElementById("other-specialization").style.display="none";
+    }
+
+}
+ </script>
 </html>

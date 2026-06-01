@@ -43,6 +43,7 @@ class SpecializationController extends Controller
             'skills' => 'array',
             'skills.*' => 'exists:skills,id',
         ]);
+        //get or create specialization
         $specialization = Specialization::create([
             'name' => $request->name,
         ]);

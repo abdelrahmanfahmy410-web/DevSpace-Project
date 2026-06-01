@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Specialization extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['name'];
     //area of interset
     //select * from users where id in (select user_id from area_of_interests where specialization_id = 1)

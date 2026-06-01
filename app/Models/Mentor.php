@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Mentor extends Model
 {
-    //
+    use HasFactory;
+
     protected $fillable = ['organization', 'user_id', 'experience_years','specialization_id'];
     public function user()
     {

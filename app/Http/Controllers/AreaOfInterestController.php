@@ -36,11 +36,12 @@ class AreaOfInterestController extends Controller
             'areas_of_interest' => 'required|array|min:3',
             'areas_of_interest.*' => 'exists:specializations,id',
         ]);
-
-        auth()->user()->areasOfInterest()->sync(
-            $request->areas_of_interest
-        );
-
+      foreach ($request->areas_of_interest as $areaId) {
+            Area_of_interest::create([
+                'user_id' => auth()->id(),
+                'specializations_id' => $areaId,
+            ]);
+        }
         return redirect()
             ->back()
             ->with(

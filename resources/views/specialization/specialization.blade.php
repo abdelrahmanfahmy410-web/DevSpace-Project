@@ -21,7 +21,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         thead {
-            background-color: #343a40;
+            background-color: #1f9d55;
             color: white;
         }
         th, td {

@@ -8,7 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\Specialization;
-
+use App\Models\UserRole;
+use App\Models\Role;
 
 class DeveloperController extends Controller
 {
@@ -103,7 +104,7 @@ class DeveloperController extends Controller
 public function show()
 { 
     $developer = Developer::with(['user', 'specialization'])->first();
-
+   //  dd($developer->user->roles());
     if (!$developer) {
         return "جدول المطورين (developers) فارغ في قاعدة البيانات. برجاء إضافة مطور أولاً للتجربة.";
     }

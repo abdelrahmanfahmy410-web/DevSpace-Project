@@ -12,14 +12,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body style="background-color: var(--color-bg-light, #f8fafc); margin: 0; padding: 0; font-family: sans-serif;">
-
 <div class="container section" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
     {{-- تقسيم الصفحة لعمودين باستخدام الـ Grid الخاص بيكِ --}}
     <div class="grid-2">
         <div class="card text-center" style="padding: var(--space-5, 24px); height: fit-content; background: #ffffff; border: 1px solid var(--color-border, #e2e8f0); border-radius: var(--radius-md, 8px);">
             
             <div class="avatar avatar--lg mb-4" style="width: 120px; height: 120px; margin: 0 auto var(--space-4, 16px) auto; display: block; border-radius: 50%; overflow: hidden;">
-            @if($developer->user?->profile_picture)
+               @if($developer->user?->profile_picture)
                     <img src="{{ asset('/storage/' . $developer->user?->profile_picture) }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
                 @else
                     <img src="https://ui-avatars.com/api/?name={{ urlencode($developer->user?->name ?? 'DevSpace') }}&background=1A7A4A&color=fff" alt="Default Avatar" style="width: 100%; height: 100%; object-fit: cover;">

@@ -7,6 +7,22 @@
         <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 </head>
 <body>
+    <div>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
 <div class="page-wrap">
     <div class="page-header">
         <span class="badge">SPECIALIZATION</span>
@@ -37,6 +53,16 @@
         <option disabled selected>
             Select Specialization
         </option>
+        <option value="Web Development">
+            Web Development
+        </option>
+        <option value="Mobile App Development">
+            Mobile App Development
+        </option>
+        <option value="Data Science">
+            Data Science
+        </option>
+        
 
         @foreach($specializations as $specialization)
 

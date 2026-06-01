@@ -90,4 +90,25 @@
             color: var(--color-body-text);
             margin-bottom: 8px;
         }
+        .toaster-container{
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .toaster-container .toast {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            animation: fadeInOut 3s forwards;
+        }
+        .toaster-container .toast.success {
+            background-color: var(--color-primary);
+        }
+        .toaster-container .toast.error {
+            background-color: #E74C3C;
+        }
    

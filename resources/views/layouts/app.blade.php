@@ -10,7 +10,9 @@
 </head>
 
 <body>
-
+    <div>
+        @include('layouts.toaster')
+    </div>
     <nav class="navbar">
         <div class="navbar__logo">
             @include('layouts.logo')
@@ -23,6 +25,7 @@
             <a href="#" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
             <a href="#" class="btn btn-primary">Join the Space</a>
         </div>
+
         <button class="navbar__mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>

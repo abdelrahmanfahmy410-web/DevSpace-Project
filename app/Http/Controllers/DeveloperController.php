@@ -52,37 +52,39 @@ class DeveloperController extends Controller
     try {
 
         DB::beginTransaction();
+        $imagname = null;
+        
+        if ($request->hasFile('profile_picture')) {
+            $imagname = $request->file('profile_picture')->store('profiles', 'public');
+            }
 
         // create user
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'phonenumber' => $validatedData['phone_number'] ?? null,
+            'bio' => $validatedData['bio'] ?? null,
+            'linkedin_url' => $validatedData['linkedin_url'] ?? null,
+            'profile_picture' => $imagname,
             'password' => Hash::make($validatedData['password']),
+            
         ]);
-
-        // upload image
-        $imagePath = null;
-
-        if ($request->hasFile('profile_picture')) {
-            $imagePath = $request->file('profile_picture')->store('profiles', 'public');
-        }
 
         // create developer
         Developer::create([
             'user_id' => $user->id,
             'portfolio_url' => $validatedData['portfolio_url'] ?? null,
-            'bio' => $validatedData['bio'] ?? null,
-            'linkedin_url' => $validatedData['linkedin_url'] ?? null,
-            'phone_number' => $validatedData['phone_number'] ?? null,
-            'profile_picture' => $imagePath,
             'specialization_id' => $validatedData['specialization_id'],
         ]);
 
         DB::commit();
-
+       
         auth()->login($user);
-
-        return redirect('/investor/register')
+        UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => Role::where('name','developer')->first()->id
+          ]);
+        return redirect('/developer/profile')
             ->with('success', 'Developer account created successfully');
 
     } catch (\Exception $e) {
@@ -97,13 +99,7 @@ class DeveloperController extends Controller
     }
 }
 
-    /**
-     * Display the specified resource.
-
-
-     * Show the form for editing the specified resource.
-//      */
-
+   
 public function show()
 { 
     $developer = Developer::with(['user', 'specialization'])->first();
@@ -170,7 +166,7 @@ public function show()
             'phone_number' => $request->phone_number,
             'bio' => $request->bio, // حفظ البايو جوة جدول الـ users هنا
         ];
-        
+        dd($request->all());
         if ($request->hasFile('profile_picture')) {
             // رفع الصورة وحفظ المسار في حقل 'profile_pic' التابع لليوزر
             $userData['profile_pic'] = $request->file('profile_picture')->store('profiles', 'public');

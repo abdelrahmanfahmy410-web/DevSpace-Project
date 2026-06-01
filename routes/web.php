@@ -75,3 +75,4 @@ Route::get('/projects-index', function () {
     $projects = \App\Models\Project::with(['skills', 'specializations'])->get();
     return view('Project.projects-index', compact('projects'));})->name('projects.index.page');
 
+Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);

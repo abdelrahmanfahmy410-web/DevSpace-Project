@@ -73,7 +73,8 @@ class ProjectController extends Controller
             'specializations.*' => 'exists:specializations,id', 
             'skills' => 'nullable|array', 
             'skills.*' => 'exists:skills,id',
-            'project_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'project_images'   => 'nullable|array',
+            'project_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $project->update([
@@ -85,19 +86,19 @@ class ProjectController extends Controller
         ]);
 
         // تحديث الصورة
-        if ($request->hasFile('project_image')) {
-            // إذا كان للمشروع صورة قديمة، نقوم بحذفها من السيرفر أولاً
-            if ($project->media()->exists()) {
-                $oldMedia = $project->media()->first();
-                Storage::disk('public')->delete($oldMedia->file_path);
-                
-                // ارفع الصورة الجديدة وحدّث السجل الحالي
-                $newImagePath = $request->file('project_image')->store('projects_media', 'public');
-                $oldMedia->update(['file_path' => $newImagePath]);
-            } else {
-                // إذا لم يكن لديه صورة قديمة، قم بإنشاء سجل جديد
-                $newImagePath = $request->file('project_image')->store('projects_media', 'public');
-                $project->media()->create(['file_path' => $newImagePath]);
+        if ($request->hasFile('project_images')) {
+    // حذف الصور القديمة كلها
+    foreach ($project->media as $media) {
+        Storage::disk('public')->delete($media->file_path);
+        $media->delete();
+    }
+    // رفع الصور الجديدة
+    foreach ($request->file('project_images') as $image) {
+        $newPath = $image->store('projects_media', 'public');
+        $project->media()->create([
+            'file_path' => $newPath,
+            'medianame' => $image->getClientOriginalName(),
+        ]);
             }
         }
 

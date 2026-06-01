@@ -10,6 +10,8 @@ use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\DeveloperSkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
+use App\Http\Controllers\UserController;
+
 //all users
 Route::get('/', function () {
     return view('layouts.app');
@@ -74,6 +76,11 @@ Route::get('/project/{project}', [ProjectController::class, 'show'])->name('proj
 
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 Route::post('/project/store_media/{project}', [ProjectController::class, 'storeMedia'])->name('projects.store_media');
-Route::get('/login', function () {
-    return response()->json(['message' => 'Not authenticated'], 401);
-})->name('login');
+// Route::get('/login', function () {
+//     return response()->json(['message' => 'Not authenticated'], 401);
+// })->name('login');
+
+//login routes
+
+Route::get('/login', [UserController::class, 'login'])->name('login');
+Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');

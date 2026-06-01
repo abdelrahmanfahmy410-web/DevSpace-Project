@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -23,20 +25,26 @@ public function savelogin(Request $request){
         'email' => 'required|email',
         'password' => 'required',
     ]);
+     // 1.find the user by email
+    $user = User::where('email', $request->email)->first();
 
-    $credentials = $request->only('email', 'password');
-
-    if (Auth::attempt($credentials)) {
-
-        $request->session()->regenerate();
-
+        // 2.check if user exists and password is correct
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+    // 3.regenerate session and log the user in
+     $request->session()->regenerate();
         Auth::login($user);
-        return redirect('/dashboard');
+        return redirect('/')->with('success');
     }
 
 
 
-}
+
+
+
     public function search(Request $request)
     {
       

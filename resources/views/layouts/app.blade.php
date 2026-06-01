@@ -21,9 +21,10 @@
             <a href="#" class="navbar__link is-active">Home</a>
             <a href="#" class="navbar__link">Projects</a>
             <a href="#" class="navbar__link">Mentors</a>
-            <a href="#" class="navbar__link">Investors</a>
+            <a href="#" class="navbar__link">Developers</a>
             <a href="#" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
-            <a href="#" class="btn btn-primary">Join the Space</a>
+            
+            <a href="#" class="btn btn-primary">Join the Space </a>
         </div>
 
         <button class="navbar__mobile-toggle" id="mobileToggle" aria-label="Toggle menu">

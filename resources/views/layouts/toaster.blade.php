@@ -5,9 +5,9 @@
             {{ session('success') }}
         </div>
     @endif
-    @if (session('error'))
+    @foreach($errors->all() as $error)
         <div class="toaster error">
-            {{ session('error') }}
+            {{ $error }}
         </div>
-    @endif
+    @endforeach
 </div>

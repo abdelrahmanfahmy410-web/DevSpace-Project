@@ -48,21 +48,13 @@
         class="form-control"
         name="name"
         required
+    onchange="showspecilization()"
     >
 
         <option disabled selected>
             Select Specialization
         </option>
-        <option value="Web Development">
-            Web Development
-        </option>
-        <option value="Mobile App Development">
-            Mobile App Development
-        </option>
-        <option value="Data Science">
-            Data Science
-        </option>
-        
+
 
         @foreach($specializations as $specialization)
 
@@ -71,11 +63,22 @@
                 {{ $specialization->name }}
 
             </option>
+            <option value="Other" >
+
+                Other
+             </option>
 
         @endforeach
 
     </select>
-
+  <div> id="other-specialization" style="display:none; margin-top:10px;">
+        <input
+            type="text"
+            name="other_specialization"
+            class="form-control"
+            placeholder="Enter other specialization"
+        >
+    </div>
 </div>
 
 
@@ -118,4 +121,15 @@
 </div>
 
 </body>
+<script>
+function showspecilization(){
+    var specialization=documents.getElementById("specialization").value;
+    if(specialization=="Other"){
+        document.getElementById("other-specialization").style.display="block";
+    else{
+        document.getElementById("other-specialization").style.display="none";
+    }
+
+}
+ </script>
 </html>

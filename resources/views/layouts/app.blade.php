@@ -13,6 +13,7 @@
     <div>
         @include('layouts.toaster')
     </div>
+
     <nav class="navbar">
         <div class="navbar__logo">
             @include('layouts.logo', ['darkMode' => false])

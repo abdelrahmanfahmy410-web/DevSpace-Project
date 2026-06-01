@@ -13,6 +13,15 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    public function login(){
+
+    }
+public function savelogin(Request $request){
+
+//
+Auth::login($user);
+
+}
     public function search(Request $request)
     {
       
@@ -30,4 +39,3 @@ class UserController extends Controller
     return response()->json($users);
     }
 }
-

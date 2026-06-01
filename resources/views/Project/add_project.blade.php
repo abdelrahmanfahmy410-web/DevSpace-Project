@@ -348,7 +348,7 @@ selected_specializations.addEventListener('change', function() {
 
   // 2. تجهيز مصفوفة لجمع كل الوعود (Promises) لتشغيل الـ AJAX لكل تخصص معاً
   const fetchPromises = selectedOptions.map(specId => 
-    fetch(`/projects/create/${specId}`).then(response => {
+    fetch(`/api/skills-by-specialization/${specId}`).then(response => {
       if(!response.ok) throw new Error('Network error');
       return response.json();
     })

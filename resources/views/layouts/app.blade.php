@@ -16,7 +16,7 @@
 
     <nav class="navbar">
         <div class="navbar__logo">
-            @include('layouts.logo')
+            @include('layouts.logo', ['darkMode' => false])
         </div>
         <div class="navbar__links" id="navLinks">
             <a href="#" class="navbar__link is-active">Home</a>
@@ -45,7 +45,9 @@
             <div class="footer-grid">
 
                 <div class="footer-brand">
-                    <div class="footer-brand-name">Dev<span>Space</span></div>
+                    <div class="footer-brand-name">
+                      @include('layouts.logo', ['darkMode' => true])
+                    </div>
                     <p class="footer-brand-desc">Where developers showcase their work, connect with mentors, and turn
                         side projects into real products.</p>
                     <div class="social-links">
@@ -103,7 +105,7 @@
         </div>
     </footer>
 
-    <script src="./js_template.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

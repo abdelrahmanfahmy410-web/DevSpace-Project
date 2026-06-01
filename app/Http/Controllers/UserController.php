@@ -14,14 +14,26 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(){
-
-
+        return view('auth.login');
     }
 public function savelogin(Request $request){
 
 // Validate the incoming request data
+ $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-Auth::login($user);
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+
+        $request->session()->regenerate();
+
+        Auth::login($user);
+        return redirect('/dashboard');
+    }
+
 
 
 }

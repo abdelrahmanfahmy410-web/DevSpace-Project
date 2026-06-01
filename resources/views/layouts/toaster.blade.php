@@ -5,7 +5,7 @@
             {{ session('success') }}
         </div>
     @endif
-    @foreach($php_errormsg as $error)
+    @foreach($errors->all() as $error)
         <div class="toaster error">
             {{ $error }}
         </div>

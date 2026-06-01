@@ -10,10 +10,7 @@ use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\DeveloperSkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
-<<<<<<< HEAD
 use App\Http\Controllers\UserController;
-=======
->>>>>>> 7192245e0eb2bf5828dcc9f71e4244726c3f8ca1
 
 //all users
 Route::get('/', function () {

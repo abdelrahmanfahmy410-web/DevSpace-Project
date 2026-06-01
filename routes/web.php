@@ -25,6 +25,8 @@ Route::post('/role/add_role', [RoleController::class, 'store']);
 Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
 Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('developer.edit');
 Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
+Route::get('/developer/skills/{id}/edit', [DeveloperSkillController::class, 'edit']);
+Route::post('/developer/skills/{id}/update', [DeveloperSkillController::class, 'update']);
 
 Route::get('/mentor/register', [MentorController::class, 'create'])->name('mentor.register');
 Route::post('/mentor/register', [MentorController::class, 'store'])->name('mentor.store');
@@ -40,6 +42,7 @@ Route::post('/specialization/add_specialization', [SpecializationController::cla
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
+Route::middleware(['auth'])->group(function () {Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');});
 
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');

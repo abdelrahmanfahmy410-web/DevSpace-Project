@@ -109,5 +109,14 @@ class ProjectController extends Controller
         
         return view('projects_show', compact('project'));
         }
+        
+        public function myProjects()
+{
+    $projects = Project::where('user_id', auth()->id())
+                       ->latest()
+                       ->get();
+
+    return view('projects.my-projects', compact('projects'));
+}
 
 }

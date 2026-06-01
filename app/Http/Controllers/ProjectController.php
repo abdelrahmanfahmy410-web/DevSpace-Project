@@ -64,7 +64,7 @@ class ProjectController extends Controller
         }
 
         // Add team members
-        
+        dd($request->team_members);
         if ($request->has('team_members') && is_array($request->team_members)) {
             foreach ($request->team_members as $member) {
                 if (isset($member['user_id'])) {

@@ -71,7 +71,7 @@
       <h1 class="page-title">Add New Project</h1>
       <p class="page-subtitle">Fill in your project details so investors and mentors can discover and connect with your team.</p>
 
-      <form method="POST" action="{{ route('projects.store') }}" id="projectForm" novalidate>
+      <form method="POST" action="{{ route('projects.store') }}" id="projectForm" enctype="multipart/form-data" novalidate>
         @csrf
 
         <!-- ── CARD 1: Project Details ── -->
@@ -138,75 +138,24 @@
 
         <!-- ── CARD 2: Project Type ── -->
         <div class="card">
-          <div class="card-header">
-            <div class="card-header-left">
-              <div class="card-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              </div>
-              <div>
-                <div class="card-title">Project Type</div>
-                <div class="card-sub">Choose the category that best fits your project</div>
-              </div>
-            </div>
-          </div>
-          <div class="card-body">
-
-            <div class="form-group" style="margin-bottom:0;">
-              <label class="form-label">Type <span class="req">*</span></label>
-              <div class="type-grid" id="typeGrid">
-
-                <div class="type-card" onclick="selectType(this,'Web Development')" data-type="Web Development">
-                  <div class="type-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
-                  <span class="type-emoji">🌐</span>
-                  <div class="type-label">Web Dev</div>
-                  <div class="type-desc">Full-stack or frontend web applications</div>
-                </div>
-
-                <div class="type-card" onclick="selectType(this,'Mobile')" data-type="Mobile">
-                  <div class="type-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
-                  <span class="type-emoji">📱</span>
-                  <div class="type-label">Mobile</div>
-                  <div class="type-desc">iOS, Android or cross-platform apps</div>
-                </div>
-
-                <div class="type-card" onclick="selectType(this,'AI / ML')" data-type="AI / ML">
-                  <div class="type-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
-                  <span class="type-emoji">🤖</span>
-                  <div class="type-label">AI / ML</div>
-                  <div class="type-desc">Machine learning and AI-powered solutions</div>
-                </div>
-
-                <div class="type-card" onclick="selectType(this,'IoT')" data-type="IoT">
-                  <div class="type-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
-                  <span class="type-emoji">🔌</span>
-                  <div class="type-label">IoT</div>
-                  <div class="type-desc">Embedded systems and hardware projects</div>
-                </div>
-
-                <div class="type-card" onclick="selectType(this,'Cybersecurity')" data-type="Cybersecurity">
-                  <div class="type-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
-                  <span class="type-emoji">🛡️</span>
-                  <div class="type-label">Cybersecurity</div>
-                  <div class="type-desc">Security tools, research and systems</div>
-                </div>
-
-                <div class="type-card" onclick="selectType(this,'Data Science')" data-type="Data Science">
-                  <div class="type-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
-                  <span class="type-emoji">📊</span>
-                  <div class="type-label">Data Science</div>
-                  <div class="type-desc">Analytics, visualization and data pipelines</div>
-                </div>
-
-              </div>
-              <input type="hidden" name="type" id="type_input" />
-              <div class="field-error" id="typeError" style="margin-top:10px;">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                Please select a project type.
-              </div>
-            </div>
-
-          </div>
-        </div>
+ <div class="form-group" style="margin-bottom:0;">
+  <label class="form-label" for="type_input">
+    Type <span class="req">*</span>
+  </label>
+  <input
+    type="text"
+    id="type_input"
+    name="type"
+    class="form-input"
+    placeholder="e.g. Web Development, AI/ML, IoT…"
+    maxlength="100"
+    oninput="updatePreview(); document.getElementById('typeError').classList.remove('show'); this.classList.remove('error');"
+  />
+  <div class="field-error" id="typeError" style="margin-top:8px;">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+    Please enter a project type.
+  </div>
+</div>
 
         <!-- ── CARD 3: Links ── -->
         <div class="card">
@@ -222,6 +171,57 @@
             </div>
           </div>
           <div class="card-body">
+
+          <!-- ── CARD 4: Project Image ── -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-header-left">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Project Image</div>
+        <div class="card-sub">Upload a cover image for your project</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label" for="project_image">
+        Cover Image <span class="opt">(optional)</span>
+      </label>
+      <input
+        type="file"
+        id="project_image"
+        name="project_images[]"
+        multiple
+        class="form-input"
+        accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+        onchange="previewImage(this)"
+        style="padding: 8px 12px; cursor: pointer;"
+      />
+      <p class="form-hint">Accepted formats: JPG, PNG, GIF, SVG — max 2MB</p>
+
+      <!-- Image Preview -->
+      <div id="imagePreviewWrapper" style="display:none; margin-top:12px;">
+        <img 
+          id="imagePreview" 
+          src="" 
+          alt="Preview"
+          style="max-width:100%; max-height:220px; border-radius:10px; border:1px solid var(--border); object-fit:cover;"
+        />
+        <button 
+          type="button"
+          onclick="clearImage()"
+          style="display:block; margin-top:8px; font-size:12.5px; color:var(--red); background:none; border:none; cursor:pointer; padding:0;"
+        >
+          ✕ Remove image
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
             <!-- repository_link -->
             <div class="form-group">
@@ -295,6 +295,37 @@
   <div id="skills-checkbox-container" class="skills-checkbox-grid">
     <p class="form-hint">Please select the new specialization to view the available skills...</p>
   </div>
+</div>
+
+<!-- ── CARD 5: Team Members ── -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-header-left">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+            </div>
+            <div>
+                <div class="card-title">Team Members</div>
+                <div class="card-sub">Add people working on this project</div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label class="form-label">Team Members <span class="opt">(optional)</span></label>
+            <div id="team-members-container" class="team-members-list">
+                <p class="form-hint">No team members added yet. Click the button below to add one.</p>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addTeamMemberField()" style="margin-top: 12px;">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;margin-right:6px;">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Add Team Member
+            </button>
+        </div>
+    </div>
 </div>
 
         <!-- ── LIVE PREVIEW ── -->
@@ -398,6 +429,113 @@ selected_specializations.addEventListener('change', function() {
       skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">حدث خطأ أثناء تحميل المهارات.</p>';
     });
 });
+
+// 2. الاستماع لحدث التغيير الخاص بـ Tom Select مباشرة بدلاً من الـ addEventListener التقليدي
+tomSelectControl.on('change', function(values) {
+    
+    // القيم المحددة تأتي مباشرة كمصفوفة من الـ IDs داخل المتغير values
+    const selectedOptions = values; 
+    const skillsContainer = document.getElementById('skills-checkbox-container');
+    
+    if (!selectedOptions || selectedOptions.length === 0) {
+        skillsContainer.innerHTML = '<p class="form-hint">Please select the new specialization to view the available skills...</p>';
+        return;
+    }
+
+    // 3. تجهيز الـ Promises لتشغيل الـ AJAX لكل تخصص معاً (الرابط يطابق الـ Routes لديك تماماً)
+    const fetchPromises = selectedOptions.map(specId => 
+        fetch(`/projects/create/${specId}`).then(response => {
+            if(!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+    );
+
+    // 4. انتهاء جلب البيانات من كافة التخصصات المحددة
+    Promise.all(fetchPromises)
+        .then(results => {
+            skillsContainer.innerHTML = ''; // تفريغ الحاوية لبناء المهارات الجديدة
+            
+            // دمج كافة المهارات القادمة في مصفوفة واحدة واستبعاد المهارات المكررة
+            let allSkills = [];
+            let uniqueSkillIds = new Set();
+
+            results.forEach(skillsArray => {
+                skillsArray.forEach(skill => {
+                    if (!uniqueSkillIds.has(skill.id)) {
+                        uniqueSkillIds.add(skill.id);
+                        allSkills.push(skill);
+                    }
+                });
+            });
+
+            // 5. بناء الـ Checkboxes للمهارات المدمجة
+            if(allSkills.length > 0) {
+                allSkills.forEach(skill => {
+                    const label = document.createElement('label');
+                    label.className = 'skill-checkbox-item';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'skills[]';
+                    checkbox.value = skill.id;
+                    
+                    const text = document.createTextNode(' ' + skill.name);
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(text);
+                    skillsContainer.appendChild(label);
+                });
+            } else {
+                skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">No skills registered for these specializations.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching skills:', error);
+            skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">حدث خطأ أثناء تحميل المهارات.</p>';
+        });
+});
+
+// وحط مكانها الدالة الجديدة دي
+function previewImage(input) {
+  const wrapper = document.getElementById('imagePreviewWrapper');
+  wrapper.innerHTML = '';
+
+  if (input.files && input.files.length > 0) {
+    wrapper.style.display = 'block';
+
+    Array.from(input.files).forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const container = document.createElement('div');
+        container.style.cssText = 'display:inline-block; margin:4px; position:relative;';
+        container.innerHTML = `
+          <img src="${e.target.result}" 
+               style="width:100px; height:80px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" />
+          <span style="display:block; font-size:11px; color:var(--color-muted); text-align:center; margin-top:2px; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            ${file.name}
+          </span>
+        `;
+        wrapper.appendChild(container);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.onclick = clearImage;
+    removeBtn.style.cssText = 'display:block; margin-top:8px; font-size:12.5px; color:var(--red); background:none; border:none; cursor:pointer; padding:0;';
+    removeBtn.textContent = '✕ Remove all images';
+    wrapper.appendChild(removeBtn);
+  }
+}
+
+function clearImage() {
+  document.getElementById('project_image').value = '';
+  const wrapper = document.getElementById('imagePreviewWrapper');
+  wrapper.style.display = 'none';
+  wrapper.innerHTML = '';
+}
+
 function onTitleInput(el) {
   document.getElementById('titleCount').textContent = el.value.length;
   const cc = document.getElementById('titleCount').parentElement;
@@ -410,13 +548,7 @@ function onDescInput(el) {
   cc.classList.toggle('over', el.value.length > 1900);
   updatePreview();
 }
-function selectType(card, val) {
-  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
-  card.classList.add('selected');
-  document.getElementById('type_input').value = val;
-  document.getElementById('typeError').classList.remove('show');
-  updatePreview();
-}
+
 function validateUrl(input, errorId) {
   const err = document.getElementById(errorId);
   if (input.value && !input.value.startsWith('http')) {
@@ -495,11 +627,66 @@ document.getElementById('description').addEventListener('input', function() {
   document.getElementById('descError').classList.remove('show');
 });
 
-new TomSelect("#specializations", {
-    plugins: ['remove_button'], // يضيف زر X صغير لحذف التخصص المختار بسهولة
-    create: false,
-    placeholder: "Choose your majors..."
-});
+
+// ─────────────────────────────────────────────────────────────────────────
+// TEAM MEMBERS
+// ─────────────────────────────────────────────────────────────────────────
+
+let teamMemberCount = 0;
+
+window.addTeamMemberField = function () {
+    const container = document.getElementById("team-members-container");
+
+    const placeholder = container.querySelector(".form-hint");
+    if (placeholder) placeholder.remove();
+
+    teamMemberCount++;
+    const id = "team-member-" + teamMemberCount;
+    const selectId = id + "-user-select";
+
+    const item = document.createElement("div");
+    item.className = "team-member-item";
+    item.id = id;
+    item.innerHTML = `
+        <div>
+            <label class="form-label" for="${selectId}">Team Member</label>
+            <select id="${selectId}" name="team_members[${teamMemberCount}][user_id]" class="form-input"></select>
+        </div>
+        <div>
+            <label class="form-label" for="${id}-role">Role</label>
+            <input type="text" id="${id}-role" name="team_members[${teamMemberCount}][role]" 
+                   class="form-input" placeholder="e.g. Frontend Developer" />
+        </div>
+        <button type="button" class="team-member-remove" 
+                onclick="removeTeamMember('${id}')" aria-label="Remove">✕</button>
+    `;
+
+    container.appendChild(item);
+
+    new TomSelect("#" + selectId, {
+        valueField: "value",
+        labelField: "text",
+        searchField: "text",
+        placeholder: "Search and select a user…",
+        load: function (query, callback) {
+            if (!query.length) return callback();
+            fetch(`/api/users/search?q=${encodeURIComponent(query)}`)
+                .then((res) => res.json())
+                .then((data) => callback(data))
+                .catch(() => callback());
+        },
+    });
+};
+
+window.removeTeamMember = function (id) {
+    const item = document.getElementById(id);
+    if (item) item.remove();
+
+    const container = document.getElementById("team-members-container");
+    if (container.children.length === 0) {
+        container.innerHTML = '<p class="form-hint">No team members added yet. Click the button below to add one.</p>';
+    }
+};
 </script>
 </body>
 </html>

@@ -30,4 +30,9 @@ class Project extends Model
     {
         return $this->belongsToMany(Specialization::class, 'project_specializations', 'project_id', 'specialization_id');
     }
+
+    public function media()
+{
+    return $this->hasMany(ProjectMedia::class, 'project_id');
+}
 } 

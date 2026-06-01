@@ -10,7 +10,10 @@ use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\DeveloperSkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
+<<<<<<< HEAD
 use App\Http\Controllers\UserController;
+=======
+>>>>>>> 7192245e0eb2bf5828dcc9f71e4244726c3f8ca1
 
 //all users
 Route::get('/', function () {
@@ -18,9 +21,11 @@ Route::get('/', function () {
 });
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
+
 //investor Routes
 Route::get('/investor/register',[InvestorController::class, 'create']);
 Route::post('/investor/register', [InvestorController::class, 'store']);
+
 //developer Routes 
 //developer registration
 Route::get('/developer/register', [DeveloperController::class, 'create']);
@@ -40,9 +45,9 @@ Route::get('/project/create', [ProjectController::class, 'create'])->name('proje
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 //show project details
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
-Route::middleware(['auth'])->group(function () {Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');});
 
 
+Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 //Admin Areas
 Route::get('/role/add_role', [RoleController::class, 'create']);
 Route::post('/role/add_role', [RoleController::class, 'store']);
@@ -52,23 +57,11 @@ Route::get('/skill', [SkillController::class, 'index'])->name('skill.index');
 //add skill specilization
 Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
 Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
-/*
-Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
-Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
-Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
-*/
+
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
 
-//Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
-//Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
-
-//Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
-
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('api.skills.by_specialization');
-
-//Route::get('/project/add_media/{project}', [ProjectController::class, 'addMedia'])->name('projects.add_media');
-//Route::post('/project/store_media/{project}', [ProjectController::class, 'storeMedia'])->name('projects.store_media');  
 
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
 Route::get('/project/add_media/{project}', [ProjectController::class, 'addMedia'])->name('projects.add_media');
@@ -84,3 +77,14 @@ Route::post('/project/store_media/{project}', [ProjectController::class, 'storeM
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');
+
+Route::get('/login', function () {
+    return response()->json(['message' => 'Not authenticated'], 401);
+})->name('login');
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+
+Route::get('/projects-index', function () {
+    $projects = \App\Models\Project::with(['skills', 'specializations'])->get();
+    return view('Project.projects-index', compact('projects'));})->name('projects.index.page');
+
+Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);

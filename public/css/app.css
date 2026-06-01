@@ -1231,6 +1231,31 @@ h3,
   color: var(--color-white);
 }
 
+    /* ── RESPONSIVE ── */
+    @media (max-width: 992px) {
+      .hero-inner       { grid-template-columns: 1fr; }
+      .hero-visual      { align-items: center; }
+      .steps-grid       { grid-template-columns: repeat(2, 1fr); }
+      .step-connector   { display: none; }
+      .project-grid     { grid-template-columns: repeat(2, 1fr); }
+      .mentors-grid     { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid{ grid-template-columns: 1fr; }
+      .impact-grid      { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+      .footer-grid      { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .hero-heading     { font-size: 32px; }
+      .steps-grid       { grid-template-columns: 1fr; }
+      .project-grid     { grid-template-columns: 1fr; }
+      .mentors-grid     { grid-template-columns: repeat(2, 1fr); }
+      .cta-box          { flex-direction: column; text-align: center; }
+      .cta-actions      { flex-wrap: wrap; justify-content: center; }
+      .footer-grid      { grid-template-columns: 1fr; }
+      .footer-bottom    { flex-direction: column; gap: var(--space-3); text-align: center; }
+      .section-header   { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+    }
+  
+    
 
 /* ============================================================
    28. RESPONSIVE (extended sections)

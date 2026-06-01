@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{{ asset('assets/investor-register.css') }}">
 </head>
 <body>
+    <div>
+        @include('../layouts.toaster')
+    </div>
     <div class="register-page">
         <div class="register-container">
             <div class="register-header">

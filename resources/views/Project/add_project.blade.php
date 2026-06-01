@@ -71,7 +71,7 @@
       <h1 class="page-title">Add New Project</h1>
       <p class="page-subtitle">Fill in your project details so investors and mentors can discover and connect with your team.</p>
 
-      <form method="POST" action="{{ route('projects.store') }}" id="projectForm" novalidate>
+      <form method="POST" action="{{ route('projects.store') }}" id="projectForm" enctype="multipart/form-data" novalidate>
         @csrf
 
         <!-- ── CARD 1: Project Details ── -->
@@ -222,6 +222,56 @@
             </div>
           </div>
           <div class="card-body">
+
+          <!-- ── CARD 4: Project Image ── -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-header-left">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Project Image</div>
+        <div class="card-sub">Upload a cover image for your project</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label" for="project_image">
+        Cover Image <span class="opt">(optional)</span>
+      </label>
+      <input
+        type="file"
+        id="project_image"
+        name="project_image"
+        class="form-input"
+        accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+        onchange="previewImage(this)"
+        style="padding: 8px 12px; cursor: pointer;"
+      />
+      <p class="form-hint">Accepted formats: JPG, PNG, GIF, SVG — max 2MB</p>
+
+      <!-- Image Preview -->
+      <div id="imagePreviewWrapper" style="display:none; margin-top:12px;">
+        <img 
+          id="imagePreview" 
+          src="" 
+          alt="Preview"
+          style="max-width:100%; max-height:220px; border-radius:10px; border:1px solid var(--border); object-fit:cover;"
+        />
+        <button 
+          type="button"
+          onclick="clearImage()"
+          style="display:block; margin-top:8px; font-size:12.5px; color:var(--red); background:none; border:none; cursor:pointer; padding:0;"
+        >
+          ✕ Remove image
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
             <!-- repository_link -->
             <div class="form-group">
@@ -398,6 +448,91 @@ selected_specializations.addEventListener('change', function() {
       skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">حدث خطأ أثناء تحميل المهارات.</p>';
     });
 });
+
+// 2. الاستماع لحدث التغيير الخاص بـ Tom Select مباشرة بدلاً من الـ addEventListener التقليدي
+tomSelectControl.on('change', function(values) {
+    
+    // القيم المحددة تأتي مباشرة كمصفوفة من الـ IDs داخل المتغير values
+    const selectedOptions = values; 
+    const skillsContainer = document.getElementById('skills-checkbox-container');
+    
+    if (!selectedOptions || selectedOptions.length === 0) {
+        skillsContainer.innerHTML = '<p class="form-hint">Please select the new specialization to view the available skills...</p>';
+        return;
+    }
+
+    // 3. تجهيز الـ Promises لتشغيل الـ AJAX لكل تخصص معاً (الرابط يطابق الـ Routes لديك تماماً)
+    const fetchPromises = selectedOptions.map(specId => 
+        fetch(`/projects/create/${specId}`).then(response => {
+            if(!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+    );
+
+    // 4. انتهاء جلب البيانات من كافة التخصصات المحددة
+    Promise.all(fetchPromises)
+        .then(results => {
+            skillsContainer.innerHTML = ''; // تفريغ الحاوية لبناء المهارات الجديدة
+            
+            // دمج كافة المهارات القادمة في مصفوفة واحدة واستبعاد المهارات المكررة
+            let allSkills = [];
+            let uniqueSkillIds = new Set();
+
+            results.forEach(skillsArray => {
+                skillsArray.forEach(skill => {
+                    if (!uniqueSkillIds.has(skill.id)) {
+                        uniqueSkillIds.add(skill.id);
+                        allSkills.push(skill);
+                    }
+                });
+            });
+
+            // 5. بناء الـ Checkboxes للمهارات المدمجة
+            if(allSkills.length > 0) {
+                allSkills.forEach(skill => {
+                    const label = document.createElement('label');
+                    label.className = 'skill-checkbox-item';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'skills[]';
+                    checkbox.value = skill.id;
+                    
+                    const text = document.createTextNode(' ' + skill.name);
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(text);
+                    skillsContainer.appendChild(label);
+                });
+            } else {
+                skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">No skills registered for these specializations.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching skills:', error);
+            skillsContainer.innerHTML = '<p class="form-hint" style="color:red;">حدث خطأ أثناء تحميل المهارات.</p>';
+        });
+});
+
+function previewImage(input) {
+  const wrapper = document.getElementById('imagePreviewWrapper');
+  const preview = document.getElementById('imagePreview');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      wrapper.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function clearImage() {
+  document.getElementById('project_image').value = '';
+  document.getElementById('imagePreviewWrapper').style.display = 'none';
+  document.getElementById('imagePreview').src = '';
+}
+
 function onTitleInput(el) {
   document.getElementById('titleCount').textContent = el.value.length;
   const cc = document.getElementById('titleCount').parentElement;

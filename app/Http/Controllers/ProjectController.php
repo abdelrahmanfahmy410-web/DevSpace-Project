@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Specialization;
 use App\Models\team_role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage; // استدعاء الفايل سيستم للحذف والتخزين
 
 class ProjectController extends Controller
 {
@@ -14,8 +15,11 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // $projects = Project::with(['skills', 'specializations', 'team_roles'])->get();
-        // return view('Project.index', compact('projects'));
+        // Fetch projects with their related models dynamically
+        $projects = Project::with(['skills', 'specializations', 'media'])->get();
+        
+        // Returns the view located at resources/views/project/index.blade.php
+        return view('project.index', compact('projects'));
     }
 
     /**
@@ -40,7 +44,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->load(['skills', 'specializations', 'team_roles']);
+        $project->load(['skills', 'specializations', 'team_roles', 'media']);
         return view('Project.show', compact('project'));
     }
 
@@ -51,6 +55,9 @@ class ProjectController extends Controller
     {
         //
         
+        $specializations = Specialization::all();
+        $project->load(['skills', 'specializations', 'media']);
+        return view('project.edit_project', compact('project', 'specializations'));
     }
 
     /**
@@ -58,7 +65,47 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'type' => 'required|string|max:100',
+            'specializations' => 'required|array', 
+            'specializations.*' => 'exists:specializations,id', 
+            'skills' => 'nullable|array', 
+            'skills.*' => 'exists:skills,id',
+            'project_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $project->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'repository_link' => $request->repository_link,
+            'live_demo_link' => $request->live_demo_link,
+            'type' => $request->type,
+        ]);
+
+        // تحديث الصورة
+        if ($request->hasFile('project_image')) {
+            // إذا كان للمشروع صورة قديمة، نقوم بحذفها من السيرفر أولاً
+            if ($project->media()->exists()) {
+                $oldMedia = $project->media()->first();
+                Storage::disk('public')->delete($oldMedia->file_path);
+                
+                // ارفع الصورة الجديدة وحدّث السجل الحالي
+                $newImagePath = $request->file('project_image')->store('projects_media', 'public');
+                $oldMedia->update(['file_path' => $newImagePath]);
+            } else {
+                // إذا لم يكن لديه صورة قديمة، قم بإنشاء سجل جديد
+                $newImagePath = $request->file('project_image')->store('projects_media', 'public');
+                $project->media()->create(['file_path' => $newImagePath]);
+            }
+        }
+
+        // تحديث التخصصات والمهارات باستخدام sync لمنع التكرار
+        $project->specializations()->sync($request->specializations);
+        $project->skills()->sync($request->skills ?? []);
+
+        return redirect()->route('project.index')->with('success', 'تم تحديث المشروع بنجاح');
     }
 
     /**
@@ -66,12 +113,20 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        // حذف الصورة من السيرفر قبل حذف المشروع
+        if ($project->media()->exists()) {
+            foreach ($project->media as $media) {
+                Storage::disk('public')->delete($media->file_path);
+            }
+        }
+        
+        $project->delete();
+        return redirect()->back()->with('success', 'تم حذف المشروع بنجاح');
     }
+
     public function getSkillsBySpecialization(Specialization $specialization)
     {
-        $skills = $specialization->skills;
-        $specializations = \App\Models\Specialization::all();
+        $skills = $specialization->skills; 
         return response()->json($skills);
        }
 

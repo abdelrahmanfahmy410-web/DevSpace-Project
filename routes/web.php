@@ -41,9 +41,7 @@ Route::get('/project/create', [ProjectController::class, 'create'])->name('proje
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 //show project details
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
-// });
+
 
 Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 //Admin Areas
@@ -71,3 +69,9 @@ Route::post('/project/store_media/{project}', [ProjectController::class, 'storeM
 Route::get('/login', function () {
     return response()->json(['message' => 'Not authenticated'], 401);
 })->name('login');
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+
+Route::get('/projects-index', function () {
+    $projects = \App\Models\Project::with(['skills', 'specializations'])->get();
+    return view('Project.projects-index', compact('projects'));})->name('projects.index.page');
+

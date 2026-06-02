@@ -1,0 +1,283 @@
+/* ============================================================
+   DevSpace — Project Directory Stylesheet
+   Complements Tailwind classes already in the Blade template.
+   Import this AFTER your Tailwind CDN link:
+     <link rel="stylesheet" href="{{ asset('css/project-directory.css') }}">
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ── CSS Variables ── */
+:root {
+  --ds-primary:       #1A7A4A;
+  --ds-primary-light: #e8f5ee;
+  --ds-primary-mid:   #2d9e62;
+  --ds-accent:        #C0392B;
+  --ds-accent-light:  #fdf0ee;
+  --ds-bg:            #F4F7FA;
+  --ds-surface:       #ffffff;
+  --ds-border:        #e2e8f0;
+  --ds-text-main:     #1a202c;
+  --ds-text-muted:    #64748b;
+  --ds-text-soft:     #94a3b8;
+  --ds-shadow-sm:     0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --ds-shadow-md:     0 4px 16px rgba(26,122,74,.10), 0 2px 6px rgba(0,0,0,.06);
+  --ds-shadow-hover:  0 8px 28px rgba(26,122,74,.15), 0 4px 10px rgba(0,0,0,.08);
+  --ds-radius:        14px;
+  --ds-transition:    all .22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Base ── */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--ds-bg);
+  color: var(--ds-text-main);
+}
+
+/* ── Page wrapper ── */
+.max-w-6xl {
+  max-width: 1152px;
+}
+
+/* ── Page header ── */
+.border-b {
+  border-color: var(--ds-border);
+  padding-bottom: 1.5rem;
+}
+
+h1 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ds-text-main);
+}
+
+h1 + p {
+  color: var(--ds-text-muted);
+  font-size: .95rem;
+}
+
+/* ── Add New Project button ── */
+a.bg-blue-600,
+a[href*="projects.create"] {
+  background-color: var(--ds-primary) !important;
+  color: #fff !important;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: .875rem;
+  padding: .55rem 1.25rem;
+  border-radius: 10px;
+  border: none;
+  transition: var(--ds-transition);
+  box-shadow: 0 2px 8px rgba(26,122,74,.20);
+  text-decoration: none;
+}
+a.bg-blue-600:hover,
+a[href*="projects.create"]:hover {
+  background-color: var(--ds-primary-mid) !important;
+  box-shadow: 0 4px 14px rgba(26,122,74,.30);
+  transform: translateY(-1px);
+}
+
+/* ── Project Card ── */
+.bg-white.rounded-xl {
+  border-radius: var(--ds-radius) !important;
+  border: 1px solid var(--ds-border) !important;
+  box-shadow: var(--ds-shadow-sm);
+  transition: var(--ds-transition);
+  background: var(--ds-surface) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Green left-border accent on hover */
+.bg-white.rounded-xl::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--ds-primary);
+  border-radius: 3px 0 0 3px;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.bg-white.rounded-xl:hover::before {
+  opacity: 1;
+}
+
+.bg-white.rounded-xl:hover {
+  box-shadow: var(--ds-shadow-hover) !important;
+  transform: translateY(-3px);
+  border-color: rgba(26,122,74,.25) !important;
+}
+
+/* ── Card body padding ── */
+.bg-white.rounded-xl .p-6 {
+  padding: 1.4rem 1.5rem 1rem;
+}
+
+/* ── Type badge ── */
+.bg-gray-100.text-gray-700 {
+  background-color: var(--ds-primary-light) !important;
+  color: var(--ds-primary) !important;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: .28rem .75rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  border: 1px solid rgba(26,122,74,.18);
+}
+
+/* ── Card title ── */
+.bg-white.rounded-xl h2 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--ds-text-main);
+  letter-spacing: -.2px;
+  line-height: 1.35;
+}
+
+/* ── Card description ── */
+.bg-white.rounded-xl p.text-gray-600 {
+  font-size: .875rem;
+  color: var(--ds-text-muted);
+  line-height: 1.65;
+}
+
+/* ── Specializations label + chips ── */
+.text-xs.font-bold.text-gray-400 {
+  color: var(--ds-text-soft) !important;
+  font-size: .68rem;
+  letter-spacing: .07em;
+}
+
+/* Specialization chips — blue → green */
+.bg-blue-50.text-blue-700 {
+  background-color: var(--ds-primary-light) !important;
+  color: var(--ds-primary) !important;
+  border-color: rgba(26,122,74,.2) !important;
+  font-size: .73rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: .18rem .55rem;
+  transition: var(--ds-transition);
+}
+.bg-blue-50.text-blue-700:hover {
+  background-color: rgba(26,122,74,.18) !important;
+}
+
+/* Skills chips — green, slightly different shade */
+.bg-green-50.text-green-700 {
+  background-color: #f0faf4 !important;
+  color: #156940 !important;
+  border-color: rgba(26,122,74,.22) !important;
+  font-size: .73rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: .18rem .55rem;
+  transition: var(--ds-transition);
+}
+.bg-green-50.text-green-700:hover {
+  background-color: rgba(26,122,74,.15) !important;
+}
+
+/* ── Card footer ── */
+.bg-gray-50.px-6.py-4 {
+  background-color: #f8fafc !important;
+  border-top: 1px solid var(--ds-border) !important;
+  padding: .9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* Repository link */
+.bg-gray-50 a.text-gray-600 {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ds-text-muted) !important;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  transition: color .18s ease;
+}
+.bg-gray-50 a.text-gray-600:hover {
+  color: var(--ds-text-main) !important;
+}
+
+/* Live Demo link */
+.bg-gray-50 a.text-blue-600 {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ds-primary) !important;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  transition: color .18s ease;
+}
+.bg-gray-50 a.text-blue-600:hover {
+  color: var(--ds-primary-mid) !important;
+}
+
+/* ── Empty state card ── */
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200.p-12 {
+  border-radius: var(--ds-radius) !important;
+  border: 2px dashed var(--ds-border) !important;
+  box-shadow: none !important;
+  background: var(--ds-surface) !important;
+}
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200.p-12 p {
+  color: var(--ds-text-muted);
+  font-size: 1rem;
+}
+
+/* ── Grid gap ── */
+.gap-6 {
+  gap: 1.5rem;
+}
+
+/* ── Card entrance animation ── */
+@keyframes ds-card-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.grid > .bg-white {
+  animation: ds-card-in .35s ease both;
+}
+
+/* Stagger for up to 9 cards */
+.grid > .bg-white:nth-child(1) { animation-delay: .04s; }
+.grid > .bg-white:nth-child(2) { animation-delay: .09s; }
+.grid > .bg-white:nth-child(3) { animation-delay: .14s; }
+.grid > .bg-white:nth-child(4) { animation-delay: .19s; }
+.grid > .bg-white:nth-child(5) { animation-delay: .24s; }
+.grid > .bg-white:nth-child(6) { animation-delay: .29s; }
+.grid > .bg-white:nth-child(7) { animation-delay: .34s; }
+.grid > .bg-white:nth-child(8) { animation-delay: .39s; }
+.grid > .bg-white:nth-child(9) { animation-delay: .44s; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .max-w-6xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex.justify-between.items-center {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  a.bg-blue-600,
+  a[href*="projects.create"] {
+    width: 100%;
+    text-align: center;
+  }
+}

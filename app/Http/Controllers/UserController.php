@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+class UserController extends Controller
+{
+    /**
+     * Search users by name or email
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(){
+        return view('auth.login');
+    }
+public function savelogin(Request $request){
+
+// Validate the incoming request data
+ $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+     // 1.find the user by email
+    $user = User::where('email', $request->email)->first();
+
+        // 2.check if user exists and password is correct
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+    // 3.regenerate session and log the user in
+     $request->session()->regenerate();
+        Auth::login($user);
+        return redirect('/')->with('success');
+    }
+
+
+
+
+
+
+    public function search(Request $request)
+    {
+      
+    $q = $request->input('q', '');
+
+    $users = User::where('name', 'LIKE', "%{$q}%")
+        ->orWhere('email', 'LIKE', "%{$q}%")
+        ->limit(10)
+        ->get()
+        ->map(fn($u) => [
+            'value' => $u->id,
+            'text'  => $u->name . ' (' . $u->email . ')',
+        ]);
+
+    return response()->json($users);
+    }
+}

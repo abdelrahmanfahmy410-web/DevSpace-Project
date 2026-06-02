@@ -24,7 +24,9 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
-        Schema::dropIfExists('project_media');
-    }
+{
+    Schema::table('project_media', function (Blueprint $table) {
+        $table->dropColumn('file_path');
+    });
+}
 };

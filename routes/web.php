@@ -10,6 +10,7 @@ use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\DeveloperSkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
+use App\Http\Controllers\UserController;
 
 //all users
 Route::get('/', function () {
@@ -44,6 +45,7 @@ Route::get('/projects', [ProjectController::class, 'index'])->name('projects.ind
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 // });
+
 
 Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 //Admin Areas
@@ -80,5 +82,24 @@ Route::get('/login', function () {
 
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 
+
+Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
+// Route::get('/login', function () {
+//     return response()->json(['message' => 'Not authenticated'], 401);
+// })->name('login');
+
+//login routes
+
+Route::get('/login', [UserController::class, 'login'])->name('login');
+Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');
+
+Route::get('/login', function () {
+    return response()->json(['message' => 'Not authenticated'], 401);
+})->name('login');
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+
+Route::get('/projects-index', function () {
+    $projects = \App\Models\Project::with(['skills', 'specializations'])->get();
+    return view('Project.projects-index', compact('projects'));})->name('projects.index.page');
 
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);

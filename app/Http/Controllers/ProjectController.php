@@ -203,7 +203,6 @@ class ProjectController extends Controller
                 Storage::disk('public')->delete($media->file_path);
             }
         }
-
         $project->delete();
         return redirect()->back()->with('success', 'تم حذف المشروع بنجاح');
     }

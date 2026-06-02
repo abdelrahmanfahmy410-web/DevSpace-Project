@@ -1,6 +1,3 @@
-@extends('layouts.app')
-@section('content')
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -216,61 +213,19 @@
             transform: translateY(-2px);
         }
 
-        /* ── Card Thumbnail (when image exists) ── */
-        .card-thumbnail {
-            position: relative;
-            width: 100%;
-            height: 160px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .card-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.35s ease;
-        }
-        .project-card:hover .card-thumbnail img {
-            transform: scale(1.05);
-        }
-        .type-badge-over {
-            position: absolute;
-            top: 10px;
-            left: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            padding: 3px 9px;
-            border-radius: 20px;
-            border: 1px solid;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-        }
-        .type-badge-over.web        { background: rgba(232,245,238,0.92); color: var(--green);  border-color: rgba(26,122,74,0.25); }
-        .type-badge-over.mobile     { background: rgba(239,246,255,0.92); color: #2563EB;       border-color: rgba(37,99,235,0.25); }
-        .type-badge-over.ai         { background: rgba(245,243,255,0.92); color: #7C3AED;       border-color: rgba(124,58,237,0.25); }
-        .type-badge-over.security   { background: rgba(253,236,234,0.92); color: var(--red);    border-color: rgba(192,57,43,0.25); }
-        /* fallback for any other type */
-        .type-badge-over.other      { background: rgba(244,247,250,0.92); color: var(--text-secondary); border-color: var(--border-md); }
-
-        /* ── Card Accent (no-image fallback) ── */
         .card-accent {
             height: 4px;
             background: var(--green);
-            flex-shrink: 0;
         }
-        .card-accent.web      { background: #1A7A4A; }
-        .card-accent.mobile   { background: #2563EB; }
-        .card-accent.ai       { background: #7C3AED; }
+        .card-accent.web { background: #1A7A4A; }
+        .card-accent.mobile { background: #2563EB; }
+        .card-accent.ai { background: #7C3AED; }
         .card-accent.security { background: #C0392B; }
 
         .card-body { padding: 1.1rem 1.25rem; flex: 1; }
 
         .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
 
-        /* badge inside card-header (no-image cards only) */
         .type-badge {
             font-size: 11px; font-weight: 600;
             text-transform: uppercase; letter-spacing: 0.07em;
@@ -278,10 +233,10 @@
             border-radius: 20px;
             border: 1px solid;
         }
-        .type-badge.web      { background: var(--green-light); color: var(--green);  border-color: rgba(26,122,74,0.2); }
-        .type-badge.mobile   { background: #EFF6FF;            color: #2563EB;       border-color: rgba(37,99,235,0.2); }
-        .type-badge.ai       { background: #F5F3FF;            color: #7C3AED;       border-color: rgba(124,58,237,0.2); }
-        .type-badge.security { background: var(--red-light);   color: var(--red);    border-color: rgba(192,57,43,0.2); }
+        .type-badge.web { background: var(--green-light); color: var(--green); border-color: rgba(26,122,74,0.2); }
+        .type-badge.mobile { background: #EFF6FF; color: #2563EB; border-color: rgba(37,99,235,0.2); }
+        .type-badge.ai { background: #F5F3FF; color: #7C3AED; border-color: rgba(124,58,237,0.2); }
+        .type-badge.security { background: var(--red-light); color: var(--red); border-color: rgba(192,57,43,0.2); }
 
         .card-menu-btn {
             width: 28px; height: 28px;
@@ -319,7 +274,7 @@
             border-radius: 5px;
             border: 1px solid;
         }
-        .tag.spec  { background: #EFF6FF;         color: #2563EB;     border-color: rgba(37,99,235,0.18); }
+        .tag.spec { background: #EFF6FF; color: #2563EB; border-color: rgba(37,99,235,0.18); }
         .tag.skill { background: var(--green-light); color: var(--green); border-color: rgba(26,122,74,0.18); }
 
         /* ── Card Footer ── */
@@ -416,7 +371,44 @@
 
 <div class="layout">
 
-   
+    {{-- ── Sidebar ── --}}
+    <aside class="sidebar">
+        <a href="/" class="sidebar-logo">
+            <div class="logo-mark">D</div>
+            <span>DevSpace</span>
+        </a>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Main</div>
+            <a href="#" class="nav-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Dashboard
+            </a>
+            <a href="{{ route('projects.index') }}" class="nav-item active">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/><rect x="2" y="5" width="20" height="14" rx="2"/></svg>
+                Projects
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                Graduates
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Investors
+            </a>
+            <a href="#" class="nav-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Mentors
+            </a>
+        </div>
+
+        <div class="sidebar-section" style="margin-top: auto;">
+            <a href="#" class="nav-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                Settings
+            </a>
+        </div>
+    </aside>
 
     {{-- ── Main ── --}}
     <div class="main">
@@ -443,7 +435,7 @@
             <div class="stats-row">
                 <div class="stat-card">
                     <div class="stat-label">Total Projects</div>
-                    <div class="stat-value">{{ $projects->count() }}</div>
+                    <div class="stat-value">{{ $projects->total() ?? $projects->count() }}</div>
                     <div class="stat-sub"><span class="stat-dot" style="background:#1A7A4A"></span>All time</div>
                 </div>
                 <div class="stat-card">
@@ -463,53 +455,21 @@
                 </div>
             </div>
 
-           <form method="GET" action="{{ route('projects.index') }}" id="filter-form">
-    <div class="filter-bar">
-
-        {{-- Type tabs --}}
-        <div class="filter-tabs">
-            @foreach([''=>'All','web'=>'Web','mobile'=>'Mobile','ai'=>'AI','security'=>'Security'] as $val => $label)
-                <button
-                    type="submit"
-                    name="type"
-                    value="{{ $val }}"
-                    class="filter-tab {{ request('type', '') === $val ? 'active' : '' }}"
-                >{{ $label }}</button>
-            @endforeach
-        </div>
-
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-
-            {{-- Specialization --}}
-            <select name="specialization" class="sort-select" onchange="this.form.submit()">
-                <option value="">All Specializations</option>
-                @foreach($specializations as $spec)
-                    <option value="{{ $spec->id }}" {{ request('specialization') == $spec->id ? 'selected' : '' }}>
-                        {{ $spec->name }}
-                    </option>
-                @endforeach
-            </select>
-
-            {{-- Skills --}}
-            <select name="skill" class="sort-select" onchange="this.form.submit()">
-                <option value="">All Skills</option>
-                @foreach($skills as $skill)
-                    <option value="{{ $skill->id }}" {{ request('skill') == $skill->id ? 'selected' : '' }}>
-                        {{ $skill->name }}
-                    </option>
-                @endforeach
-            </select>
-
-            {{-- Sort --}}
-            <select name="sort" class="sort-select" onchange="this.form.submit()">
-                <option value="newest" {{ request('sort','newest') === 'newest' ? 'selected' : '' }}>Newest first</option>
-                <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest first</option>
-                <option value="az"     {{ request('sort') === 'az'     ? 'selected' : '' }}>A → Z</option>
-            </select>
-
-        </div>
-    </div>
-</form>
+            {{-- Filter bar --}}
+            <div class="filter-bar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">All</button>
+                    <button class="filter-tab">Web</button>
+                    <button class="filter-tab">Mobile</button>
+                    <button class="filter-tab">AI</button>
+                    <button class="filter-tab">Security</button>
+                </div>
+                <select class="sort-select">
+                    <option>Newest first</option>
+                    <option>Oldest first</option>
+                    <option>A → Z</option>
+                </select>
+            </div>
 
             {{-- Grid --}}
             @if($projects->isEmpty())
@@ -529,29 +489,10 @@
                     @foreach($projects as $project)
                         @php $type = strtolower($project->type ?? 'web'); @endphp
                         <div class="project-card">
-
-                            {{-- ── Top of card: thumbnail OR accent bar ── --}}
-                            @if($project->media->isNotEmpty())
-                                <div class="card-thumbnail">
-                                    <img
-                                        src="{{ asset('storage/' . $project->media->first()->file_path) }}"
-                                        alt="{{ $project->title }}"
-                                        loading="lazy"
-                                    >
-                                    <span class="type-badge-over {{ $type }}">{{ $project->type }}</span>
-                                </div>
-                            @else
-                                <div class="card-accent {{ $type }}"></div>
-                            @endif
-
+                            <div class="card-accent {{ $type }}"></div>
                             <div class="card-body">
                                 <div class="card-header">
-                                    {{-- badge only shown when there is NO thumbnail (thumbnail already has its own badge) --}}
-                                    @if($project->media->isEmpty())
-                                        <span class="type-badge {{ $type }}">{{ $project->type }}</span>
-                                    @else
-                                        <span></span>{{-- spacer so the menu button stays right-aligned --}}
-                                    @endif
+                                    <span class="type-badge {{ $type }}">{{ $project->type }}</span>
                                     <button class="card-menu-btn" aria-label="Options">
                                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
                                     </button>
@@ -653,4 +594,3 @@
 
 </body>
 </html>
-@endsection

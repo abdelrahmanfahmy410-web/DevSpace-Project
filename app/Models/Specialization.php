@@ -23,8 +23,8 @@ class Specialization extends Model
     }
     public function skills()
     {
-        return $this->belongsToMany(Skill::class, 'specialization_skills');
-    }
+        return $this->belongsToMany(Skill::class, 'specialization_skills', 'specialization_id', 'skill_id');    
+}
     //metor
     public function mentors()
     {

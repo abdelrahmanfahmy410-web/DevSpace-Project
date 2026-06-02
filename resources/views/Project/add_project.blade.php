@@ -178,6 +178,57 @@
           </div>
           <div class="card-body">
 
+          <!-- ── CARD 4: Project Image ── -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-header-left">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Project Image</div>
+        <div class="card-sub">Upload a cover image for your project</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label" for="project_image">
+        Cover Image <span class="opt">(optional)</span>
+      </label>
+      <input
+        type="file"
+        id="project_image"
+        name="project_images[]"
+        multiple
+        class="form-input"
+        accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+        onchange="previewImage(this)"
+        style="padding: 8px 12px; cursor: pointer;"
+      />
+      <p class="form-hint">Accepted formats: JPG, PNG, GIF, SVG — max 2MB</p>
+
+      <!-- Image Preview -->
+      <div id="imagePreviewWrapper" style="display:none; margin-top:12px;">
+        <img 
+          id="imagePreview" 
+          src="" 
+          alt="Preview"
+          style="max-width:100%; max-height:220px; border-radius:10px; border:1px solid var(--border); object-fit:cover;"
+        />
+        <button 
+          type="button"
+          onclick="clearImage()"
+          style="display:block; margin-top:8px; font-size:12.5px; color:var(--red); background:none; border:none; cursor:pointer; padding:0;"
+        >
+          ✕ Remove image
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
             <!-- repository_link -->
             <div class="form-group">
               <label class="form-label" for="repository_link">
@@ -296,6 +347,37 @@
             </div>
           </div>
         </div>
+
+<!-- ── CARD 5: Team Members ── -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-header-left">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+            </div>
+            <div>
+                <div class="card-title">Team Members</div>
+                <div class="card-sub">Add people working on this project</div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label class="form-label">Team Members <span class="opt">(optional)</span></label>
+            <div id="team-members-container" class="team-members-list">
+                <p class="form-hint">No team members added yet. Click the button below to add one.</p>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addTeamMemberField()" style="margin-top: 12px;">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;margin-right:6px;">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Add Team Member
+            </button>
+        </div>
+    </div>
+</div>
 
         <!-- ── LIVE PREVIEW ── -->
         <div class="preview-panel">

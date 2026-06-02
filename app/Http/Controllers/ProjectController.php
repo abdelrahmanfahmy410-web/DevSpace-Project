@@ -44,16 +44,31 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->load(['skills', 'specializations', 'team_roles', 'media']);
-        return view('Project.show', compact('project'));
-    }
 
+        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
+        return view('Project.project_details', compact('project'));
+    }
+        public function showProjectDetails(Project $project)    
+    {
+     if($project->user_id != auth::user()->id){
+        abort(403);
+     }
+     else{
+        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
+        return view('Project.project_details', compact('project'));
+     }
+    }
+    //   public function showProjectDetails(Project $project)
+    // {
+    //     $project->load(['skills', 'specializations', 'team_roles', 'media']);
+    //     return view('Project.show', compact('project'));
+    // }
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Project $project)
     {
-        //
+        
         
         $specializations = Specialization::all();
         $project->load(['skills', 'specializations', 'media']);

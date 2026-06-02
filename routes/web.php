@@ -42,8 +42,7 @@ Route::get('/project/create', [ProjectController::class, 'create'])->name('proje
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 //show project details
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
-
-
+Route::get('/project/{project}/details', [ProjectController::class, 'showProjectDetails'])->name('projects.details');
 Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 //Admin Areas
 Route::get('/role/add_role', [RoleController::class, 'create']);
@@ -66,18 +65,14 @@ Route::get('/project/{project}', [ProjectController::class, 'show'])->name('proj
 
 Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 Route::post('/project/store_media/{project}', [ProjectController::class, 'storeMedia'])->name('projects.store_media');
-// Route::get('/login', function () {
-//     return response()->json(['message' => 'Not authenticated'], 401);
-// })->name('login');
+
 
 //login routes
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');
 
-Route::get('/login', function () {
-    return response()->json(['message' => 'Not authenticated'], 401);
-})->name('login');
+
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 
 Route::get('/projects-index', function () {

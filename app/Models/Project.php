@@ -23,7 +23,7 @@ class Project extends Model
 
     public function skills()
      {
-         return $this->belongsToMany(Skill::class, 'project_skills', 'project_id', 'skill_id');
+         return $this->belongsToMany(Skill::class, 'project_skill', 'project_id', 'skill_id');
     }
     
     public function specializations()

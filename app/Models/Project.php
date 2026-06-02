@@ -30,4 +30,12 @@ class Project extends Model
     {
         return $this->belongsToMany(Specialization::class, 'project_specializations', 'project_id', 'specialization_id');
     }
-} 
+
+    public function media()
+    {
+        // ربطنا المشروع بموديل الـ ProjectMedia اللي عملناه في الخطوة 2
+        return $this->hasMany(ProjectMedia::class, 'project_id'); 
+    }
+
+
+}

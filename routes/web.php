@@ -38,9 +38,9 @@ Route::post('/mentor/register', [MentorController::class, 'store'])->name('mento
 Route::get('/mentor/{mentor}', [MentorController::class, 'show'])->name('mentor.show');
 
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
-Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
 //show project details
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 // });
@@ -61,13 +61,24 @@ Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])-
 
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('api.skills.by_specialization');
 
+Route::get('/projects/skills/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
+     ->name('projects.get_skills');
+     
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
 Route::get('/project/add_media/{project}', [ProjectController::class, 'addMedia'])->name('projects.add_media');
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
 
-Route::post('/project', [ProjectController::class, 'store'])->name('projects.store');
+Route::post('/project/create/', [ProjectController::class, 'store'])->name('projects.store');
 Route::post('/project/store_media/{project}', [ProjectController::class, 'storeMedia'])->name('projects.store_media');
-
+Route::get('/projects/skills/{specialization}', [\App\Http\Controllers\ProjectController::class, 'getSkillsBySpecialization'])
+     ->name('projects.get_skills');
+     
 Route::get('/login', function () {
     return response()->json(['message' => 'Not authenticated'], 401);
 })->name('login');
+
+
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+
+
+Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);

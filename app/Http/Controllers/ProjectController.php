@@ -14,35 +14,36 @@ class ProjectController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $specializationId = $request->input('specialization');
-    $skillId          = $request->input('skill');
-    $type             = $request->input('type');
-    $sort             = $request->input('sort', 'newest');
+    {
+        $specializationId = $request->input('specialization');
+        $skillId          = $request->input('skill');
+        $type             = $request->input('type');
+        $sort             = $request->input('sort', 'newest');
 
-    $projects = Project::with(['skills', 'specializations', 'media'])
-        ->when($type, fn($q) => $q->where('type', $type))
-        ->when($specializationId, fn($q) => $q->whereHas('specializations',
-            fn($q2) => $q2->where('specializations.id', $specializationId)
-        ))
-        ->when($skillId, fn($q) => $q->whereHas('skills',
-            fn($q2) => $q2->where('skills.id', $skillId)
-        ))
-        ->when($sort, function($q, $sort) {
-            match($sort) {
-                'oldest' => $q->oldest(),
-                'az'     => $q->orderBy('title'),
-                default  => $q->latest(),
-            };
-        })
-        ->paginate(12)
-        ->withQueryString(); // مهم عشان الـ pagination يحتفظ بالفلاتر
+        $projects = Project::with(['skills', 'specializations', 'media'])
+            ->when($type, fn($q) => $q->where('type', $type))
+            ->when($specializationId, fn($q) => $q->whereHas('specializations',
+                fn($q2) => $q2->where('specializations.id', $specializationId)
+            ))
+            ->when($skillId, fn($q) => $q->whereHas('skills',
+                fn($q2) => $q2->where('skills.id', $skillId)
+            ))
+            ->when($sort, function($q, $sort) {
+                match($sort) {
+                    'oldest' => $q->oldest(),
+                    'az'     => $q->orderBy('title'),
+                    default  => $q->latest(),
+                };
+            })
+            ->paginate(12)
+            ->withQueryString(); // مهم عشان الـ pagination يحتفظ بالفلاتر
 
-    $specializations = \App\Models\Specialization::orderBy('name')->get();
-    $skills          = \App\Models\Skill::orderBy('name')->get();
+        $specializations = \App\Models\Specialization::orderBy('name')->get();
+        $skills          = \App\Models\Skill::orderBy('name')->get();
 
-    return view('Project.projects-index', compact('projects', 'specializations', 'skills'));
-}
+        return view('Project.projects-index', compact('projects', 'specializations', 'skills'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -235,6 +236,12 @@ class ProjectController extends Controller
     {
         $project = Project::with(['skills', 'specializations', 'team_roles'])->findOrFail($id);
         return view('projects_show', compact('project'));
+    }
+
+    public function myProjects()
+    {
+        $projects = Project::latest()->get();
+        return view('Project.my-projects', compact('projects'));
     }
 
     public function addMedia(Project $project)

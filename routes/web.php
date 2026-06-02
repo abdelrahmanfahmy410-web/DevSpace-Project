@@ -93,6 +93,10 @@ Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');
 
+Route::get('/project/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+Route::put('/project/{project}', [ProjectController::class, 'update'])->name('projects.update');
+Route::delete('/project/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
 Route::get('/login', function () {
     return response()->json(['message' => 'Not authenticated'], 401);
 })->name('login');

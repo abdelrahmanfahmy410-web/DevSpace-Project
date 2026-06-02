@@ -1,3 +1,6 @@
+@extends('layouts.app')
+@section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -413,44 +416,7 @@
 
 <div class="layout">
 
-    {{-- ── Sidebar ── --}}
-    <aside class="sidebar">
-        <a href="/" class="sidebar-logo">
-            <div class="logo-mark">D</div>
-            <span>DevSpace</span>
-        </a>
-
-        <div class="sidebar-section">
-            <div class="sidebar-label">Main</div>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                Dashboard
-            </a>
-            <a href="{{ route('projects.index') }}" class="nav-item active">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/><rect x="2" y="5" width="20" height="14" rx="2"/></svg>
-                Projects
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                Graduates
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                Investors
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                Mentors
-            </a>
-        </div>
-
-        <div class="sidebar-section" style="margin-top: auto;">
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-                Settings
-            </a>
-        </div>
-    </aside>
+   
 
     {{-- ── Main ── --}}
     <div class="main">
@@ -497,21 +463,53 @@
                 </div>
             </div>
 
-            {{-- Filter bar --}}
-            <div class="filter-bar">
-                <div class="filter-tabs">
-                    <button class="filter-tab active">All</button>
-                    <button class="filter-tab">Web</button>
-                    <button class="filter-tab">Mobile</button>
-                    <button class="filter-tab">AI</button>
-                    <button class="filter-tab">Security</button>
-                </div>
-                <select class="sort-select">
-                    <option>Newest first</option>
-                    <option>Oldest first</option>
-                    <option>A → Z</option>
-                </select>
-            </div>
+           <form method="GET" action="{{ route('projects.index') }}" id="filter-form">
+    <div class="filter-bar">
+
+        {{-- Type tabs --}}
+        <div class="filter-tabs">
+            @foreach([''=>'All','web'=>'Web','mobile'=>'Mobile','ai'=>'AI','security'=>'Security'] as $val => $label)
+                <button
+                    type="submit"
+                    name="type"
+                    value="{{ $val }}"
+                    class="filter-tab {{ request('type', '') === $val ? 'active' : '' }}"
+                >{{ $label }}</button>
+            @endforeach
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+            {{-- Specialization --}}
+            <select name="specialization" class="sort-select" onchange="this.form.submit()">
+                <option value="">All Specializations</option>
+                @foreach($specializations as $spec)
+                    <option value="{{ $spec->id }}" {{ request('specialization') == $spec->id ? 'selected' : '' }}>
+                        {{ $spec->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            {{-- Skills --}}
+            <select name="skill" class="sort-select" onchange="this.form.submit()">
+                <option value="">All Skills</option>
+                @foreach($skills as $skill)
+                    <option value="{{ $skill->id }}" {{ request('skill') == $skill->id ? 'selected' : '' }}>
+                        {{ $skill->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            {{-- Sort --}}
+            <select name="sort" class="sort-select" onchange="this.form.submit()">
+                <option value="newest" {{ request('sort','newest') === 'newest' ? 'selected' : '' }}>Newest first</option>
+                <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest first</option>
+                <option value="az"     {{ request('sort') === 'az'     ? 'selected' : '' }}>A → Z</option>
+            </select>
+
+        </div>
+    </div>
+</form>
 
             {{-- Grid --}}
             @if($projects->isEmpty())
@@ -655,3 +653,4 @@
 
 </body>
 </html>
+@endsection

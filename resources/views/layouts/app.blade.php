@@ -23,89 +23,118 @@
             <a href="#" class="navbar__link">Projects</a>
             <a href="#" class="navbar__link">Mentors</a>
             <a href="#" class="navbar__link">Developers</a>
-            <a href="#" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
-            
-            <a href="#" class="btn btn-primary">Join the Space </a>
-        </div>
 
-        <button class="navbar__mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-        </button>
-    </nav>
+            @guest
+                <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
+                <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join the Space</a>
+            @else
+                <div class="navbar__user" style="margin-left: 8px; display: flex; align-items: center; gap: 12px;">
 
-    <main>
-        <div class="container">
-            @yield('content')
-        </div>
-    </main>
-
-
-    <footer class="footer-extended">
-        <div class="container">
-            <div class="footer-grid">
-
-                <div class="footer-brand">
-                    <div class="footer-brand-name">
-                      @include('layouts.logo', ['darkMode' => true])
+                    {{-- Avatar --}}
+                    <div class="navbar__avatar">
+                        @if (Auth::user()->avatar)
+                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
+                                style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                        @else
+                            <div
+                                style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); 
+                                display: flex; align-items: center; justify-content: center; 
+                                color: white; font-weight: 600; font-size: 14px;">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </div>
+                        @endif
                     </div>
-                    <p class="footer-brand-desc">Where developers showcase their work, connect with mentors, and turn
-                        side projects into real products.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-btn" aria-label="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="#" class="social-btn" aria-label="Twitter / X">
-                            <i class="fab fa-x-twitter"></i>
-                        </a>
-                        <a href="#" class="social-btn" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="social-btn" aria-label="Facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                    </div>
+
+                    {{-- Name --}}
+                    <span style="font-weight: 500;">{{ Auth::user()->name }}</span>
+
+                    {{-- Logout --}}
+                    <form method="POST" action="{{-- route('logout') --}}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline">Sign Out</button>
+                    </form>
                 </div>
-
-                <div>
-                    <div class="footer-col-title">Platform</div>
-                    <div class="footer-col-links">
-                        <a href="#" class="footer-col-link">Browse Projects</a>
-                        <a href="#" class="footer-col-link">Submit a Project</a>
-                        <a href="#" class="footer-col-link">Find Mentors</a>
-                        <a href="#" class="footer-col-link">Investor Portal</a>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="footer-col-title">Resources</div>
-                    <div class="footer-col-links">
-                        <a href="#" class="footer-col-link">Getting Started</a>
-                        <a href="#" class="footer-col-link">Pitch Guidelines</a>
-                        <a href="#" class="footer-col-link">Success Stories</a>
-                        <a href="#" class="footer-col-link">FAQ</a>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="footer-col-title">Company</div>
-                    <div class="footer-col-links">
-                        <a href="#" class="footer-col-link">About Us</a>
-                        <a href="#" class="footer-col-link">Our Team</a>
-                        <a href="#" class="footer-col-link">Partners</a>
-                        <a href="#" class="footer-col-link">Contact</a>
-                        <a href="#" class="footer-col-link">Privacy Policy</a>
-                    </div>
-                </div>
-
+                @endguest
             </div>
 
-            <div class="footer-bottom">
-                <span>© 2025 DevSpace · Egypt</span>
+            <button class="navbar__mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+
+        <main>
+            <div class="container">
+                @yield('content')
             </div>
-        </div>
-    </footer>
+        </main>
 
-    <script src="{{ asset('js/app.js') }}"></script>
-</body>
 
-</html>
+        <footer class="footer-extended">
+            <div class="container">
+                <div class="footer-grid">
+
+                    <div class="footer-brand">
+                        <div class="footer-brand-name">
+                            @include('layouts.logo', ['darkMode' => true])
+                        </div>
+                        <p class="footer-brand-desc">Where developers showcase their work, connect with mentors, and turn
+                            side projects into real products.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-btn" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="social-btn" aria-label="Twitter / X">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                            <a href="#" class="social-btn" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="#" class="social-btn" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="footer-col-title">Platform</div>
+                        <div class="footer-col-links">
+                            <a href="#" class="footer-col-link">Browse Projects</a>
+                            <a href="#" class="footer-col-link">Submit a Project</a>
+                            <a href="#" class="footer-col-link">Find Mentors</a>
+                            <a href="#" class="footer-col-link">Investor Portal</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="footer-col-title">Resources</div>
+                        <div class="footer-col-links">
+                            <a href="#" class="footer-col-link">Getting Started</a>
+                            <a href="#" class="footer-col-link">Pitch Guidelines</a>
+                            <a href="#" class="footer-col-link">Success Stories</a>
+                            <a href="#" class="footer-col-link">FAQ</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="footer-col-title">Company</div>
+                        <div class="footer-col-links">
+                            <a href="#" class="footer-col-link">About Us</a>
+                            <a href="#" class="footer-col-link">Our Team</a>
+                            <a href="#" class="footer-col-link">Partners</a>
+                            <a href="#" class="footer-col-link">Contact</a>
+                            <a href="#" class="footer-col-link">Privacy Policy</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="footer-bottom">
+                    <span>© 2025 DevSpace · Egypt</span>
+                </div>
+            </div>
+        </footer>
+
+        <script src="{{ asset('js/app.js') }}"></script>
+    </body>
+
+    </html>

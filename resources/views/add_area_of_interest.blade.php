@@ -20,7 +20,7 @@
     <div class="interest-card">
 
         <h1 class="title">
-            Select 3 Topics
+            Select at least one Topic
         </h1>
 
         <p class="subtitle">

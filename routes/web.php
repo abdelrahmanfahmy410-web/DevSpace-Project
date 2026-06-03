@@ -10,18 +10,21 @@ use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\DeveloperSkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
-<<<<<<< HEAD
 use App\Http\Controllers\UserController;
-=======
->>>>>>> 7192245e0eb2bf5828dcc9f71e4244726c3f8ca1
-
+use App\Models\Project;
 //all users
 Route::get('/', function () {
     return view('layouts.app');
 });
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
+Route::get('/dashboard', function () {
+    $projects = Project::whereHas('team_roles', function ($query) {
+        $query->where('user_id', auth()->id());
+    })->get();
 
+    return view('layouts.dashboard', compact('projects'));
+});
 //investor Routes
 Route::get('/investor/register',[InvestorController::class, 'create']);
 Route::post('/investor/register', [InvestorController::class, 'store']);
@@ -88,3 +91,9 @@ Route::get('/projects-index', function () {
     return view('Project.projects-index', compact('projects'));})->name('projects.index.page');
 
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
+
+
+Route::get('/dev-login', function () {
+    auth()->loginUsingId(14); // the ID you saw in the database
+    return redirect('/dashboard');
+});

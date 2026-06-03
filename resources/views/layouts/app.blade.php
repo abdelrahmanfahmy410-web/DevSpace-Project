@@ -23,6 +23,17 @@
             <a href="#" class="navbar__link">Projects</a>
             <a href="#" class="navbar__link">Mentors</a>
             <a href="#" class="navbar__link">Developers</a>
+            @if(!Auth::user())
+            <a href="#" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
+            <a href="#" class="btn btn-primary">Join the Space </a>
+            @else
+            <p class="navbar__link">Welcome, {{ Auth::user()->name }}</p>
+            <a href="#" class="navbar__link">Dashboard</a>
+            <a href="#" class="navbar__link">Profile</a>
+            @endif
+
+
+        </div>
 
             @guest
                 <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>

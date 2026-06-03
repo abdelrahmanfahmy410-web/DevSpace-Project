@@ -23,7 +23,7 @@ class Project extends Model
 
     public function skills()
      {
-         return $this->belongsToMany(Skill::class, 'project_skills', 'project_id', 'skill_id');
+         return $this->belongsToMany(Skill::class, 'project_skill', 'project_id', 'skill_id');
     }
     
     public function specializations()
@@ -32,7 +32,10 @@ class Project extends Model
     }
 
     public function media()
-{
-    return $this->hasMany(ProjectMedia::class, 'project_id');
+    {
+        // ربطنا المشروع بموديل الـ ProjectMedia اللي عملناه في الخطوة 2
+        return $this->hasMany(ProjectMedia::class, 'project_id'); 
+    }
+
+
 }
-} 

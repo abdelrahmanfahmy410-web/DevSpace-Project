@@ -6,9 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectMedia extends Model
 {
-    protected $table = 'project_media'; // لتحديد اسم الجدول بدقة
-    protected $fillable = ['project_id', 'file_path', 'medianame'];
-    
+   
+    protected $table = 'project_media';
+
+   
+    protected $fillable = ['project_id', 'medianame', 'file_path'];
+
+        /**
+         *  Get the project that owns the media.
+         */
     public function project()
     {
         return $this->belongsTo(Project::class);

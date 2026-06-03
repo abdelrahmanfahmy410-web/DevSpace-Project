@@ -38,7 +38,7 @@ class SkillController extends Controller
         Skill::create([
             'name' => $request->name,
         ]);
-        return redirect('/');
+        return redirect('/')->with('success', 'Skill added successfully!');
     }
 
     /**

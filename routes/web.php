@@ -122,4 +122,5 @@ Route::get('/dev-login', function () {
     auth()->loginUsingId(14); // the ID you saw in the database
     return redirect('/dashboard');
 });
-   
+   Route::get('/team-member/{teamRole}/profile', [ProjectController::class, 'memberProfile'])
+    ->name('team-role.profile');

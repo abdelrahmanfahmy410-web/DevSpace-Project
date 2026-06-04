@@ -7,6 +7,7 @@ use App\Models\Specialization;
 use App\Models\team_role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\TeamRole;
 
 class ProjectController extends Controller
 {
@@ -265,4 +266,13 @@ class ProjectController extends Controller
     {
         return view('project.add_media', compact('project'));
     }
+    public function memberProfile(TeamRole $teamRole)
+{
+    return match($teamRole->user->role) {
+        'developer' => redirect()->route('developer.profile', $teamRole->user->id),
+        'mentor'    => redirect()->route('developer.profile',    $teamRole->user->id),
+        'investor'  => redirect()->route('developer.profile',  $teamRole->user->id),
+        default     => abort(404),
+    };
+}
 }

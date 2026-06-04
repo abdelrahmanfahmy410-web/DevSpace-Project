@@ -62,4 +62,15 @@ class TeamRoleController extends Controller
     {
         //
     }
+    // app/Http/Controllers/TeamRoleController.php
+
+public function profile(TeamRole $teamRole)
+{
+    return match($teamRole->user_role) {
+        'developer' => redirect()->route('developer.profile', $teamRole->id),
+        'mentor'    => redirect()->route('developer.profile',    $teamRole->id),
+        'investor'  => redirect()->route('developer.profile',  $teamRole->id),
+        default     => abort(404),
+    };
+}
 }

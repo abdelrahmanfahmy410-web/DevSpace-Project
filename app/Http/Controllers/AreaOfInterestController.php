@@ -6,6 +6,7 @@ use App\Models\Area_of_interest;
 use Illuminate\Http\Request;
 use App\Models\Specialization;
 
+
 class AreaOfInterestController extends Controller
 {
     /**
@@ -14,6 +15,7 @@ class AreaOfInterestController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**
@@ -33,7 +35,7 @@ class AreaOfInterestController extends Controller
     {
         //
         $request->validate([
-            'areas_of_interest' => 'required|array|min:3',
+            'areas_of_interest' => 'required|array|min:1',
             'areas_of_interest.*' => 'exists:specializations,id',
         ]);
       foreach ($request->areas_of_interest as $areaId) {
@@ -55,6 +57,7 @@ class AreaOfInterestController extends Controller
     public function show(Area_of_interest $area_of_interest)
     {
         //
+
     }
 
     /**

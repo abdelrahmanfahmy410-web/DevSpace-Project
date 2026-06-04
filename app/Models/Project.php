@@ -10,6 +10,7 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = ['title','description','repository_link','live_demo_link','type'];
+    protected $with = ['media', 'specializations', 'skills', 'team_roles'];
     //teamrole
     public function team_roles()
     {
@@ -23,7 +24,7 @@ class Project extends Model
 
     public function skills()
      {
-         return $this->belongsToMany(Skill::class, 'project_skill', 'project_id', 'skill_id');
+         return $this->belongsToMany(Skill::class, 'project_skills', 'project_id', 'skill_id');
     }
     
     public function specializations()

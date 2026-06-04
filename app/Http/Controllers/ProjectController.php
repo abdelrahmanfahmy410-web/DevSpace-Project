@@ -7,6 +7,7 @@ use App\Models\Specialization;
 use App\Models\team_role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\TeamRole;
 
 class ProjectController extends Controller
 {
@@ -38,11 +39,12 @@ class ProjectController extends Controller
         ->paginate(9)
         ->withQueryString();
 
-    $specializations = \App\Models\Specialization::orderBy('name')->get();
-    $skills          = \App\Models\Skill::orderBy('name')->get();
+        $specializations = \App\Models\Specialization::orderBy('name')->get();
+        $skills          = \App\Models\Skill::orderBy('name')->get();
 
-    return view('Project.projects-index', compact('projects', 'specializations', 'skills'));
-}
+        return view('Project.projects-index', compact('projects', 'specializations', 'skills'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -117,15 +119,32 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->load(['skills', 'specializations', 'team_roles', 'media']);
-        return view('Project.show', compact('project'));
-    }
 
+        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
+        return view('Project.my_project_details', compact('project'));
+    }
+        public function showProjectDetails(Project $project)    
+    {
+     if($project->user_id != auth::user()->id){
+        abort(403);
+     }
+     else{
+        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
+        return view('Project.my_project_details', compact('project'));
+     }
+    }
+    //   public function showProjectDetails(Project $project)
+    // {
+    //     $project->load(['skills', 'specializations', 'team_roles', 'media']);
+    //     return view('Project.show', compact('project'));
+    // }
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Project $project)
     {
+        
+        
         $specializations = Specialization::all();
         $project->load(['skills', 'specializations', 'media']);
         return view('project.edit_project', compact('project', 'specializations'));
@@ -237,8 +256,23 @@ class ProjectController extends Controller
         return view('projects_show', compact('project'));
     }
 
+    public function myProjects()
+    {
+        $projects = Project::latest()->get();
+        return view('Project.my-projects', compact('projects'));
+    }
+
     public function addMedia(Project $project)
     {
         return view('project.add_media', compact('project'));
     }
+    public function memberProfile(TeamRole $teamRole)
+{
+    return match($teamRole->user->role) {
+        'developer' => redirect()->route('developer.profile', $teamRole->user->id),
+        'mentor'    => redirect()->route('developer.profile',    $teamRole->user->id),
+        'investor'  => redirect()->route('developer.profile',  $teamRole->user->id),
+        default     => abort(404),
+    };
+}
 }

@@ -14,7 +14,7 @@
             --green-mid:  #2d9e63;
             --red:        #C0392B;
             --red-light:  #FDECEA;
-            --bg:         #F4F7FA;
+            --bg:          #F4F7FA;
             --surface:    #FFFFFF;
             --border:      rgba(0,0,0,0.08);
             --border-md:  rgba(0,0,0,0.13);
@@ -144,7 +144,7 @@
         /* ── Stats row ── */
         .stats-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr); /* تم التعديل ليكون 3 أعمدة بدلاً من 4 لتناسب الكروت المطلوبة */
             gap: 14px;
             margin-bottom: 2rem;
         }
@@ -275,8 +275,8 @@
             border: 1px solid;
         }
         .type-badge.web      { background: var(--green-light); color: var(--green);  border-color: rgba(26,122,74,0.2); }
-        .type-badge.mobile   { background: #EFF6FF;             color: #2563EB;       border-color: rgba(37,99,235,0.2); }
-        .type-badge.ai       { background: #F5F3FF;             color: #7C3AED;       border-color: rgba(124,58,237,0.2); }
+        .type-badge.mobile   { background: #EFF6FF;              color: #2563EB;       border-color: rgba(37,99,235,0.2); }
+        .type-badge.ai       { background: #F5F3FF;              color: #7C3AED;       border-color: rgba(124,58,237,0.2); }
         .type-badge.security { background: var(--red-light);   color: var(--red);    border-color: rgba(192,57,43,0.2); }
 
         /* ستايل أزرار الحذف والتعديل الجديد */
@@ -477,27 +477,24 @@
         {{-- Content --}}
         <div class="content">
 
-            {{-- Stats --}}
+            {{-- Stats (تعديل: كروت إحصائية استاتيكية بالكامل وبترتيب مساحات متناسق 3 أعمدة) --}}
             <div class="stats-row">
                 <div class="stat-card">
-                    <div class="stat-label">My Total Projects</div>
-                    <div class="stat-value">{{ $projects->count() }}</div>
-                    <div class="stat-sub"><span class="stat-dot" style="background:#1A7A4A"></span>All time</div>
+                    <div class="stat-label">MY TOTAL PROJECTS</div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-sub"><span class="stat-dot" style="background:#9CA3AF"></span>All time</div>
                 </div>
+                
                 <div class="stat-card">
-                    <div class="stat-label">My Web Projects</div>
-                    <div class="stat-value">{{ $projects->where('type','web')->count() }}</div>
-                    <div class="stat-sub"><span class="stat-dot" style="background:#1A7A4A"></span>Web / Full-stack</div>
+                    <div class="stat-label">MY ASSIGNED PROJECTS</div>
+                    <div class="stat-value">0</div>
+                    <div class="stat-sub"><span class="stat-dot" style="background:#1A7A4A"></span>Assigned to me</div>
                 </div>
+                
                 <div class="stat-card">
-                    <div class="stat-label">My Mobile Projects</div>
-                    <div class="stat-value">{{ $projects->where('type','mobile')->count() }}</div>
-                    <div class="stat-sub"><span class="stat-dot" style="background:#2563EB"></span>iOS & Android</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">My AI / Other</div>
-                    <div class="stat-value">{{ $projects->whereNotIn('type',['web','mobile'])->count() }}</div>
-                    <div class="stat-sub"><span class="stat-dot" style="background:#7C3AED"></span>AI · Security · etc.</div>
+                    <div class="stat-label">MY CREATED PROJECTS</div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-sub"><span class="stat-dot" style="background:#2563EB"></span>Created by me</div>
                 </div>
             </div>
 

@@ -10,6 +10,7 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = ['title','description','repository_link','live_demo_link','type'];
+    protected $with = ['media', 'specializations', 'skills', 'team_roles'];
     //teamrole
     public function team_roles()
     {

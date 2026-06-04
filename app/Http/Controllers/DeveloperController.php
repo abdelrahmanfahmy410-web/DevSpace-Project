@@ -195,7 +195,52 @@ public function show()
             'line' => $e->getLine()
         ], 500);
     }
+ }  
+ public function myDevelopers()
+{
+    // 1. جلب المطورين مع العلاقات وعمل Pagination (10 مطورين في كل صفحة)
+    $developersPaginator = Developer::with(['user', 'specialization', 'skills'])->paginate(10);
+
+    // 2. تعديل شكل البيانات جوه الـ Paginator من غير ما نبوظه عشان الـ JavaScript يقراه صح
+    $developersPaginator->setCollection(
+        $developersPaginator->getCollection()->map(function($dev) {
+            return [
+                // الاسم من جدول الـ user
+                'name' => $dev->user ? $dev->user->name : 'Unknown Developer', 
+                
+                // رابط الصورة من الـ Storage أو صورة افتراضية
+                'avatar' => ($dev->user && $dev->user->profile_picture) 
+                            ? asset('storage/' . $dev->user->profile_picture) 
+                            : 'https://via.placeholder.com/150',
+                
+                // التخصص
+                'specialization' => $dev->specialization ? $dev->specialization->name : 'General', 
+                
+                // البيو من جدول الـ user
+                'bio' => ($dev->user && $dev->user->bio) ? $dev->user->bio : 'No bio available.',
+                
+                // تحويل المهارات لمصفوفة نصوص واضحة [ 'PHP', 'Laravel' ]
+                'skills' => $dev->skills->pluck('name')->toArray() 
+            ];
+        })
+    );
+
+    // 3. جلب التخصصات والمهارات للفلاتر اللي فوق في الصفحة
+    $specializations = \App\Models\Specialization::whereNotNull('name')->pluck('name');
+    $skills = \App\Models\Skill::pluck('name');
+
+    // 4. تمرير البيانات للـ View
+    return view('developer.my_developers', [
+        'developers' => $developersPaginator,
+        'specializations' => $specializations,
+        'skills' => $skills
+    ]);
+
 }
+
+
+
+
     /**
      * Remove the specified resource from storage.
      */

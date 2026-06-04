@@ -65,7 +65,7 @@ class SpecializationController extends Controller
     }
         $specialization->skills()->sync($request->skills);
     
-        return redirect('/')->with('success');
+        return redirect('/')->with('success', 'Specialization added successfully!');
     }
      
     /**

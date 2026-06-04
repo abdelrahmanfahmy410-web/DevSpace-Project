@@ -19,27 +19,37 @@ class UserController extends Controller
     public function login(){
         return view('auth.login');
     }
-public function savelogin(Request $request){
-
-// Validate the incoming request data
- $request->validate([
+ public function savelogin(Request $request)
+{
+    // Validate the incoming request data
+    $request->validate([
         'email' => 'required|email',
         'password' => 'required',
     ]);
-     // 1.find the user by email
+
+    // 1. find the user by email
     $user = User::where('email', $request->email)->first();
 
-        // 2.check if user exists and password is correct
-    if (!$user || !Hash::check($request->password, $user->password)) {
+    // 2. check if user exists with that email
+    if (!$user) {
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'email' => 'this email is not registered.',
+        ])->withInput($request->only('email'));
     }
-    // 3.regenerate session and log the user in
-     $request->session()->regenerate();
-        Auth::login($user);
-        return redirect('/')->with('success');
+
+    // 3. check if password is correct 
+    if (!Hash::check($request->password, $user->password)) {
+        return back()->withErrors([
+            'password' => 'the password is incorrect.',
+        ])->withInput($request->only('email')); 
     }
+
+    // 4. regenerate session and log the user in
+    $request->session()->regenerate();
+    Auth::login($user);
+    
+    return redirect('/')->with('success', 'Logged in successfully!');
+}
 
 
 

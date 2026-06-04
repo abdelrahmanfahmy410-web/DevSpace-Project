@@ -23,7 +23,7 @@
             </div>
         @endif
 
- <form action="/developer/skills/{{ $id }}/update" method="POST">
+ <form action="/developer/skills/update" method="POST">
             @csrf
 
             <div class="skills-grid mb-4">

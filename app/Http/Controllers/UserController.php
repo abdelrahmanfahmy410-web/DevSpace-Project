@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+
 class UserController extends Controller
 {
     /**
@@ -61,4 +62,32 @@ public function savelogin(Request $request){
 
     return response()->json($users);
     }
+
+
+public function showMemberProfile($id)
+{
+    // جلب المستخدم مع كافة العلاقات المحتملة بما فيها المهارات الخاصة بالمطور
+    $user = \App\Models\User::with([
+        'roles', 
+        'developer.specialization', 
+        'developer.skills', // تأكد من وجود علاقة skills في موديل Developer
+        'mentor.specialization',
+        'teamProjects'
+
+    ])->findOrFail($id);
+
+    $userRole = $user->roles->first()->name ?? 'member';
+
+    // جلب المهارات بشكل مرن
+    $skills = collect();
+    if ($userRole == 'developer' && $user->developer) {
+        $skills = $user->developer->skills;
+    } elseif ($userRole == 'mentor' && $user->mentor) {
+        // إذا كان للمينتور مهارات مخصصة أو نستخدم مهارات التخصص تبعه
+        $skills = $user->mentor->specialization?->skills ?? collect();
+    }
+
+    // نمرر المتغيرات للـ Blade
+    return view('member.profile', compact('user', 'userRole', 'skills'));
+}
 }

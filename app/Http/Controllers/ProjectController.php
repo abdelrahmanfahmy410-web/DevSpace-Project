@@ -15,18 +15,18 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
 {
-    $specializationId = $request->input('specialization');
-    $skillId          = $request->input('skill');
-    $type             = $request->input('type');
+    $types            = $request->input('type', []);
+    $specializationIds = $request->input('specialization', []);
+    $skillIds         = $request->input('skills', []);
     $sort             = $request->input('sort', 'newest');
-
+   //  dd($skillIds);
     $projects = Project::with(['skills', 'specializations', 'media'])
-        ->when($type, fn($q) => $q->where('type', $type))
-        ->when($specializationId, fn($q) => $q->whereHas('specializations',
-            fn($q2) => $q2->where('specializations.id', $specializationId)
+        ->when($types, fn($q) => $q->whereIn('type', $types))
+        ->when($specializationIds, fn($q) => $q->whereHas('specializations',
+            fn($q2) => $q2->whereIn('specializations.id', $specializationIds)
         ))
-        ->when($skillId, fn($q) => $q->whereHas('skills',
-            fn($q2) => $q2->where('skills.id', $skillId)
+        ->when($skillIds, fn($q) => $q->whereHas('skills',
+            fn($q2) => $q2->whereIn('skills.id', $skillIds)
         ))
         ->when($sort, function($q, $sort) {
             match($sort) {
@@ -35,8 +35,8 @@ class ProjectController extends Controller
                 default  => $q->latest(),
             };
         })
-        ->paginate(12)
-        ->withQueryString(); // مهم عشان الـ pagination يحتفظ بالفلاتر
+        ->paginate(9)
+        ->withQueryString();
 
     $specializations = \App\Models\Specialization::orderBy('name')->get();
     $skills          = \App\Models\Skill::orderBy('name')->get();

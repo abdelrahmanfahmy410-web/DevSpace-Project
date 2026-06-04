@@ -34,7 +34,7 @@ class User extends Authenticatable
     
     public function roles()
     {
-        return $this->hasMany(Role::class, 'user_roles');
+       return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     }
     //watchlist
     public function watchlist()
@@ -54,10 +54,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     } 
-    public function projects()
+   public function teamProjects()
     {
-        return $this->hasMany(Project::class, 'TeamRole')->withPivot('role');
+        return $this->belongsToMany(Project::class, 'team_roles', 'user_id', 'project_id')
+            ->withPivot('role')
+            ->withTimestamps();
     }
+    
     //is -a
      public function mentor()
     {

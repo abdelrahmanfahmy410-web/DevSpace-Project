@@ -30,8 +30,8 @@ Route::post('/developer/register', [DeveloperController::class, 'store']);
 Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
 Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('developer.edit');
 Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
-Route::get('/developer/skills/{id}/edit', [DeveloperSkillController::class, 'edit']);
-Route::post('/developer/skills/{id}/update', [DeveloperSkillController::class, 'update']);
+Route::get('/developer/skills/edit', [DeveloperSkillController::class, 'edit']);
+Route::post('/developer/skills/update', [DeveloperSkillController::class, 'update']);
 
 //mentor routes
 Route::get('/mentor/register', [MentorController::class, 'create'])->name('mentor.register');
@@ -84,22 +84,16 @@ Route::get('/projects', [ProjectController::class, 'index'])->name('projects.ind
 
 
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
-// Route::get('/login', function () {
-//     return response()->json(['message' => 'Not authenticated'], 401);
-// })->name('login');
+
 
 //login routes
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');
 
-Route::get('/login', function () {
-    return response()->json(['message' => 'Not authenticated'], 401);
-})->name('login');
+
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 
-Route::get('/projects-index', function () {
-    $projects = \App\Models\Project::with(['skills', 'specializations'])->get();
-    return view('Project.projects-index', compact('projects'));})->name('projects.index.page');
-
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
+
+Route::get('/member/profile/{id}', [UserController::class, 'showMemberProfile'])->name('member.profile');

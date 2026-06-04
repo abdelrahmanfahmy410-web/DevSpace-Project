@@ -103,7 +103,8 @@ class DeveloperController extends Controller
    
 public function show()
 { 
-    $developer = Developer::with(['user', 'specialization'])->first();
+    $userid = auth()->id();
+    $developer = Developer::with(['user', 'specialization'])->where('user_id', $userid)->first();
    //  dd($developer->user->roles());
     if (!$developer) {
         return "جدول المطورين (developers) فارغ في قاعدة البيانات. برجاء إضافة مطور أولاً للتجربة.";
@@ -114,7 +115,8 @@ public function show()
  public function edit()
 {try {
         // جلب أول مطور من الداتابيز مع المستخدم بتاعه عشان التست يشتغل علطول حتى لو مش عاملة Login
-        $developer = \App\Models\Developer::with('user')->first();
+        $userid = auth()->id();
+        $developer = \App\Models\Developer::with('user')->where('user_id', $userid)->first();
 
         if (!$developer) {
             return "تنبيه: لا يوجد أي مطور في قاعدة البيانات لتعديله.";

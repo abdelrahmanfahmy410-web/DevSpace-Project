@@ -11,7 +11,7 @@ class Developer extends Model
 
     protected $fillable = ['user_id', 'portfolio_url','specialization_id'];
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function specialization()
     {
@@ -20,7 +20,7 @@ class Developer extends Model
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class, 'developer_skills');
+        return $this->belongsToMany(Skill::class, 'developer_skill');
     }
 
 }

@@ -32,7 +32,7 @@ Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('devel
 Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
 Route::get('/developer/skills/{id}/edit', [DeveloperSkillController::class, 'edit']);
 Route::post('/developer/skills/{id}/update', [DeveloperSkillController::class, 'update']);
-
+Route::get('/developer/my-developers', [DeveloperController::class, 'myDevelopers'])->name('developer.my_developers');
 //mentor routes
 Route::get('/mentor/register', [MentorController::class, 'create'])->name('mentor.register');
 Route::post('/mentor/register', [MentorController::class, 'store'])->name('mentor.store');
@@ -43,9 +43,7 @@ Route::get('/project/create', [ProjectController::class, 'create'])->name('proje
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
 Route::get('/project/{project}/details', [ProjectController::class, 'showProjectDetails'])->name('projects.details');
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
-// });
+
 
 
 Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
@@ -58,7 +56,7 @@ Route::get('/skill', [SkillController::class, 'index'])->name('skill.index');
 //add skill specilization
 Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
 Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
-
+Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
 
@@ -77,18 +75,9 @@ Route::post('/project/store_media/{project}', [ProjectController::class, 'storeM
 Route::get('/projects/skills/{specialization}', [\App\Http\Controllers\ProjectController::class, 'getSkillsBySpecialization'])
      ->name('projects.get_skills');
      
-Route::get('/login', function () {
-    return response()->json(['message' => 'Not authenticated'], 401);
-})->name('login');
-
-
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 
-
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
-// Route::get('/login', function () {
-//     return response()->json(['message' => 'Not authenticated'], 401);
-// })->name('login');
 
 //login routes
 

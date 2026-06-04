@@ -119,7 +119,7 @@ class ProjectController extends Controller
     {
 
         $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
-        return view('Project.project_details', compact('project'));
+        return view('Project.my_project_details', compact('project'));
     }
         public function showProjectDetails(Project $project)    
     {
@@ -128,7 +128,7 @@ class ProjectController extends Controller
      }
      else{
         $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
-        return view('Project.project_details', compact('project'));
+        return view('Project.my_project_details', compact('project'));
      }
     }
     //   public function showProjectDetails(Project $project)

@@ -11,20 +11,18 @@ use App\Http\Controllers\DeveloperSkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Models\Project;
+
+
 //all users
 Route::get('/', function () {
     return view('layouts.app');
 });
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
-Route::get('/dashboard', function () {
-    $projects = Project::whereHas('team_roles', function ($query) {
-        $query->where('user_id', auth()->id());
-    })->get();
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
-    return view('layouts.dashboard', compact('projects'));
-});
 //investor Routes
 Route::get('/investor/register',[InvestorController::class, 'create']);
 

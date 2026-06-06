@@ -11,6 +11,7 @@ use App\Http\Controllers\DeveloperSkillController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
 // ----------------------------------------------------
 // All Users & General Routes
@@ -23,7 +24,7 @@ Route::get('/add-area-of-interest', [AreaOfInterestController::class, 'create'])
 Route::post('/add-area-of-interest', [AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
 
 // ----------------------------------------------------
-// User Authentication (Login)
+// User Authentication
 // ----------------------------------------------------
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');
@@ -42,8 +43,8 @@ Route::post('/developer/register', [DeveloperController::class, 'store']);
 Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
 Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('developer.edit');
 Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
-Route::get('/developer/skills/{id}/edit', [DeveloperSkillController::class, 'edit']);
-Route::post('/developer/skills/{id}/update', [DeveloperSkillController::class, 'update']);
+Route::get('/developer/skills/edit', [DeveloperSkillController::class, 'edit']);
+Route::post('/developer/skills/update', [DeveloperSkillController::class, 'update']);
 
 // ----------------------------------------------------
 // Mentor Routes
@@ -56,7 +57,6 @@ Route::get('/mentor/{mentor}', [MentorController::class, 'show'])->name('mentor.
 // Project Routes (CRUD & Management)
 // ----------------------------------------------------
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
-Route::get('/projects-index', [ProjectController::class, 'index'])->name('projects.index.page'); // مربوط بالكنترولر الجديد
 Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
@@ -73,11 +73,12 @@ Route::delete('/project/{project}', [ProjectController::class, 'destroy'])->name
 Route::get('/project/add_media/{project}', [ProjectController::class, 'addMedia'])->name('projects.add_media');
 Route::post('/project/store_media/{project}', [ProjectController::class, 'storeMedia'])->name('projects.store_media');
 
-// Wishlist (المفضلة)
+// Wishlist Routes
 Route::post('/wishlist/toggle/{project}', [ProjectController::class, 'toggleWishlist'])->name('wishlist.toggle');
 Route::get('/wishlist', [ProjectController::class, 'wishlist'])->name('wishlist.index');
+
 // ----------------------------------------------------
-// Admin Areas (Roles, Skills & Specializations)
+// Admin Areas
 // ----------------------------------------------------
 Route::get('/role/add_role', [RoleController::class, 'create']);
 Route::post('/role/add_role', [RoleController::class, 'store']);
@@ -92,6 +93,24 @@ Route::post('/specialization/add_specialization', [SpecializationController::cla
 // ----------------------------------------------------
 // API / AJAX Routes
 // ----------------------------------------------------
-Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('api.skills.by_specialization');
-Route::get('/projects/skills/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('projects.get_skills');
+Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
+     ->name('api.skills.by_specialization');
+
+Route::get('/projects/skills/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
+     ->name('projects.get_skills');
+
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
+
+// Team Member Profile
+Route::get('/team-member/{teamRole}/profile', [ProjectController::class, 'memberProfile'])
+     ->name('team-role.profile');
+
+// ----------------------------------------------------
+// Development / Temporary Routes
+// ----------------------------------------------------
+Route::get('/dev-login', function () {
+    auth()->loginUsingId(14); 
+    return redirect('/dashboard');
+});
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');

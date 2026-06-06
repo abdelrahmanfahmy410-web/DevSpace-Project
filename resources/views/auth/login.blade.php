@@ -33,15 +33,13 @@
             <form id="loginForm" action="{{ url('/login') }}" method="POST">
                 @csrf
 
-                @if ($errors->any())
-                    <div style="color: red; margin-bottom: 15px;">
-                        {{ $errors->first('email') }}
-                    </div>
-                @endif
-
                 <div class="form-group">
                     <label>Email Address <span style="color: red;">*</span></label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="you@example.com" required>
+                    
+                    @error('email')
+                        <div style="color: red; font-size: 14px; margin-top: 5px;">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
@@ -50,6 +48,10 @@
                         <input type="password" id="password" name="password" placeholder="••••••••" required>
                         <button type="button" class="toggle-password" id="togglePassword">👁</button>
                     </div>
+                    
+                    @error('password')
+                        <div style="color: red; font-size: 14px; margin-top: 5px;">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <button type="submit" class="login-btn">Login to DevSpace</button>
@@ -60,7 +62,6 @@
 </div>
 
 <script>
-// سيبنا كود العين بس شغال عشان يفتح ويقفل الباسورد
 const password = document.getElementById("password");
 const togglePassword = document.getElementById("togglePassword");
 

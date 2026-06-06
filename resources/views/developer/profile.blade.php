@@ -37,7 +37,7 @@
 
             <div class="text-left mb-5" style="display: flex; flex-direction: column; gap: var(--space-2, 8px); align-items: flex-start;">
                 <span class="text-body" style="font-size: var(--font-size-small, 14px); color: var(--color-muted, #64748b);">
-                    <i class="fas fa-phone" style="margin-right: 6px;"></i> {{ $developer->phone_number ?? 'No phone added' }}
+                    <i class="fas fa-phone" style="margin-right: 6px;"></i> {{ $developer->user?->phonenumber ?? 'No phone added' }}
                 </span>
                 
                 @if($developer->user?->linkedin_url)

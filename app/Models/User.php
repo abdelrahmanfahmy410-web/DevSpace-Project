@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Project;
 
 #[Fillable(['name', 'email', 'password','bio', 'linkedin_url', 'phonenumber', 'profile_picture'])]
 #[Hidden(['password', 'remember_token'])]
@@ -71,6 +72,11 @@ class User extends Authenticatable
         return $this->hasOne(Investor::class);
         
     } 
+
+    public function wishlist()
+{
+    return $this->belongsToMany(Project::class, 'project_user_watchlist');
+}
     
   
 

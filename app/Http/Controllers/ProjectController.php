@@ -7,6 +7,7 @@ use App\Models\Specialization;
 use App\Models\team_role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth; // تم إضافتها لضمان عمل الـ Auth بشكل صحيح
 
 class ProjectController extends Controller
 {
@@ -36,7 +37,7 @@ class ProjectController extends Controller
                 };
             })
             ->paginate(12)
-            ->withQueryString(); // مهم عشان الـ pagination يحتفظ بالفلاتر
+            ->withQueryString();
 
         $specializations = \App\Models\Specialization::orderBy('name')->get();
         $skills          = \App\Models\Skill::orderBy('name')->get();
@@ -72,9 +73,8 @@ class ProjectController extends Controller
             'team_members'           => 'nullable|array',
             'team_members.*.user_id' => 'required|exists:users,id',
             'team_members.*.role'    => 'required|string',
-            ]);
+        ]);
 
-     
         $project = Project::create([
             'title'           => $request->title,
             'description'     => $request->description,
@@ -102,15 +102,23 @@ class ProjectController extends Controller
             $project->skills()->attach($request->skills);
         }
 
-        // ربط أعضاء الفريق
-        if ($request->has('team_members')) {
+        // ربط أعضاء الفريق (إذا تم اختيارهم من الفورم)
+        if ($request->has('team_members') && !empty($request->team_members)) {
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
                     'role' => $member['role']
                 ]);
             }
         }
-        return redirect('/');
+
+        // التعديل المضمون: إذا لم يكن المستخدم الحالي مضافاً للفريق، يتم إضافته تلقائياً كـ منشئ للمشروع
+        if (!$project->team_roles()->where('user_id', auth()->id())->exists()) {
+            $project->team_roles()->attach(auth()->id(), [
+                'role' => 'Project Creator'
+            ]);
+        }
+
+        return redirect()->route('projects.my')->with('success', 'تم إضافة المشروع بنجاح');
     }
 
     /**
@@ -118,32 +126,26 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
+        return view('Project.project_details', compact('project'));
+    }
 
-        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
-        return view('Project.project_details', compact('project'));
-    }
-        public function showProjectDetails(Project $project)    
+    public function showProjectDetails(Project $project)    
     {
-     if($project->user_id != auth::user()->id){
-        abort(403);
-     }
-     else{
-        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
-        return view('Project.project_details', compact('project'));
-     }
+        if($project->user_id != auth()->user()->id){
+            abort(403);
+        }
+        else{
+            $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
+            return view('Project.project_details', compact('project'));
+        }
     }
-    //   public function showProjectDetails(Project $project)
-    // {
-    //     $project->load(['skills', 'specializations', 'team_roles', 'media']);
-    //     return view('Project.show', compact('project'));
-    // }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Project $project)
     {
-        
-        
         $specializations = Specialization::all();
         $project->load(['skills', 'specializations', 'media']);
         return view('project.edit_project', compact('project', 'specializations'));
@@ -179,12 +181,10 @@ class ProjectController extends Controller
 
         // تحديث الصور
         if ($request->hasFile('project_images')) {
-            // حذف الصور القديمة
             foreach ($project->media as $media) {
                 Storage::disk('public')->delete($media->file_path);
                 $media->delete();
             }
-            // رفع الصور الجديدة
             foreach ($request->file('project_images') as $image) {
                 $newPath = $image->store('projects_media', 'public');
                 $project->media()->create([
@@ -194,7 +194,6 @@ class ProjectController extends Controller
             }
         }
 
-        // تحديث التخصصات والمهارات
         $project->specializations()->sync($request->specializations);
         $project->skills()->sync($request->skills ?? []);
 
@@ -255,9 +254,19 @@ class ProjectController extends Controller
         return view('projects_show', compact('project'));
     }
 
+    /**
+     * Display projects assigned to the current user via team roles
+     */
     public function myProjects()
     {
-        $projects = Project::latest()->get();
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $projects = Project::whereHas('team_roles', function($query) {
+            $query->where('user_id', auth()->id());
+        })->latest()->get();
+
         return view('Project.my-projects', compact('projects'));
     }
 
@@ -265,4 +274,43 @@ class ProjectController extends Controller
     {
         return view('project.add_media', compact('project'));
     }
+
+    /**
+     * Toggle project wishlist status (AJAX)
+     */
+    public function toggleWishlist(Project $project)
+    {
+        if (!auth()->check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $user = auth()->user();
+        $status = $user->wishlist()->toggle($project->id);
+        $attached = count($status['attached']) > 0;
+
+        return response()->json([
+            'success' => true,
+            'attached' => $attached
+        ]);
+    }
+    public function wishlist()
+{
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    $projects = auth()->user()->wishlist()
+        ->with(['skills', 'specializations', 'media'])
+        ->latest()
+        ->paginate(12)
+        ->withQueryString();
+
+    $specializations = \App\Models\Specialization::orderBy('name')->get();
+    $skills = \App\Models\Skill::orderBy('name')->get();
+
+    return view('Project.wishlist', compact('projects', 'specializations', 'skills'));
+}
 }

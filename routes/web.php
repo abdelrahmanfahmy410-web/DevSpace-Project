@@ -56,6 +56,7 @@ Route::get('/mentor/{mentor}', [MentorController::class, 'show'])->name('mentor.
 // Project Routes (CRUD & Management)
 // ----------------------------------------------------
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+Route::get('/projects-index', [ProjectController::class, 'index'])->name('projects.index.page'); // مربوط بالكنترولر الجديد
 Route::get('/my-projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 
 Route::get('/project/create', [ProjectController::class, 'create'])->name('projects.create');
@@ -72,6 +73,9 @@ Route::delete('/project/{project}', [ProjectController::class, 'destroy'])->name
 Route::get('/project/add_media/{project}', [ProjectController::class, 'addMedia'])->name('projects.add_media');
 Route::post('/project/store_media/{project}', [ProjectController::class, 'storeMedia'])->name('projects.store_media');
 
+// Wishlist (المفضلة)
+Route::post('/wishlist/toggle/{project}', [ProjectController::class, 'toggleWishlist'])->name('wishlist.toggle');
+Route::get('/wishlist', [ProjectController::class, 'wishlist'])->name('wishlist.index');
 // ----------------------------------------------------
 // Admin Areas (Roles, Skills & Specializations)
 // ----------------------------------------------------
@@ -91,11 +95,3 @@ Route::post('/specialization/add_specialization', [SpecializationController::cla
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('api.skills.by_specialization');
 Route::get('/projects/skills/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('projects.get_skills');
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
-
-// ----------------------------------------------------
-// Views / Temporary Pages
-// ----------------------------------------------------
-Route::get('/projects-index', function () {
-    $projects = \App\Models\Project::with(['skills', 'specializations'])->get();
-    return view('Project.projects-index', compact('projects'));
-})->name('projects.index.page');

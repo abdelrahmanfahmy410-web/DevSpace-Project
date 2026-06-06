@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Directory — DevSpace</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -252,7 +255,6 @@
         .type-badge-over.mobile     { background: rgba(239,246,255,0.92); color: #2563EB;       border-color: rgba(37,99,235,0.25); }
         .type-badge-over.ai         { background: rgba(245,243,255,0.92); color: #7C3AED;       border-color: rgba(124,58,237,0.25); }
         .type-badge-over.security   { background: rgba(253,236,234,0.92); color: var(--red);    border-color: rgba(192,57,43,0.25); }
-        /* fallback for any other type */
         .type-badge-over.other      { background: rgba(244,247,250,0.92); color: var(--text-secondary); border-color: var(--border-md); }
 
         /* ── Card Accent (no-image fallback) ── */
@@ -329,7 +331,7 @@
             display: flex; align-items: center; justify-content: space-between;
             background: rgba(244,247,250,0.5);
         }
-        .footer-links { display: flex; gap: 10px; }
+        .footer-links { display: flex; gap: 10px; align-items: center; }
         .link-btn {
             display: inline-flex; align-items: center; gap: 5px;
             font-size: 12.5px; font-weight: 500;
@@ -358,6 +360,22 @@
         }
         .view-btn:hover { background: #d1ead9; }
         .view-btn svg { width: 13px; height: 13px; }
+
+        /* تنسيق زرار الـ Wishlist الجديد */
+        .wishlist-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.15rem;
+            padding: 4px 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+        .wishlist-btn:hover {
+            transform: scale(1.15);
+        }
 
         /* ── Empty state ── */
         .empty-state {
@@ -416,8 +434,6 @@
 
 <div class="layout">
 
-   
-
     {{-- ── Main ── --}}
     <div class="main">
 
@@ -463,53 +479,50 @@
                 </div>
             </div>
 
-           <form method="GET" action="{{ route('projects.index') }}" id="filter-form">
-    <div class="filter-bar">
+            <form method="GET" action="{{ route('projects.index') }}" id="filter-form">
+                <div class="filter-bar">
+                    {{-- Type tabs --}}
+                    <div class="filter-tabs">
+                        @foreach([''=>'All','web'=>'Web','mobile'=>'Mobile','ai'=>'AI','security'=>'Security'] as $val => $label)
+                            <button
+                                type="submit"
+                                name="type"
+                                value="{{ $val }}"
+                                class="filter-tab {{ request('type', '') === $val ? 'active' : '' }}"
+                            >{{ $label }}</button>
+                        @endforeach
+                    </div>
 
-        {{-- Type tabs --}}
-        <div class="filter-tabs">
-            @foreach([''=>'All','web'=>'Web','mobile'=>'Mobile','ai'=>'AI','security'=>'Security'] as $val => $label)
-                <button
-                    type="submit"
-                    name="type"
-                    value="{{ $val }}"
-                    class="filter-tab {{ request('type', '') === $val ? 'active' : '' }}"
-                >{{ $label }}</button>
-            @endforeach
-        </div>
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        {{-- Specialization --}}
+                        <select name="specialization" class="sort-select" onchange="this.form.submit()">
+                            <option value="">All Specializations</option>
+                            @foreach($specializations as $spec)
+                                <option value="{{ $spec->id }}" {{ request('specialization') == $spec->id ? 'selected' : '' }}>
+                                    {{ $spec->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        {{-- Skills --}}
+                        <select name="skill" class="sort-select" onchange="this.form.submit()">
+                            <option value="">All Skills</option>
+                            @foreach($skills as $skill)
+                                <option value="{{ $skill->id }}" {{ request('skill') == $skill->id ? 'selected' : '' }}>
+                                    {{ $skill->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
-            {{-- Specialization --}}
-            <select name="specialization" class="sort-select" onchange="this.form.submit()">
-                <option value="">All Specializations</option>
-                @foreach($specializations as $spec)
-                    <option value="{{ $spec->id }}" {{ request('specialization') == $spec->id ? 'selected' : '' }}>
-                        {{ $spec->name }}
-                    </option>
-                @endforeach
-            </select>
-
-            {{-- Skills --}}
-            <select name="skill" class="sort-select" onchange="this.form.submit()">
-                <option value="">All Skills</option>
-                @foreach($skills as $skill)
-                    <option value="{{ $skill->id }}" {{ request('skill') == $skill->id ? 'selected' : '' }}>
-                        {{ $skill->name }}
-                    </option>
-                @endforeach
-            </select>
-
-            {{-- Sort --}}
-            <select name="sort" class="sort-select" onchange="this.form.submit()">
-                <option value="newest" {{ request('sort','newest') === 'newest' ? 'selected' : '' }}>Newest first</option>
-                <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest first</option>
-                <option value="az"     {{ request('sort') === 'az'     ? 'selected' : '' }}>A → Z</option>
-            </select>
-
-        </div>
-    </div>
-</form>
+                        {{-- Sort --}}
+                        <select name="sort" class="sort-select" onchange="this.form.submit()">
+                            <option value="newest" {{ request('sort','newest') === 'newest' ? 'selected' : '' }}>Newest first</option>
+                            <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest first</option>
+                            <option value="az"     {{ request('sort') === 'az'     ? 'selected' : '' }}>A → Z</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
 
             {{-- Grid --}}
             @if($projects->isEmpty())
@@ -546,11 +559,10 @@
 
                             <div class="card-body">
                                 <div class="card-header">
-                                    {{-- badge only shown when there is NO thumbnail (thumbnail already has its own badge) --}}
                                     @if($project->media->isEmpty())
                                         <span class="type-badge {{ $type }}">{{ $project->type }}</span>
                                     @else
-                                        <span></span>{{-- spacer so the menu button stays right-aligned --}}
+                                        <span></span>
                                     @endif
                                     <button class="card-menu-btn" aria-label="Options">
                                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
@@ -603,7 +615,16 @@
                                             Live
                                         </a>
                                     @endif
+
+                                    <button class="wishlist-btn" data-id="{{ $project->id }}" aria-label="Add to wishlist">
+                                        @if(auth()->check() && auth()->user()->wishlist->contains($project->id))
+                                            <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+                                        @else
+                                            <i class="fa-regular fa-heart" style="color: #9ca3af;"></i>
+                                        @endif
+                                    </button>
                                 </div>
+
                                 <a href="{{ route('projects.show', $project->id) }}" class="view-btn">
                                     View
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -647,9 +668,49 @@
                 @endif
             @endif
 
-        </div>{{-- /content --}}
-    </div>{{-- /main --}}
-</div>{{-- /layout --}}
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.wishlist-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const projectId = this.getAttribute('data-id');
+        const icon = this.querySelector('i');
+
+        fetch(`/wishlist/toggle/${projectId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if(response.status === 401) {
+                alert('برجاء تسجيل الدخول أولاً لإضافة المشروع للمفضلة!');
+                window.location.href = '/login';
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.success) {
+                if (data.attached) {
+                    icon.className = 'fa-solid fa-heart';
+                    icon.style.color = '#ef4444';
+                } else {
+                    icon.className = 'fa-regular fa-heart';
+                    icon.style.color = '#9ca3af';
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+</script>
 
 </body>
 </html>

@@ -60,7 +60,7 @@ Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('devel
 Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
 Route::get('/developer/skills/{id}/edit', [DeveloperSkillController::class, 'edit']);
 Route::post('/developer/skills/{id}/update', [DeveloperSkillController::class, 'update']);
-Route::get('/developer/my-developers', [DeveloperController::class, 'myDevelopers'])->name('developer.my_developers');
+Route::get('/developer/developers', [DeveloperController::class, 'allDevelopers'])->name('developer.all_developers');
 //mentor routes
 
 // ----------------------------------------------------
@@ -82,6 +82,8 @@ Route::post('/project/create/', [ProjectController::class, 'store'])->name('proj
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('projects.show');
 Route::get('/project/{project}/details', [ProjectController::class, 'showProjectDetails'])->name('projects.details');
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+Route::get('/projects/my_project_details/{project}', [ProjectController::class, 'showmyProjectDetails'])->name('projects.my_details');
+Route::get('/assigned-projects', [ProjectController::class, 'assignedProjects'])->name('projects.assigned');
 
 
 Route::get('/project/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');

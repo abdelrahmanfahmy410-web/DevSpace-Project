@@ -7,6 +7,7 @@ use App\Models\Specialization;
 use App\Models\TeamRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\TeamRole;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
@@ -130,19 +131,20 @@ class ProjectController extends Controller
         return view('Project.project_details', compact('project'));
     }
 
-    /**
-     * Show project details for the owner.
-     */
-    public function showProjectDetails(Project $project)
-    {
-        if ($project->user_id != auth()->user()->id) {
-            abort(403);
-        }
-
-        $project->load(['skills', 'specializations', 'team_roles', 'media', 'watchers']);
+        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
         return view('Project.my_project_details', compact('project'));
     }
-
+        public function showmyProjectDetails(Project $project)    
+    {
+//     if(!auth()->check() || $project->user_id != auth()->user()->id){
+//     abort(403);
+// }
+//      else{
+        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
+        return view('Project.my_project_details', compact('project'));
+     
+    }
+   
     /**
      * Show the form for editing the specified resource.
      */
@@ -233,6 +235,15 @@ class ProjectController extends Controller
     {
         $skills = $specialization->skills;
         return response()->json($skills);
+    }
+    public function assignedProjects()
+    {
+        $userId = auth()->id();
+        $projects = Project::whereHas('team_roles', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })->with(['skills', 'specializations', 'team_roles','media'])->get();
+
+        return view('project.assigned_projects',compact('projects'));
     }
 
     /**

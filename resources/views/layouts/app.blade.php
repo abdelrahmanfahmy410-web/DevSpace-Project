@@ -72,7 +72,9 @@
 
     @auth
         <div class="layout">
-            @include('layouts.sidebar', ['active' => $active ?? ''])
+            @if ($fullWidth ?? false)
+                @include('layouts.sidebar', ['active' => $active ?? ''])
+            @endif
             <main class="layout__main">
                 @if ($fullWidth ?? false)
                     @yield('content')

@@ -4,17 +4,102 @@ namespace App\Http\Controllers;
 
 use App\Models\TeamRole;
 use Illuminate\Http\Request;
+use App\Models\User; 
+use Illuminate\Support\Facades\DB;
+
+
 
 class TeamRoleController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * This shows the teammates of the authenticated user based on shared projects.
      */
     public function index()
-    {
-        //
-    }
+{
+   // dd(\DB::getSchemaBuilder()->getColumnListing('projects'));
+    $me = auth()->user();
 
+    // Project IDs the logged-in user is part of
+    $myProjectIds = \DB::table('team_roles')
+        ->where('user_id', $me->id)
+        ->pluck('project_id');
+
+    // Other users who share any of those projects
+    $teammates = User::where('id', '!=', $me->id)
+        ->whereExists(function ($query) use ($myProjectIds) {
+            $query->select(\DB::raw(1))
+                ->from('team_roles')
+                ->whereColumn('team_roles.user_id', 'users.id')
+                ->whereIn('team_roles.project_id', $myProjectIds);
+        })
+        ->get()
+        ->map(function (User $user) use ($myProjectIds) {
+            $sharedProjects = \DB::table('team_roles')
+                ->join('projects', 'projects.id', '=', 'team_roles.project_id')
+                ->where('team_roles.user_id', $user->id)
+                ->whereIn('team_roles.project_id', $myProjectIds)
+                ->select('projects.id', 'projects.title', 'team_roles.role')
+                ->get();
+
+            return [
+                'id'       => $user->id,
+                'name'     => $user->name,
+                'avatar'   => $user->avatar_url ?? null,
+                'headline' => $user->headline ?? null,
+                'projects' => $sharedProjects,
+            ];
+        });
+
+    $pageTitle = match (strtolower($me->role ?? '')) {
+        'mentor'    => 'My Developers',
+        'developer' => 'My Team',
+        default     => 'My Team',
+    };
+
+    return view('my_team.index', compact('teammates', 'pageTitle'));
+}
+
+public function mentees()
+{
+    $me = auth()->user();
+
+    // Projects where the logged-in user has the 'mentor' role
+    $myMentoredProjectIds = DB::table('team_roles')
+        ->where('user_id', $me->id)
+        ->where('role', 'mentor')
+        ->pluck('project_id');
+
+    // Users who are 'developer' on any of those same projects
+    $mentees = User::where('id', '!=', $me->id)
+        ->whereExists(function ($query) use ($myMentoredProjectIds) {
+            $query->select(DB::raw(1))
+                ->from('team_roles')
+                ->whereColumn('team_roles.user_id', 'users.id')
+                ->where('team_roles.role', 'developer')
+                ->whereIn('team_roles.project_id', $myMentoredProjectIds);
+        })
+        ->get()
+        ->map(function (User $user) use ($myMentoredProjectIds) {
+            $sharedProjects = DB::table('team_roles')
+                ->join('projects', 'projects.id', '=', 'team_roles.project_id')
+                ->where('team_roles.user_id', $user->id)
+                ->where('team_roles.role', 'developer')
+                ->whereIn('team_roles.project_id', $myMentoredProjectIds)
+                ->select('projects.id', 'projects.title', 'team_roles.role')
+                ->get();
+
+            return [
+                'id'       => $user->id,
+                'name'     => $user->name,
+                'avatar'   => $user->avatar_url ?? null,
+                'headline' => $user->headline ?? null,
+                'projects' => $sharedProjects,
+            ];
+        });
+
+    return view('mentor.mentees', compact('mentees'));
+}
     /**
      * Show the form for creating a new resource.
      */

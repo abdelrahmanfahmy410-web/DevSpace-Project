@@ -41,4 +41,5 @@ class DashboardController extends Controller
 
         return view('layouts.dashboard', compact('projects', 'isInvestor', 'profile', 'stats'));
     }
+    
 }

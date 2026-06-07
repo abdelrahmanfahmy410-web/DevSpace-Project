@@ -12,6 +12,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AreaOfInterestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TeamRoleController;
 
 // ----------------------------------------------------
 // All Users & General Routes
@@ -28,6 +29,7 @@ Route::post('/add-area-of-interest', [AreaOfInterestController::class, 'store'])
 // ----------------------------------------------------
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'savelogin'])->name('login.save');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 // ----------------------------------------------------
 // Investor Routes
@@ -114,3 +116,5 @@ Route::get('/dev-login', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
+Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');

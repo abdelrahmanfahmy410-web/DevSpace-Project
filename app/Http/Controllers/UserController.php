@@ -95,4 +95,12 @@ public function showMemberProfile()
 
     return view('member.profile', compact('user', 'userRole', 'skills'));
 }
+public function logout(Request $request)
+{
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/')->with('success', 'Logged out successfully!');
+}
 }

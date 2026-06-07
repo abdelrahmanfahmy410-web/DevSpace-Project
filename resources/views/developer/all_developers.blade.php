@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevSpace - My Developers</title>
-    <link rel="stylesheet" href="{{ asset('assets/my_developers.css') }}">
+    <title>DevSpace - All Developers</title>
+    <link rel="stylesheet" href="{{ asset('assets/all_developers.css') }}">
 </head>
 <body>
 

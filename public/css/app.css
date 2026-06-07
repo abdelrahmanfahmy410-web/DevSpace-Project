@@ -83,6 +83,7 @@
   /* --- Layout --- */
   --max-width: 1140px;
   --container-px: 20px;
+  --navbar-h: 61px;
 
   /* --- Transitions --- */
   --transition-fast: 0.15s ease;
@@ -419,6 +420,7 @@ h3,
   position: sticky;
   top: 0;
   z-index: 100;
+  width: 100%;
 }
 
 .logo-link {
@@ -431,7 +433,6 @@ h3,
   width: 120px;
   height: auto;
   mix-blend-mode: multiply;
-  
 }
 
 .navbar__links {
@@ -1116,7 +1117,7 @@ h3,
 
 
 /* ============================================================
-   18. NAVBAR OVERRIDES
+   18. NAVBAR LOGO
    ============================================================ */
 
 ::selection {
@@ -1124,20 +1125,65 @@ h3,
   color: var(--color-primary-dark);
 }
 
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.navbar__logo img{
+.navbar__logo img {
   height: 40px;
   width: auto;
   max-width: none;
 }
 
+
 /* ============================================================
-   27. FOOTER EXTENDED  ← LOGO FIX IS HERE
+   19. APP LAYOUT (sidebar + main content)
+   ============================================================ */
+
+.layout {
+  display: flex;
+  min-height: calc(100vh - var(--navbar-h));
+}
+
+.layout__main {
+  flex: 1;
+  padding: 24px;
+  overflow: auto;
+  min-width: 0;
+}
+
+/* Override dashboard.css fixed/absolute sidebar when used inside .layout */
+.layout > .sidebar {
+  position: sticky;
+  top: 0;
+  width: 260px;
+  height: calc(100vh - var(--navbar-h));
+  flex-shrink: 0;
+  overflow-y: auto;
+  /* Reset any dashboard.css values */
+  transform: none !important;
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  .layout > .sidebar {
+    position: fixed;
+    top: var(--navbar-h);
+    left: 0;
+    height: calc(100vh - var(--navbar-h));
+    transform: translateX(-100%);
+    z-index: 150;
+  }
+
+  .layout > .sidebar.is-open {
+    transform: translateX(0);
+    box-shadow: 0 16px 40px rgba(15, 31, 46, 0.12);
+  }
+
+  .layout__main {
+    padding: 16px;
+  }
+}
+
+
+/* ============================================================
+   20. FOOTER EXTENDED
    ============================================================ */
 
 .footer-extended {
@@ -1153,7 +1199,6 @@ h3,
   margin-bottom: var(--space-7);
 }
 
-/* ── LOGO FIX ── */
 .footer-brand-name {
   display: block;
   margin-bottom: var(--space-3);
@@ -1165,7 +1210,6 @@ h3,
   max-width: none !important;
   display: block;
 }
-/* ──────────── */
 
 .footer-brand-name span { color: var(--color-primary-light); }
 
@@ -1231,34 +1275,9 @@ h3,
   color: var(--color-white);
 }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 992px) {
-      .hero-inner       { grid-template-columns: 1fr; }
-      .hero-visual      { align-items: center; }
-      .steps-grid       { grid-template-columns: repeat(2, 1fr); }
-      .step-connector   { display: none; }
-      .project-grid     { grid-template-columns: repeat(2, 1fr); }
-      .mentors-grid     { grid-template-columns: repeat(2, 1fr); }
-      .testimonials-grid{ grid-template-columns: 1fr; }
-      .impact-grid      { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
-      .footer-grid      { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 768px) {
-      .hero-heading     { font-size: 32px; }
-      .steps-grid       { grid-template-columns: 1fr; }
-      .project-grid     { grid-template-columns: 1fr; }
-      .mentors-grid     { grid-template-columns: repeat(2, 1fr); }
-      .cta-box          { flex-direction: column; text-align: center; }
-      .cta-actions      { flex-wrap: wrap; justify-content: center; }
-      .footer-grid      { grid-template-columns: 1fr; }
-      .footer-bottom    { flex-direction: column; gap: var(--space-3); text-align: center; }
-      .section-header   { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
-    }
-  
-    
 
 /* ============================================================
-   28. RESPONSIVE (extended sections)
+   21. RESPONSIVE (extended sections)
    ============================================================ */
 
 @media (max-width: 992px) {

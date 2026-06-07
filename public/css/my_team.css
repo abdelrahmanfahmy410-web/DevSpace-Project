@@ -1,0 +1,282 @@
+/* resources/css/pages/teammates.css */
+
+/* ── Page shell ──────────────────────────────────────────────────────────── */
+
+.teammates-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.page-header__eyebrow {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 4px;
+}
+
+.page-header__title {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 4px;
+    line-height: 1.2;
+    letter-spacing: -0.4px;
+}
+
+.page-header__sub {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin: 0;
+}
+
+.stat-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 12px 16px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    gap: 4px;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-pill__value {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.stat-pill__label {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* ── Teammates grid ──────────────────────────────────────────────────────── */
+
+.teammates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+/* ── Teammate card ───────────────────────────────────────────────────────── */
+
+.teammate-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+}
+
+.teammate-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* Identity row */
+
+.teammate-card__identity {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.teammate-card__avatar-wrap {
+    flex-shrink: 0;
+}
+
+.teammate-card__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-border);
+    display: block;
+}
+
+.teammate-card__avatar--initials {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.5px;
+}
+
+.teammate-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.teammate-card__name {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.teammate-card__headline {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.teammate-card__project-count {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* Projects list */
+
+.teammate-card__projects {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--color-border);
+    padding-top: 16px;
+}
+
+.shared-project {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.shared-project__name {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.12s ease;
+}
+
+.shared-project__name:hover {
+    color: var(--color-primary);
+}
+
+/* Role badges — scoped to shared-project to avoid clash with dashboard.css .role-badge */
+
+.shared-project__role {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: capitalize;
+    white-space: nowrap;
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+}
+
+.shared-project__role--developer {
+    background: var(--color-blue-bg);
+    color: var(--color-blue);
+}
+
+.shared-project__role--designer {
+    background: var(--color-purple-bg);
+    color: var(--color-purple);
+}
+
+.shared-project__role--lead {
+    background: var(--color-yellow-bg);
+    color: var(--color-yellow);
+}
+
+/* ── Empty state (scoped so it doesn't clash with dashboard.css) ─────────── */
+
+.teammates-page .empty-state {
+    padding: 64px 16px;
+}
+
+.empty-state__icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-primary-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-primary);
+    margin-bottom: 4px;
+}
+
+.empty-state__heading {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.empty-state__body {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .teammates-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stat-pill {
+        flex-direction: row;
+        gap: 8px;
+    }
+}

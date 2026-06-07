@@ -70,13 +70,12 @@ public function mentees()
         ->where('role', 'mentor')
         ->pluck('project_id');
 
-    // Users who are 'developer' on any of those same projects
+    // Any other user on those same projects (any role)
     $mentees = User::where('id', '!=', $me->id)
         ->whereExists(function ($query) use ($myMentoredProjectIds) {
             $query->select(DB::raw(1))
                 ->from('team_roles')
                 ->whereColumn('team_roles.user_id', 'users.id')
-                ->where('team_roles.role', 'developer')
                 ->whereIn('team_roles.project_id', $myMentoredProjectIds);
         })
         ->get()
@@ -84,7 +83,6 @@ public function mentees()
             $sharedProjects = DB::table('team_roles')
                 ->join('projects', 'projects.id', '=', 'team_roles.project_id')
                 ->where('team_roles.user_id', $user->id)
-                ->where('team_roles.role', 'developer')
                 ->whereIn('team_roles.project_id', $myMentoredProjectIds)
                 ->select('projects.id', 'projects.title', 'team_roles.role', 'team_roles.id as team_role_id')
                 ->get();
@@ -101,6 +99,7 @@ public function mentees()
 
     return view('mentor.mentees', compact('mentees'));
 }
+
     /**
      * Show the form for creating a new resource.
      */

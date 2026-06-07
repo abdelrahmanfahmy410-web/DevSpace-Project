@@ -21,7 +21,7 @@
 
         <div class="navbar__links" id="navLinks">
             <a href="#" class="navbar__link is-active">Home</a>
-            <a href="#" class="navbar__link">Projects</a>
+            <a href="{{ route('projects.index') }}" class="navbar__link">Projects</a>
             <a href="#" class="navbar__link">Mentors</a>
             <a href="#" class="navbar__link">Developers</a>
 

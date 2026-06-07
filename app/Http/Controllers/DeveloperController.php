@@ -89,6 +89,38 @@ class DeveloperController extends Controller
             return back()
                 ->withErrors(['error' => $e->getMessage()])
                 ->withInput();
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        return back()
+            ->withErrors([
+                'error' => $e->getMessage()
+            ])
+            ->withInput();
+    }
+}
+
+   
+public function show()
+{ 
+    $userid = auth()->id();
+    $developer = Developer::with(['user', 'specialization'])->where('user_id', $userid)->first();
+   //  dd($developer->user->roles());
+    if (!$developer) {
+        return "جدول المطورين (developers) فارغ في قاعدة البيانات. برجاء إضافة مطور أولاً للتجربة.";
+    }
+
+    return view('developer.profile', compact('developer'));
+}
+ public function edit()
+{try {
+        // جلب أول مطور من الداتابيز مع المستخدم بتاعه عشان التست يشتغل علطول حتى لو مش عاملة Login
+        $userid = auth()->id();
+        $developer = \App\Models\Developer::with('user')->where('user_id', $userid)->first();
+
+        if (!$developer) {
+            return "تنبيه: لا يوجد أي مطور في قاعدة البيانات لتعديله.";
         }
     }
 

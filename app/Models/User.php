@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Project;
+use App\Models\TeamRole;
+
 
 #[Fillable(['name', 'email', 'password','bio', 'linkedin_url', 'phonenumber', 'profile_picture'])]
 #[Hidden(['password', 'remember_token'])]
@@ -34,7 +37,7 @@ class User extends Authenticatable
     
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+       return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     }
     //watchlist
     public function watchlist()
@@ -54,10 +57,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     } 
-    public function projects()
+   public function teamProjects()
     {
-        return $this->hasMany(Project::class, 'TeamRole')->withPivot('role');
+        return $this->belongsToMany(Project::class, 'team_roles', 'user_id', 'project_id')
+            ->withPivot('role')
+            ->withTimestamps();
     }
+    
     //is -a
      public function mentor()
     {
@@ -71,7 +77,15 @@ class User extends Authenticatable
         return $this->hasOne(Investor::class);
         
     } 
+
+    public function wishlist()
+{
+    return $this->belongsToMany(Project::class, 'project_user_watchlist');
+}
     
-  
+ public function teamRoles()
+{
+    return $this->hasMany(TeamRole::class);
+} 
 
 }

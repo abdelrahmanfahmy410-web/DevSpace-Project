@@ -14,9 +14,9 @@ class Mentor extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function specializations()
+    public function specialization()
     {
-        return $this->hasone(Specialization::class);
+        return $this->belongsTo(Specialization::class); 
     }
 
     public function skills()

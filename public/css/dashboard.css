@@ -585,7 +585,19 @@ body {
     overflow: hidden;
 }
 
+.project-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
 
+.project-text {
+    flex: 1;
+}
+
+.project-content a.btn {
+    flex-shrink: 0;
+}
 /* ============================================================
    SKILLS
    ============================================================ */

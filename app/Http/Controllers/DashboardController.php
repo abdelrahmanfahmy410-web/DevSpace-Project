@@ -28,13 +28,17 @@ class DashboardController extends Controller
                 ->get();
         }
         if ($isInvestor) {
-            $profile = $user->investor->first() ?? null;
+            $profile = $user->investor()->first() ?? null;
+            $areaOfInterest = $profile?->area_of_interest;   // add this
+
         } else if ($user->developer()->exists()) {
-            $profile = $user->developer->with('skills')->first() ?? null;
+            $profile = $user->developer()->with('skills')->first() ?? null;
         }
         else {
-            $profile = $user->mentor->with('skills')->first() ?? null;
+            $profile = $user->mentor()->with('skills')->first() ?? null;
         }
+        $skills = $profile?->skills ?? collect();
+
         // if($profile==null){
         //     $profile=$user->mentor->firstorfail() ?? null;
         // }
@@ -49,7 +53,7 @@ class DashboardController extends Controller
             'following'        => Following::where('follower_id', $user->id)->count(),
         ];
 
-        return view('layouts.dashboard', compact('projects', 'isInvestor', 'profile', 'stats'));
+        return view('layouts.dashboard', compact('projects', 'isInvestor', 'profile', 'stats','skills','areaOfInterest'));
     }
 
 }

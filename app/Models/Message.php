@@ -1,22 +1,31 @@
 <?php
+// app/Models/Message.php
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Message extends Model
 {
-    use HasFactory;
+    protected $fillable = ['conversation_id', 'user_id', 'body', 'read_at'];
 
-    protected $fillable = ['sender_id', 'receiver_id', 'title', 'body', 'isunread'];
-    public function sender()
+    protected $casts = [
+        'read_at' => 'datetime',
+    ];
+
+    public function conversation(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->belongsTo(Conversation::class);
     }
-    public function receiver()
+
+    public function sender(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-    
+
+    public function isRead(): bool
+    {
+        return $this->read_at !== null;
+    }
 }

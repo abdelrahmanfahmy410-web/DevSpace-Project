@@ -13,6 +13,7 @@ use App\Http\Controllers\AreaOfInterestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Project;
+use App\Http\Controllers\ConversationController;
 
 
 //all users
@@ -136,7 +137,10 @@ Route::get('/projects', [ProjectController::class, 'index'])->name('projects.ind
 
 Route::get('/api/users/search', [ProjectController::class, 'searchUsers']);
 
-Route::get('/member/profile/{id}', [UserController::class, 'showMemberProfile'])->name('member.profile');
+Route::get('/member/profile', [UserController::class, 'showMemberProfile'])->name('member.profile');
+Route::get('/member/profile', [UserController::class, 'showMemberProfile'])
+    ->name('member.profile')
+    ->middleware('auth');
 // ----------------------------------------------------
 // API / AJAX Routes
 // ----------------------------------------------------
@@ -160,3 +164,19 @@ Route::get('/dev-login', function () {
 });
    Route::get('/team-member/{teamRole}/profile', [ProjectController::class, 'memberProfile'])
     ->name('team-role.profile');
+
+
+    
+    // routes/web.php  (add inside your auth middleware group)
+    Route::middleware(['auth'])->group(function () {
+
+    // Inbox: list all conversations
+    Route::get('/inbox', [ConversationController::class, 'index'])->name('inbox');
+
+    // Start or open a conversation with a user
+    Route::get('/conversations/start/{user}', [ConversationController::class, 'start'])->name('conversations.start');
+
+    // Show a specific conversation (chat page)
+    Route::get('/conversations/{conversation}', [ConversationController::class, 'show'])->name('conversations.show');
+
+});

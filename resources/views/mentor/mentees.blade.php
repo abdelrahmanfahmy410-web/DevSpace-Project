@@ -1,5 +1,5 @@
 {{-- resources/views/mentees/index.blade.php --}}
-@extends('layouts.app_dashboard')
+@extends('layouts.app')
 
 @section('page-title', 'My Developers')
 

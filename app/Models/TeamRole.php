@@ -11,12 +11,12 @@ class TeamRole extends Model
 
     protected $fillable = ['role', 'project_id', 'user_id'];
 
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'user_team_roles');
+        return $this->belongsTo(User::class);
     }
-    public function projects()
+    public function project()
     {
-        return $this->belongsToMany(Project::class, 'project_team_roles');
+        return $this->belongsTo(Project::class);
     }
 }

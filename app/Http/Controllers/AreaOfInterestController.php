@@ -51,36 +51,5 @@ class AreaOfInterestController extends Controller
                 'Areas of interest saved successfully.'
             );
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(Area_of_interest $area_of_interest)
-    {
-        //
 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Area_of_interest $area_of_interest)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Area_of_interest $area_of_interest)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Area_of_interest $area_of_interest)
-    {
-        //
-    }
 }

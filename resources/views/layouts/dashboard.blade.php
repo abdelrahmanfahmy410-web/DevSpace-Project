@@ -173,14 +173,22 @@
             </div>
 
             <div class="skills">
-                @forelse($profile->expertise ?? [] as $skill)
-                    <span class="skill">{{ $skill }}</span>
-                @empty
-                    <div class="empty-state empty-state--sm">
-                        <p>No skills added yet.</p>
-                        <a href="#" class="btn btn-outline btn--sm">Add Skills</a>
-                    </div>
-                @endforelse
+                @if(!$isInvestor)
+                    @forelse($profile->skills as $skill)
+                    <span class="skill">{{ $skill->name}}</span>
+                    @empty
+                        <div class="empty-state empty-state--sm">
+                            <p>No skills added yet.</p>
+                            @if($isDeveloper)
+                            <a href="/developer/skills/edit" class="btn btn-outline btn--sm">Add Skills</a>
+                            @else
+                            <a href="/mentor/skills/edit" class="btn btn-outline btn--sm">Add Skills</a>
+                            @endif
+                        </div>
+
+                    @endforelse
+                   @endif
+                      
             </div>
         </div>
 

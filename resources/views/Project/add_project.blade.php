@@ -348,7 +348,7 @@
           </div>
         </div>
 
-<!-- ── CARD 5: Team Members ── -->
+<!-- ── CARD 5: Team Members ──
 <div class="card">
     <div class="card-header">
         <div class="card-header-left">
@@ -377,7 +377,7 @@
             </button>
         </div>
     </div>
-</div>
+</div> -->
 
         <!-- ── LIVE PREVIEW ── -->
         <div class="preview-panel">

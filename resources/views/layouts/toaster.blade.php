@@ -1,13 +1,37 @@
-
-<div class="toaster-container">
-    @if (session('success'))
-        <div class="toaster">
-            {{ session('success') }}
+<div class="toast-container">
+    @if(session('success'))
+        <div class="toast toast-success show">
+            <div class="toast-header">
+                <strong>Success</strong>
+                <span class="close-btn" onclick="this.parentElement.parentElement.remove()">×</span>
+            </div>
+            <div class="toast-body">
+                {{ session('success') }}
+            </div>
         </div>
     @endif
-    @foreach($errors->all() as $error)
-        <div class="toaster error">
-            {{ $error }}
+
+    @if(session('error'))
+        <div class="toast toast-error show">
+            <div class="toast-header">
+                <strong>Error</strong>
+                <span class="close-btn" onclick="this.parentElement.parentElement.remove()">×</span>
+            </div>
+            <div class="toast-body">
+                {{ session('error') }}
+            </div>
+        </div>
+    @endif
+
+    @foreach ($errors->all() as $error)
+        <div class="toast toast-error show">
+            <div class="toast-header">
+                <strong>Validation</strong>
+                <span class="close-btn" onclick="this.parentElement.parentElement.remove()">×</span>
+            </div>
+            <div class="toast-body">
+                {{ $error }}
+            </div>
         </div>
     @endforeach
 </div>

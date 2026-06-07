@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Skill;
-use App\Models\Developer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DeveloperSkillController extends Controller
@@ -45,60 +43,53 @@ class DeveloperSkillController extends Controller
      * Show the form for editing the specified resource.
      */
 
-   public function edit()
-    { 
-    $skills = Skill::all();
-    $id = auth()->id();
-    $developer = DB::table('developers')->where('user_id', $id)->first();
-    $developerId = $developer->id;
+    public function edit()
+    {
+        $skills      = Skill::all();
+        $id          = auth()->id();
+        $developer   = DB::table('developers')->where('user_id', $id)->first();
+        $developerId = $developer->id;
 
-    $developerSkills = DB::table('developer_skill')
-        ->where('developer_id', $developerId)
-        ->pluck('skill_id')
-        ->toArray();
+        $developerSkills = DB::table('developer_skill')
+            ->where('developer_id', $developerId)
+            ->pluck('skill_id')
+            ->toArray();
 
-    return view('developer.skills', [
-        'skills'          => $skills,
-        'developerSkills' => $developerSkills,
-        'id'              => $id,
-        'update_url'      => url('/developer/skills/' . $id . '/update')
-    ]);
+        return view('developer.skills', [
+            'skills'          => $skills,
+            'developerSkills' => $developerSkills,
+            'id'              => $id,
+            'update_url'      => url('/developer/skills/' . $id . '/update'),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-   public function update(Request $request)
-    {      
-        //   dd($request->all());
-    $id = auth()->id(); 
-    $developer = DB::table('developers')->where('user_id', $id)->first();
-    $developerId = $developer->id;
-
-    DB::table('developer_skill')
-        ->where('developer_id', $developerId)
-        ->delete();
-
-    if ($request->has('skills')) {
-        $data = [];
-        foreach ($request->skills as $skillId) {
-            $data[] = [
-                'developer_id' => $developerId,
-                'skill_id'     => $skillId,
-            ];
-        }
-        DB::table('developer_skill')->insert($data);
-    }
-
-    return redirect('/developer/skills/edit')
-        ->with('success', 'Skills updated successfully!');
-}
-  
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function update(Request $request)
     {
-        //
+        //   dd($request->all());
+        $id          = auth()->id();
+        $developer   = DB::table('developers')->where('user_id', $id)->first();
+        $developerId = $developer->id;
+
+        DB::table('developer_skill')
+            ->where('developer_id', $developerId)
+            ->delete();
+
+        if ($request->has('skills')) {
+            $data = [];
+            foreach ($request->skills as $skillId) {
+                $data[] = [
+                    'developer_id' => $developerId,
+                    'skill_id'     => $skillId,
+                ];
+            }
+            DB::table('developer_skill')->insert($data);
+        }
+
+        return redirect('/dashboard')
+            ->with('success', 'Skills updated successfully!');
     }
+
 }

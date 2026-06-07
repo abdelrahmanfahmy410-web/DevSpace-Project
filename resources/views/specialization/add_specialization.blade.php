@@ -63,36 +63,43 @@
                 {{ $specialization->name }}
 
             </option>
+            @endforeach
             <option value="Other" >
 
                 Other
              </option>
 
-        @endforeach
 
     </select>
-  <div> id="other-specialization" style="display:none; margin-top:10px;">
-        <input
+  <div  id="other-specialization" style="display:none; margin-top:10px;">
+    
+       <input
             type="text"
             name="other_specialization"
             class="form-control"
             placeholder="Enter other specialization"
         >
+            
+       
     </div>
 </div>
 
 
-<div class="form-group">
+<div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
 
-    <label>
+    <label style="margin: 0; font-weight: 600;">
         Skills
     </label>
 
-    <div class="skills-container">
+    <a href="{{ url('/skill/add_skill') }}" class="btn btn-secondary" style="white-space: nowrap;">
+        Add Skill
+    </a>
+
+    <div class="skills-container" style="width: 100%; margin-top: 12px;">
 
         @foreach($skills as $skill)
 
-            <div class="skill-item">
+            <div class="skill-item" data-skill-id="{{ $skill->id }}">
 
                 <input
                     type="checkbox"
@@ -101,9 +108,7 @@
                 >
 
                 <label>
-
                     {{ $skill->name }}
-
                 </label>
 
             </div>
@@ -118,18 +123,24 @@
                 <button type="submit" class="btn btn-primary">
                     Create Specialization
                 </button>
+            </div>
+        </form>
+    </div>
 </div>
 
-</body>
 <script>
-function showspecilization(){
-    var specialization=documents.getElementById("specialization").value;
-    if(specialization=="Other"){
-        document.getElementById("other-specialization").style.display="block";
-    else{
-        document.getElementById("other-specialization").style.display="none";
-    }
+function showspecilization() {
 
+    var specialization =
+        document.getElementById("specialization").value;
+
+    if (specialization == "Other") {
+        document.getElementById("other-specialization").style.display = "block";
+    } else {
+        document.getElementById("other-specialization").style.display = "none";
+    }
 }
- </script>
+
+</script>
+</body>
 </html>

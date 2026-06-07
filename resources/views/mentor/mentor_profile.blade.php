@@ -40,7 +40,7 @@
 
             <div class="info-box">
                 <h4>Experience</h4>
-                <p>{{ $mentor->years_of_experience }} Years</p>
+                <p>{{ $mentor->experience_years }} Years</p>
             </div>
 
         </div>

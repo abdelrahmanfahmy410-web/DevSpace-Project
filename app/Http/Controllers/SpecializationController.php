@@ -38,19 +38,36 @@ class SpecializationController extends Controller
      */
     public function store(Request $request)
     {
+       
+        //get or create specialization
+
+      if ($request->name == 'Other') {
         $request->validate([
+            'other_specialization' => 'required|string|max:255',
+        ]);
+        
+        $specialization = Specialization::create([
+            'name' => $request->other_specialization,
+        ]);
+    }
+    else {
+        $specialization = Specialization::where('name', $request->name)->first();
+         if (!$specialization) {
+            $specialization = Specialization::create([
+                'name' => $request->other_specialization,
+            ]);
+             $request->validate([
             'name' => 'required|string|max:255|unique:specializations,name',
             'skills' => 'array',
             'skills.*' => 'exists:skills,id',
         ]);
-        //get or create specialization
-        $specialization = Specialization::create([
-            'name' => $request->name,
-        ]);
-        $specialization->skills()->attach($request->skills);
-        return redirect('/');
+         }
     }
-
+        $specialization->skills()->sync($request->skills);
+    
+        return redirect('/')->with('success', 'Specialization added successfully!');
+    }
+     
     /**
      * Display the specified resource.
      */

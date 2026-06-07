@@ -45,10 +45,10 @@ class DeveloperSkillController extends Controller
      * Show the form for editing the specified resource.
      */
 
-   public function edit($id)
+   public function edit()
     { 
     $skills = Skill::all();
-    
+    $id = auth()->id();
     $developer = DB::table('developers')->where('user_id', $id)->first();
     $developerId = $developer->id;
 
@@ -68,9 +68,10 @@ class DeveloperSkillController extends Controller
     /**
      * Update the specified resource in storage.
      */
-   public function update(Request $request, $id)
+   public function update(Request $request)
     {      
         //   dd($request->all());
+    $id = auth()->id(); 
     $developer = DB::table('developers')->where('user_id', $id)->first();
     $developerId = $developer->id;
 
@@ -89,7 +90,7 @@ class DeveloperSkillController extends Controller
         DB::table('developer_skill')->insert($data);
     }
 
-    return redirect('/developer/skills/' . $id . '/edit')
+    return redirect('/developer/skills/edit')
         ->with('success', 'Skills updated successfully!');
 }
   

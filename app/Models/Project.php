@@ -10,6 +10,7 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = ['title','description','repository_link','live_demo_link','type'];
+    protected $with = ['media', 'specializations', 'skills', 'team_roles'];
     //teamrole
     public function team_roles()
     {
@@ -32,7 +33,10 @@ class Project extends Model
     }
 
     public function media()
-{
-    return $this->hasMany(ProjectMedia::class, 'project_id');
+    {
+        // ربطنا المشروع بموديل الـ ProjectMedia اللي عملناه في الخطوة 2
+        return $this->hasMany(ProjectMedia::class, 'project_id'); 
+    }
+
+
 }
-} 

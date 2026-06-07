@@ -17,6 +17,6 @@ class TeamRole extends Model
     }
     public function projects()
     {
-        return $this->belongsToMany(Team::class, 'team_team_roles');
+        return $this->belongsToMany(Project::class, 'project_team_roles');
     }
 }

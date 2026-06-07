@@ -86,15 +86,16 @@ public function mentees()
                 ->where('team_roles.user_id', $user->id)
                 ->where('team_roles.role', 'developer')
                 ->whereIn('team_roles.project_id', $myMentoredProjectIds)
-                ->select('projects.id', 'projects.title', 'team_roles.role')
+                ->select('projects.id', 'projects.title', 'team_roles.role', 'team_roles.id as team_role_id')
                 ->get();
 
             return [
-                'id'       => $user->id,
-                'name'     => $user->name,
-                'avatar'   => $user->avatar_url ?? null,
-                'headline' => $user->headline ?? null,
-                'projects' => $sharedProjects,
+                'id'           => $user->id,
+                'team_role_id' => $sharedProjects->first()->team_role_id ?? null,
+                'name'         => $user->name,
+                'avatar'       => $user->avatar_url ?? null,
+                'headline'     => $user->headline ?? null,
+                'projects'     => $sharedProjects,
             ];
         });
 

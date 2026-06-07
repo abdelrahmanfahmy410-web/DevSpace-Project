@@ -111,6 +111,17 @@ public function show()
 
     return view('developer.profile', compact('developer'));
 }
+public function myprojectdetails()
+{ 
+    $user_id=auth()->user()->id;
+    $developer = Developer::with(['user', 'specialization'])->where('user_id',$user_id)->first();
+   //  dd($developer->user->roles());
+    if (!$developer) {
+        return "جدول المطورين (developers) فارغ في قاعدة البيانات. برجاء إضافة مطور أولاً للتجربة.";
+    }
+
+    return view('developer.profile', compact('developer'));
+}
  public function edit()
 {try {
         // جلب أول مطور من الداتابيز مع المستخدم بتاعه عشان التست يشتغل علطول حتى لو مش عاملة Login

@@ -10,13 +10,10 @@
     // $active is passed in from the parent blade, e.g. 'dashboard', 'my-projects', 'my-team', 'mentees', 'wishlist', 'chats', 'settings'
     $active = $active ?? '';
 @endphp
+<link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
 
 <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-
-    <div class="sidebar-brand">
-        @include('layouts.logo', ['darkMode' => false])
-    </div>
-
     <nav class="sidebar-menu" aria-label="Workspace navigation">
 
         <p class="menu-title" role="heading" aria-level="3">MY WORKSPACE</p>

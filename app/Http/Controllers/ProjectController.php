@@ -235,15 +235,27 @@ class ProjectController extends Controller
         $skills = $specialization->skills;
         return response()->json($skills);
     }
-    public function assignedProjects()
-    {
-        $userId   = auth()->id();
-        $projects = Project::whereHas('team_roles', function ($q) use ($userId) {
-            $q->where('user_id', $userId);
-        })->with(['skills', 'specializations', 'team_roles', 'media'])->get();
-        return view('project.assigned_projects', compact('projects'));
-    }
+  public function assignedProjects(Request $request) 
+{
+    $userId = auth()->id();
+    $search = $request->input('search'); 
 
+    $projects = Project::whereHas('team_roles', function ($q) use ($userId) {
+        $q->where('user_id', $userId);
+    })
+   
+    ->when($search, function ($query) use ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', '%' . $search . '%') 
+              ->orWhere('description', 'like', '%' . $search . '%'); 
+        });
+    })
+    ->with(['skills', 'specializations', 'team_roles', 'media'])
+    ->paginate(10) // استبدال get() بـ paginate وتحديد عدد العناصر في الصفحة (مثلاً 10)
+    ->withQueryString(); // هذه الدالة مهمة جداً للحفاظ على كلمة البحث أثناء التنقل بين الصفحات
+
+    return view('project.assigned_projects', compact('projects'));
+}
 /**
  * Search users for team member selection (AJAX)
  */

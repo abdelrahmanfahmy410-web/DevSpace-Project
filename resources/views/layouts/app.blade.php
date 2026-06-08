@@ -39,21 +39,24 @@
                 <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join the Space</a>
             @else
                 <div class="navbar__user" style="margin-left: 8px; display: flex; align-items: center; gap: 12px;">
-                    <div class="navbar__avatar">
-                        @if (Auth::user()->avatar)
-                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
-                                style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
-                        @else
-                            <div
-                                style="width: 36px; height: 36px; border-radius: 50%;
+                    <a href="{{ route('member.profile') }}"
+                        style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+                        <div class="navbar__avatar">
+                            @if (Auth::user()->avatar)
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
+                                    style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                            @else
+                                <div
+                                    style="width: 36px; height: 36px; border-radius: 50%;
                     background: var(--color-primary);
                     display: flex; align-items: center; justify-content: center;
                     color: white; font-weight: 600; font-size: 14px;">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </div>
-                        @endif
-                    </div>
-                    <span style="font-weight: 500;">{{ Auth::user()->name }}</span>
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+                            @endif
+                        </div>
+                        <span style="font-weight: 500;">{{ Auth::user()->name }}</span>
+                    </a>
 
                     {{-- Only show logout when NOT on a dashboard page --}}
                     @if (!($fullWidth ?? false))

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Project;
@@ -29,8 +28,8 @@ class ProjectController extends Controller
             ->when($skillIds, fn($q) => $q->whereHas('skills',
                 fn($q2) => $q2->whereIn('skills.id', $skillIds)
             ))
-            ->when($sort, function($q, $sort) {
-                match($sort) {
+            ->when($sort, function ($q, $sort) {
+                match ($sort) {
                     'oldest' => $q->oldest(),
                     'az'     => $q->orderBy('title'),
                     default  => $q->latest(),
@@ -51,7 +50,7 @@ class ProjectController extends Controller
     public function create()
     {
         $specializations = \App\Models\Specialization::all();
-        $skills = [];
+        $skills          = [];
         return view('project.add_project', compact('specializations', 'skills'));
     }
 
@@ -103,18 +102,18 @@ class ProjectController extends Controller
         }
 
         // Attach team members
-        if ($request->has('team_members') && !empty($request->team_members)) {
+        if ($request->has('team_members') && ! empty($request->team_members)) {
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
-                    'role' => $member['role']
+                    'role' => $member['role'],
                 ]);
             }
         }
 
         // Ensure the creator is added to the team
-        if (!$project->team_roles()->where('user_id', auth()->id())->exists()) {
+        if (! $project->team_roles()->where('user_id', auth()->id())->exists()) {
             $project->team_roles()->attach(auth()->id(), [
-                'role' => 'Project Creator'
+                'role' => 'Project Creator',
             ]);
         }
 
@@ -155,9 +154,9 @@ class ProjectController extends Controller
         return view('project.edit_project', compact('project', 'specializations'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+/**
+ * Update the specified resource in storage.
+ */
     public function update(Request $request, Project $project)
     {
         $request->validate([
@@ -206,7 +205,7 @@ class ProjectController extends Controller
             $project->team_roles()->detach();
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
-                    'role' => $member['role']
+                    'role' => $member['role'],
                 ]);
             }
         }
@@ -214,9 +213,9 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Project updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+/**
+ * Remove the specified resource from storage.
+ */
     public function destroy(Project $project)
     {
         if ($project->media()->exists()) {
@@ -228,9 +227,9 @@ class ProjectController extends Controller
         return redirect()->back()->with('success', 'Project deleted successfully');
     }
 
-    /**
-     * Get skills by specialization (AJAX)
-     */
+/**
+ * Get skills by specialization (AJAX)
+ */
     public function getSkillsBySpecialization(Specialization $specialization)
     {
         $skills = $specialization->skills;
@@ -238,25 +237,24 @@ class ProjectController extends Controller
     }
     public function assignedProjects()
     {
-        $userId = auth()->id();
-        $projects = Project::whereHas('team_roles', function($q) use ($userId) {
+        $userId   = auth()->id();
+        $projects = Project::whereHas('team_roles', function ($q) use ($userId) {
             $q->where('user_id', $userId);
-        })->with(['skills', 'specializations', 'team_roles','media'])->get();
-
-        return view('project.assigned_projects',compact('projects'));
+        })->with(['skills', 'specializations', 'team_roles', 'media'])->get();
+        return view('project.assigned_projects', compact('projects'));
     }
 
-    /**
-     * Search users for team member selection (AJAX)
-     */
+/**
+ * Search users for team member selection (AJAX)
+ */
     public function searchUsers(Request $request)
     {
         $query = $request->get('q', '');
 
         $users = \App\Models\User::where('name', 'like', "%{$query}%")
-                    ->orWhere('email', 'like', "%{$query}%")
-                    ->limit(10)
-                    ->get(['id as value', 'name as text']);
+            ->orWhere('email', 'like', "%{$query}%")
+            ->limit(10)
+            ->get(['id as value', 'name as text']);
 
         return response()->json($users);
     }
@@ -267,18 +265,16 @@ class ProjectController extends Controller
         return view('projects_show', compact('project'));
     }
 
-    /**
-     * Display projects assigned to the current user via team roles.
-     */
+/**
+ * Display projects assigned to the current user via team roles.
+ */
     public function myProjects()
     {
-        if (!auth()->check()) {
-            return redirect()->route('login');
+        if (Auth::user()->id != null) {
+            $projects = Project::whereHas('team_roles', function ($query) {
+                $query->where('user_id', auth()->id());
+            })->latest()->get();
         }
-
-        $projects = Project::whereHas('team_roles', function($query) {
-            $query->where('user_id', auth()->id());
-        })->latest()->get();
 
         return view('Project.my-projects', compact('projects'));
     }
@@ -288,55 +284,51 @@ class ProjectController extends Controller
         return view('project.add_media', compact('project'));
     }
 
-    /**
-     * Toggle project wishlist status (AJAX)
-     */
+/**
+ * Toggle project wishlist status (AJAX)
+ */
     public function toggleWishlist(Project $project)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
             ], 401);
         }
-
-        $user = auth()->user();
-        $status = $user->wishlist()->toggle($project->id);
+        $user     = auth()->user();
+        $status   = $user->wishlist()->toggle($project->id);
         $attached = count($status['attached']) > 0;
-
         return response()->json([
-            'success' => true,
-            'attached' => $attached
+            'success'  => true,
+            'attached' => $attached,
         ]);
     }
 
-    /**
-     * Display user's wishlist
-     */
+/**
+ * Display user's wishlist
+ */
     public function wishlist()
     {
-        if (!auth()->check()) {
-            return redirect()->route('login');
+        if (Auth::user()->id != null) {
+            $projects = auth()->user()->wishlist()
+                ->with(['skills', 'specializations', 'media'])
+                ->latest()
+                ->paginate(12)
+                ->withQueryString();
         }
 
-        $projects = auth()->user()->wishlist()
-            ->with(['skills', 'specializations', 'media'])
-            ->latest()
-            ->paginate(12)
-            ->withQueryString();
-
         $specializations = \App\Models\Specialization::orderBy('name')->get();
-        $skills = \App\Models\Skill::orderBy('name')->get();
+        $skills          = \App\Models\Skill::orderBy('name')->get();
 
         return view('Project.wishlist', compact('projects', 'specializations', 'skills'));
     }
 
-    /**
-     * Redirect to member profile based on role
-     */
+/**
+ * Redirect to member profile based on role
+ */
     public function memberProfile(TeamRole $teamRole)
     {
-        return match($teamRole->user->role) {
+        return match ($teamRole->user()->first()->roles()->pluck('name')->first()) {
             'developer' => redirect()->route('developer.profile', $teamRole->user->id),
             'mentor'    => redirect()->route('developer.profile', $teamRole->user->id),
             'investor'  => redirect()->route('developer.profile', $teamRole->user->id),

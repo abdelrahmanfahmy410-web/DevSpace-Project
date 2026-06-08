@@ -78,6 +78,25 @@ class User extends Authenticatable
         
     } 
 
+    public function conversationsAsSender(): HasMany
+    {
+    return $this->hasMany(Conversation::class, 'sender_id');
+    }
+
+    public function conversationsAsReceiver(): HasMany
+    {
+    return $this->hasMany(Conversation::class, 'receiver_id');
+    }
+
+    /**
+     * All conversations this user is part of.
+    */
+    public function conversations()
+    {
+    return Conversation::where('sender_id', $this->id)
+        ->orWhere('receiver_id', $this->id);
+    }
+    
     public function wishlist()
 {
     return $this->belongsToMany(Project::class, 'project_user_watchlist');

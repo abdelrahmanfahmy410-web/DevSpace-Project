@@ -21,6 +21,7 @@ class Mentor extends Model
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class, 'mentor_skills');
+        return $this->belongsToMany(Skill::class, 'mentors_skills');
     }
+    
 }

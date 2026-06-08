@@ -38,19 +38,19 @@
 
     <section class="stats-grid" aria-label="Stats overview">
         @if ($isDeveloper || $isMentor)
-        <div class="stat-card">
-            <div class="stat-icon stat-icon--blue" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 7h18M3 12h18M3 17h12" />
-                </svg>
+            <div class="stat-card">
+                <div class="stat-icon stat-icon--blue" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7h18M3 12h18M3 17h12" />
+                    </svg>
+                </div>
+
+                <div class="stat-body">
+                    <h3 class="stat-number">{{ $stats['my_projects'] ?? 0 }}</h3>
+                    <p class="stat-label">My Projects</p>
+                </div>
+
             </div>
-            
-            <div class="stat-body">
-                <h3 class="stat-number">{{ $stats['my_projects'] ?? 0 }}</h3>
-                <p class="stat-label">My Projects</p>
-            </div>
-             
-        </div>
         @endif
 
         <div class="stat-card">
@@ -113,10 +113,11 @@
                             </div>
                             <div class="project-content">
                                 <div class="project-text">
-                                <h4 class="project-name">{{ $project->title }}</h4>
-                                <p class="project-desc">{{ Str::limit($project->description, 120) }}</p>
+                                    <h4 class="project-name">{{ $project->title }}</h4>
+                                    <p class="project-desc">{{ Str::limit($project->description, 120) }}</p>
                                 </div>
-                                <a href="{{ route('projects.show', $project) }}" class="btn btn-outline btn--sm">View Details</a>
+                                <a href="{{ route('projects.show', $project) }}" class="btn btn-outline btn--sm">View
+                                    Details</a>
                             </div>
                         </div>
                     </div>
@@ -157,7 +158,8 @@
                     </div>
                 @empty
                     <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                            aria-hidden="true">
                             <path d="M3 7h18M3 12h18M3 17h12" />
                         </svg>
                         <p>No active projects yet.</p>
@@ -169,18 +171,35 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">My Expertise</h3>
+                <h3 class="card-title">
+                    {{ $isInvestor ? 'My Area Of Interest' : 'My Expertise' }}
+                </h3>
             </div>
 
             <div class="skills">
-                @forelse($profile->expertise ?? [] as $skill)
-                    <span class="skill">{{ $skill }}</span>
-                @empty
-                    <div class="empty-state empty-state--sm">
-                        <p>No skills added yet.</p>
-                        <a href="#" class="btn btn-outline btn--sm">Add Skills</a>
-                    </div>
-                @endforelse
+                @if ($isInvestor)
+                    @if ($areaOfInterest)
+                        <span class="skill">{{ $areaOfInterest }}</span>
+                    @else
+                        <div class="empty-state empty-state--sm">
+                            <p>No area of interest added yet.</p>
+                            <a href="/investor/edit" class="btn btn-outline btn--sm">Add Interest</a>
+                        </div>
+                    @endif
+                @else
+                    @forelse($skills as $skill)
+                        <span class="skill">{{ $skill->name }}</span>
+                    @empty
+                        <div class="empty-state empty-state--sm">
+                            <p>No skills added yet.</p>
+                            @if ($isDeveloper)
+                                <a href="/developer/skills/edit" class="btn btn-outline btn--sm">Add Skills</a>
+                            @else
+                                <a href="/mentor/skills/edit" class="btn btn-outline btn--sm">Add Skills</a>
+                            @endif
+                        </div>
+                    @endforelse
+                @endif
             </div>
         </div>
 

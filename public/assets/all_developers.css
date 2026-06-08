@@ -13,7 +13,7 @@ body {
     padding: 2rem 1rem;
 }
 
-/* شريط البحث العلوي مفرود هيدر وبحث جنب بعض */
+/* شريط البحث العلوي مفرود هيدر وببحث جنب بعض */
 .header-box {
     background-color: #ffffff;
     padding: 1.5rem;
@@ -95,7 +95,7 @@ body {
     align-items: flex-start;
 }
 
-/* الفلتر الجانبي (التخصصات والمهارات فقط) */
+/* الفلتر الجانبي المحدث */
 .sidebar-filters {
     flex: 0 0 280px;
     background-color: #ffffff;
@@ -119,41 +119,104 @@ body {
 }
 
 .filter-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .filter-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     font-weight: 600;
     color: #4b5563;
     font-size: 0.875rem;
 }
 
-.sidebar-filters .filter-select {
-    width: 100%;
-    padding: 0.625rem 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
+/* تنسيق حاويات الـ Checkboxes */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    max-height: 180px; /* شريط تمرير داخلي إذا زادت العناصر عن الحد */
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* تخصيص الـ Scrollbar بشكل ناعم */
+.checkbox-group::-webkit-scrollbar {
+    width: 4px;
+}
+.checkbox-group::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.checkbox-group::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+.checkbox-group::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* تنسيق خيار الاختيار المفرد */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
     font-size: 0.875rem;
-    outline: none;
-    background-color: #f9fafb;
-    color: #374151;
-    box-sizing: border-box;
+    color: #4b5563;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+.checkbox-item:hover {
+    color: #111827;
+}
+
+/* تصميم عصري ومخصص للـ Checkbox */
+.checkbox-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    display: inline-grid;
+    place-content: center;
+    cursor: pointer;
     transition: all 0.2s;
 }
 
-.sidebar-filters .filter-select:focus {
-    border-color: #10b981;
-    background-color: #ffffff;
+.checkbox-item input[type="checkbox"]::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #ffffff;
+    background-color: CanvasText;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
-/* الجزء الرئيسي */
+.checkbox-item input[type="checkbox"]:checked {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+.checkbox-item input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.checkbox-item input[type="checkbox"]:focus-visible {
+    outline: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+/* الجزء الرئيسي لشبكة المطورين */
 .main-content {
     flex: 1;
 }
 
-/* شبكة كروت المطورين */
 .developers-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -223,6 +286,9 @@ body {
 .card-footer {
     border-top: 1px solid #f3f4f6;
     padding-top: 1rem;
+    display: flex;
+    flex-direction: column; /* ترتيب العناصر تحت بعضها */
+    align-items: flex-start; /* المهارات تبدأ من اليسار */
 }
 
 .skills-title {
@@ -256,7 +322,7 @@ body {
     color: #6b7280;
 }
 
-/* الموبايل */
+/* متجاوب مع الشاشات الصغيرة (الموبايل) */
 @media (max-width: 768px) {
     .page-layout {
         flex-direction: column;
@@ -268,4 +334,45 @@ body {
         position: static;
         margin-bottom: 1rem;
     }
+    
+    .checkbox-group {
+        max-height: 150px;
+    }
+}
+/* تحويل الزرار ليكون عبارة عن نص وسهم بدون خلفية أو حدود */
+.btn-view-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    width: fit-content;
+    align-self: flex-end;    /* لدفعه إلى جهة اليمين تماماً داخل الحاوية */
+    margin-top: auto;        /* يضمن نزوله لأسفل الكارت دائماً */
+    padding: 0.5rem 0;       /* إزالة الحشو الجانبي ليكون محاذياً للنص */
+    background: transparent;  /* إزالة الخلفية البيضاء */
+    color: #15803d;          /* درجة الأخضر الداكنة الشبيهة بالصورة */
+    border: none;            /* إزالة الحدود (Border) */
+    border-radius: 0;
+    font-size: 0.875rem;     /* حجم خط متناسق */
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* تأثير الـ Hover عند مرور الماوس (يصبح أغمق قليلاً) */
+.btn-view-profile:hover {
+    color: #166534;
+    background: transparent;  /* التأكد من عدم ظهور خلفية عند الـ Hover */
+    box-shadow: none;        /* إلغاء الظل القديم */
+}
+
+/* تنسيق السهم وحركته اللطيفة */
+.btn-view-profile svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+.btn-view-profile:hover svg {
+    transform: translateX(4px); /* حركة السهم لليمين عند الـ Hover مثل الصورة الأصلية */
 }

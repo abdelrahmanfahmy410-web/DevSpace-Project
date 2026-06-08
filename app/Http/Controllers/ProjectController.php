@@ -7,7 +7,6 @@ use App\Models\Specialization;
 use App\Models\TeamRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\TeamRole;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
@@ -131,19 +130,20 @@ class ProjectController extends Controller
         return view('Project.project_details', compact('project'));
     }
 
-        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
-        return view('Project.my_project_details', compact('project'));
-    }
-        public function showmyProjectDetails(Project $project)    
-    {
-//     if(!auth()->check() || $project->user_id != auth()->user()->id){
-//     abort(403);
-// }
-//      else{
-        $project->load(['skills', 'specializations', 'team_roles', 'media','watchers']);
-        return view('Project.my_project_details', compact('project'));
      
-    }
+     public function showmyProjectDetails(Project $project)
+{
+    // // 1. التحقق من الصلاحية: هل المستخدم الحالى هو صاحب المشروع؟
+    // if ($project->user_id !== auth()->user()->id) {
+    //     abort(403) ;
+    // }
+
+    // 2. تحميل العلاقات الخاصة بالمشروع لتعرض في الصفحة
+    $project->load(['skills', 'specializations', 'team_roles', 'media', 'watchers']);
+
+    // 3. التوجه إلى صفحة العرض وتمرير المتغير
+    return view('Project.my_project_details', compact('project'));
+}
    
     /**
      * Show the form for editing the specified resource.

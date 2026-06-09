@@ -2,12 +2,12 @@
 
 @section('page-title', 'Chat')
 
-{{-- 1. تمرير السايدبار وتفعيل زر الـ chats --}}
+
 @section('sidebar')
     @include('layouts.sidebar', ['active' => 'chats'])
 @endsection
 
-{{-- 2. محتوى صفحة الشات فقط --}}
+
 @section('content')
 <style>
     :root {

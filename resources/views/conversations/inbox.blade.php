@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_dashboard')
 
 @section('content')
 <!DOCTYPE html>
@@ -67,7 +67,7 @@
         .inbox-item:last-child { border-bottom: none; }
         .inbox-item:hover { background: var(--bg); }
 
-        .avatar {
+        .avatar-sender {
             width: 46px; height: 46px;
             border-radius: 50%;
             background: var(--green-light);
@@ -133,7 +133,7 @@
                 @php $other = $convo->otherParticipant(auth()->id()); @endphp
                 <a href="{{ route('conversations.show', $convo) }}" class="inbox-item">
 
-                    <div class="avatar">
+                    <div class="avatar-sender">
                         {{ strtoupper(substr($other->name, 0, 1)) }}
                     </div>
 

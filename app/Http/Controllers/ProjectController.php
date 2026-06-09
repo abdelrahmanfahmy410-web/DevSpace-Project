@@ -17,7 +17,8 @@ class ProjectController extends Controller
     {
         $types             = $request->input('type', []);
         $specializationIds = $request->input('specialization', []);
-        $skillIds          = $request->input('skills', []);
+        $skillIds          = $request->input('skill', []);
+        $search            = trim($request->input('search', ''));
         $sort              = $request->input('sort', 'newest');
 
         $projects = Project::with(['skills', 'specializations', 'media'])
@@ -28,6 +29,10 @@ class ProjectController extends Controller
             ->when($skillIds, fn($q) => $q->whereHas('skills',
                 fn($q2) => $q2->whereIn('skills.id', $skillIds)
             ))
+            ->when($search, fn($q) => $q->where(function ($q2) use ($search) {
+                $q2->where('title', 'like', "%{$search}%")
+                   ->orWhere('description', 'like', "%{$search}%");
+            }))
             ->when($sort, function ($q, $sort) {
                 match ($sort) {
                     'oldest' => $q->oldest(),

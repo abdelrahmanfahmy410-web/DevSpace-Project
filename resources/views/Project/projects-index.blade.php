@@ -41,9 +41,10 @@
             min-height: 100vh;
         }
 
+        /* Layout */
         .layout { display: flex; min-height: 100vh; }
 
-        /* ==================== FILTER SIDEBAR ==================== */
+        /* Filter Sidebar */
         .filter-sidebar {
             width: 260px;
             flex-shrink: 0;
@@ -110,120 +111,9 @@
             padding: 5px 8px;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: background var(--transition);
         }
 
         .filter-check-item:hover { background: var(--bg); }
-
-        .type-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        /* ==================== MAIN CONTENT ==================== */
-        .main { flex: 1; display: flex; flex-direction: column; overflow-x: hidden; }
-
-        .topbar {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 0 2rem;
-            height: 60px;
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            position: sticky; 
-            top: 0; 
-            z-index: 10;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 18px;
-        }
-
-        .project-card {
-            background: var(--surface); 
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg); 
-            box-shadow: var(--shadow-sm);
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden;
-            transition: box-shadow var(--transition), transform var(--transition);
-        }
-
-        .project-card:hover { 
-            box-shadow: var(--shadow-md); 
-            transform: translateY(-2px); 
-        }
-
-        .card-thumbnail { 
-            position: relative; 
-            width: 100%; 
-            height: 160px; 
-            overflow: hidden; 
-            flex-shrink: 0; 
-        }
-
-        .card-thumbnail img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            transition: transform 0.35s ease; 
-        }
-
-        .project-card:hover .card-thumbnail img { 
-            transform: scale(1.05); 
-        }
-
-        .type-badge-over.web      { background: rgba(232,245,238,0.92); color: var(--green);  border-color: rgba(26,122,74,0.25); }
-        .type-badge-over.mobile   { background: rgba(239,246,255,0.92); color: #2563EB;       border-color: rgba(37,99,235,0.25); }
-        .type-badge-over.ai       { background: rgba(245,243,255,0.92); color: #7C3AED;       border-color: rgba(124,58,237,0.25); }
-        .type-badge-over.security { background: rgba(253,236,234,0.92); color: var(--red);    border-color: rgba(192,57,43,0.25); }
-
-        .card-footer { 
-            padding: 0.75rem 1.25rem; 
-            border-top: 1px solid var(--border); 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            background: rgba(244,247,250,0.5); 
-        }
-
-        .footer-links { display: flex; gap: 10px; }
-        .link-btn { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 5px; 
-            font-size: 12.5px; 
-            font-weight: 500; 
-            padding: 4px 10px; 
-            border-radius: 6px; 
-            border: 1px solid var(--border); 
-            background: var(--surface); 
-            color: var(--text-secondary); 
-            text-decoration: none; 
-            transition: all var(--transition); 
-        }
-        .link-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-light); }
-
-        .view-btn { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 5px; 
-            font-size: 12.5px; 
-            font-weight: 600; 
-            padding: 5px 12px; 
-            border-radius: 7px; 
-            border: none; 
-            background: var(--green-light); 
-            color: var(--green); 
-            text-decoration: none; 
-            cursor: pointer; 
-            transition: background var(--transition); 
-        }
 
         .wishlist-btn {
             background: none;
@@ -238,6 +128,47 @@
         }
         .wishlist-btn:hover { transform: scale(1.15); }
 
+        /* Rest of your original styles (kept clean) */
+        .main { flex: 1; display: flex; flex-direction: column; overflow-x: hidden; }
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 10;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
+        .project-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+            display: flex; flex-direction: column; overflow: hidden;
+            transition: box-shadow var(--transition), transform var(--transition);
+        }
+        .project-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+        .card-thumbnail { position: relative; width: 100%; height: 160px; overflow: hidden; flex-shrink: 0; }
+        .card-thumbnail img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.35s ease; }
+        .project-card:hover .card-thumbnail img { transform: scale(1.05); }
+
+        .type-badge-over.web      { background: rgba(232,245,238,0.92); color: var(--green);  border-color: rgba(26,122,74,0.25); }
+        .type-badge-over.mobile   { background: rgba(239,246,255,0.92); color: #2563EB;       border-color: rgba(37,99,235,0.25); }
+        .type-badge-over.ai       { background: rgba(245,243,255,0.92); color: #7C3AED;       border-color: rgba(124,58,237,0.25); }
+        .type-badge-over.security { background: rgba(253,236,234,0.92); color: var(--red);    border-color: rgba(192,57,43,0.25); }
+        .type-badge-over.other    { background: rgba(244,247,250,0.92); color: var(--text-secondary); border-color: var(--border-md); }
+
+        .card-footer { padding: 0.75rem 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(244,247,250,0.5); }
+        .footer-links { display: flex; gap: 10px; }
+        .link-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); text-decoration: none; transition: all var(--transition); }
+        .link-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-light); }
+
+        .view-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; padding: 5px 12px; border-radius: 7px; border: none; background: var(--green-light); color: var(--green); text-decoration: none; cursor: pointer; transition: background var(--transition); }
+        .view-btn:hover { background: #d1ead9; }
+
         .empty-state {
             background: var(--surface);
             border: 1px dashed var(--border-md);
@@ -249,12 +180,12 @@
             width: 52px; height: 52px;
             background: var(--green-light);
             border-radius: 14px;
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center;
+            display: inline-flex; align-items: center; justify-content: center;
             margin-bottom: 1rem;
             color: var(--green);
         }
+        .empty-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+        .empty-desc { font-size: 14px; color: var(--text-secondary); max-width: 360px; margin: 0 auto 1.5rem; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -269,9 +200,10 @@
 
 <div class="layout">
 
-    <!-- Advanced Filter Sidebar -->
+    {{-- Advanced Filter Sidebar --}}
     <form method="GET" action="{{ route('projects.index') }}" id="filter-form">
     <aside class="filter-sidebar">
+
         <div class="filter-sidebar-header">
             <div class="filter-sidebar-title">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
@@ -282,7 +214,7 @@
             @endif
         </div>
 
-        <!-- Project Type -->
+        {{-- Project Type --}}
         <div class="filter-section" id="section-type">
             <div class="filter-section-header" onclick="toggleSection('section-type')">
                 <span class="filter-section-label">Project Type</span>
@@ -291,12 +223,12 @@
             <div class="filter-section-body">
                 @foreach([
                     'web'      => ['label' => 'Web / Full-stack', 'color' => '#1A7A4A'],
-                    'mobile'   => ['label' => 'Mobile', 'color' => '#2563EB'],
-                    'ai'       => ['label' => 'AI / ML', 'color' => '#7C3AED'],
-                    'security' => ['label' => 'Security', 'color' => '#C0392B'],
+                    'mobile'   => ['label' => 'Mobile',           'color' => '#2563EB'],
+                    'ai'       => ['label' => 'AI / ML',          'color' => '#7C3AED'],
+                    'security' => ['label' => 'Security',         'color' => '#C0392B'],
                 ] as $val => $meta)
                     <label class="filter-check-item">
-                        <input type="checkbox" name="type[]" value="{{ $val }}"
+                        <input type="checkbox" name="type[]" value="{{ $val }}" 
                                {{ in_array($val, $selectedTypes) ? 'checked' : '' }} onchange="this.form.submit()">
                         <span class="type-dot" style="background:{{ $meta['color'] }}"></span>
                         <span class="filter-check-label">{{ $meta['label'] }}</span>
@@ -305,7 +237,7 @@
             </div>
         </div>
 
-        <!-- Specializations -->
+        {{-- Specializations --}}
         <div class="filter-section" id="section-spec">
             <div class="filter-section-header" onclick="toggleSection('section-spec')">
                 <span class="filter-section-label">Specialization</span>
@@ -314,7 +246,7 @@
             <div class="filter-section-body">
                 @foreach($specializations as $spec)
                     <label class="filter-check-item">
-                        <input type="checkbox" name="specialization[]" value="{{ $spec->id }}"
+                        <input type="checkbox" name="specialization[]" value="{{ $spec->id }}" 
                                {{ in_array($spec->id, $selectedSpecs) ? 'checked' : '' }} onchange="this.form.submit()">
                         <span class="filter-check-label">{{ $spec->name }}</span>
                     </label>
@@ -322,7 +254,7 @@
             </div>
         </div>
 
-        <!-- Skills -->
+        {{-- Skills --}}
         <div class="filter-section" id="section-skill">
             <div class="filter-section-header" onclick="toggleSection('section-skill')">
                 <span class="filter-section-label">Skills</span>
@@ -331,7 +263,7 @@
             <div class="filter-section-body">
                 @foreach($skills as $skill)
                     <label class="filter-check-item">
-                        <input type="checkbox" name="skills[]" value="{{ $skill->id }}"
+                        <input type="checkbox" name="skills[]" value="{{ $skill->id }}" 
                                {{ in_array($skill->id, $selectedSkills) ? 'checked' : '' }} onchange="this.form.submit()">
                         <span class="filter-check-label">{{ $skill->name }}</span>
                     </label>
@@ -339,7 +271,7 @@
             </div>
         </div>
 
-        <!-- Sort -->
+        {{-- Sort --}}
         <div class="filter-section" style="border-bottom:none;">
             <div class="filter-section-label" style="margin-bottom:0.6rem;">Sort By</div>
             <select name="sort" class="sidebar-sort-select" onchange="this.form.submit()">
@@ -348,11 +280,13 @@
                 <option value="az"     {{ $selectedSort === 'az'     ? 'selected' : '' }}>A → Z</option>
             </select>
         </div>
+
     </aside>
     </form>
 
-    <!-- Main Content -->
+    {{-- Main Content --}}
     <div class="main">
+
         <header class="topbar">
             <span class="topbar-title">Project Directory</span>
             <div class="topbar-right">
@@ -364,15 +298,17 @@
         </header>
 
         <div class="content">
-            <!-- Stats -->
+
+            {{-- Stats Row --}}
             <div class="stats-row">
                 <div class="stat-card">
                     <div class="stat-label">Total Projects</div>
                     <div class="stat-value">{{ $projects->total() }}</div>
                 </div>
+                <!-- Add more stats if needed -->
             </div>
 
-            <!-- Projects Grid -->
+            {{-- Projects Grid --}}
             @if($projects->isEmpty())
                 <div class="empty-state">
                     <div class="empty-icon">
@@ -390,7 +326,7 @@
                                 <div class="card-thumbnail">
                                     <img src="{{ asset('storage/' . $project->media->first()->file_path) }}" 
                                          alt="{{ $project->title }}" loading="lazy">
-                                    <span class="type-badge-over {{ $type }}">{{ strtoupper($project->type) }}</span>
+                                    <span class="type-badge-over {{ $type }}">{{ $project->type }}</span>
                                 </div>
                             @else
                                 <div class="card-accent {{ $type }}"></div>
@@ -436,19 +372,20 @@
                     @endforeach
                 </div>
 
-                <!-- Pagination -->
+                {{-- Pagination --}}
                 @if($projects->hasPages())
                     <div class="pagination">
                         {!! $projects->links() !!}
                     </div>
                 @endif
             @endif
+
         </div>
     </div>
 </div>
 
 <script>
-// Wishlist Toggle
+// Wishlist functionality
 document.querySelectorAll('.wishlist-btn').forEach(button => {
     button.addEventListener('click', function(e) {
         e.preventDefault();
@@ -478,7 +415,7 @@ document.querySelectorAll('.wishlist-btn').forEach(button => {
     });
 });
 
-// Toggle Filter Sections
+// Toggle filter sections
 function toggleSection(id) {
     document.getElementById(id).classList.toggle('collapsed');
 }

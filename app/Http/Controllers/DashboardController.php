@@ -33,9 +33,11 @@ class DashboardController extends Controller
 
         } else if ($user->developer()->exists()) {
             $profile = $user->developer()->with('skills')->first() ?? null;
+            $areaOfInterest = $profile?->area_of_interest;
         }
         else {
             $profile = $user->mentor()->with('skills')->first() ?? null;
+            $areaOfInterest = $profile?->area_of_interest;
         }
         $skills = $profile?->skills ?? collect();
 

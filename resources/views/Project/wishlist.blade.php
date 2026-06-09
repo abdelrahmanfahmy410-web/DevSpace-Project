@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-    /* تنسيق الحاوية الأساسية لتصبح بعرض الشاشة الكامل */
+
     .wishlist-full-layout {
         display: flex;
         width: 100%;
@@ -26,7 +26,7 @@
     }
     .wishlist-btn:hover { transform: scale(1.25); }
     
-    /* تنسيقات السايد بار ليكون ملتصقاً تماماً */
+
     .filter-sidebar {
         width: 290px; 
         flex-shrink: 0; 
@@ -53,7 +53,7 @@
         font-size: 0.9rem;
     }
 
-    /* تنسيق أسفل الكارت */
+  
     .card__footer {
         display: flex;
         justify-content: space-between; 
@@ -215,13 +215,13 @@
 </div>
 
 <script>
-// كود جافا سكريبت لإجبار العنصر الأب على إلغاء الـ Padding والـ Max Width الافتراضيين
+
 document.addEventListener("DOMContentLoaded", function() {
     const pageRoot = document.getElementById('wishlistPageRoot');
     if (pageRoot) {
         const parentContainer = pageRoot.parentElement;
         if (parentContainer) {
-            // تصغير وتصفير كل الهوامش والـ padding للحاوية الأبوية فوراً
+          
             parentContainer.style.padding = '0';
             parentContainer.style.margin = '0';
             parentContainer.style.maxWidth = '100%';

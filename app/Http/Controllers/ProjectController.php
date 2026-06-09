@@ -259,37 +259,32 @@ class ProjectController extends Controller
     /**
      * Display projects assigned to the current user via team roles.
      */
-   public function myProjects(Request $request)
-{
-    if (!auth()->check()) {
-        return redirect()->route('login');
+    public function myProjects(Request $request)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $search = $request->input('search');
+        $type   = $request->input('type');
+
+        $query = Project::whereHas('team_roles', function($q) {
+            $q->where('user_id', auth()->id());
+        })->with(['skills', 'specializations', 'media']);
+
+        $query->when($search, function($q, $search) {
+            return $q->where('title', 'like', "%{$search}%");
+        });
+
+        $query->when($type, function($q, $type) {
+            return $q->where('type', $type);
+        });
+
+        $projects = $query->latest()->paginate(9);
+
+        return view('Project.my-projects', compact('projects', 'search', 'type'));
     }
 
-    // 1. استقبال قيم الفلاتر والبحث من الـ URL
-    $search = $request->input('search');
-    $type   = $request->input('type');
-
-    // 2. بناء الاستعلام الأساسي: جلب المشاريع التي ينتمي إليها المستخدم الحالي فقط
-    $query = Project::whereHas('team_roles', function($q) {
-        $q->where('user_id', auth()->id());
-    })->with(['skills', 'specializations', 'media']); // Eager loading لتحسين الأداء
-
-    // 3. تطبيق فلتر البحث بالاسم (إذا كان مكتوبًا)
-    $query->when($search, function($q, $search) {
-        return $q->where('title', 'like', "%{$search}%");
-    });
-
-    // 4. تطبيق فلتر نوع المشروع (إذا تم اختياره ولم يكن فارغًا)
-    $query->when($type, function($q, $type) {
-        return $q->where('type', $type);
-    });
-
-    // 5. جلب البيانات النهائية
-  $projects = $query->latest()->paginate(9);
-
-    // 6. تمرير البيانات للـ View (مع إرسال الفلاتر لتبقى قيمتها ثابتة في الفورم عند التحديث)
-    return view('Project.my-projects', compact('projects', 'search', 'type'));
-}
     public function addMedia(Project $project)
     {
         return view('project.add_media', compact('project'));

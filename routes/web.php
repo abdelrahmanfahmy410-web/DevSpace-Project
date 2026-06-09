@@ -148,6 +148,10 @@ Route::get('/member/profile', [UserController::class, 'showMemberProfile'])->nam
 Route::get('/member/profile', [UserController::class, 'showMemberProfile'])
     ->name('member.profile')
     ->middleware('auth');
+
+    Route::get('/member/profile/{id}', [UserController::class, 'showOtherProfile'])
+    ->name('member.other_profile')
+    ->middleware('auth');
 // ----------------------------------------------------
 // API / AJAX Routes
 // ----------------------------------------------------

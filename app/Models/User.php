@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Project;
+use App\Models\TeamRole;
+
 
 #[Fillable(['name', 'email', 'password','bio', 'linkedin_url', 'phonenumber', 'profile_picture'])]
 #[Hidden(['password', 'remember_token'])]
@@ -76,11 +78,33 @@ class User extends Authenticatable
         
     } 
 
+    public function conversationsAsSender(): HasMany
+    {
+    return $this->hasMany(Conversation::class, 'sender_id');
+    }
+
+    public function conversationsAsReceiver(): HasMany
+    {
+    return $this->hasMany(Conversation::class, 'receiver_id');
+    }
+
+    /**
+     * All conversations this user is part of.
+    */
+    public function conversations()
+    {
+    return Conversation::where('sender_id', $this->id)
+        ->orWhere('receiver_id', $this->id);
+    }
+    
     public function wishlist()
 {
     return $this->belongsToMany(Project::class, 'project_user_watchlist');
 }
     
-  
+ public function teamRoles()
+{
+    return $this->hasMany(TeamRole::class);
+} 
 
 }

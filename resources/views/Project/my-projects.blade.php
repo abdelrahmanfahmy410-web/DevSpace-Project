@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Projects — DevSpace</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@extends('layouts.app_dashboard')
+
+@section('page-title', 'Dashboard')
+@section('head')
+   <style>
+     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
             --green:      #1A7A4A;
@@ -39,49 +36,7 @@
         /* ── Sidebar ── */
         .layout { display: flex; min-height: 100vh; }
 
-        .sidebar {
-            width: 240px;
-            flex-shrink: 0;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            padding: 0 0 1.5rem;
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 1.25rem 1.25rem 1rem;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 0.75rem;
-            text-decoration: none;
-        }
-        .sidebar-logo .logo-mark {
-            width: 32px; height: 32px;
-            background: var(--green);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-weight: 700; font-size: 16px; letter-spacing: -0.5px;
-        }
-        .sidebar-logo span { font-weight: 700; font-size: 17px; color: var(--text-primary); }
-
-        .sidebar-section {
-            padding: 0 0.75rem;
-            margin-bottom: 0.25rem;
-        }
-        .sidebar-label {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            padding: 0.5rem 0.5rem 0.25rem;
-        }
+       
         .nav-item {
             display: flex; align-items: center; gap: 9px;
             padding: 0.55rem 0.75rem;
@@ -440,54 +395,18 @@
             .projects-grid { grid-template-columns: 1fr; }
         }
     </style>
-</head>
-<body>
+@endsection
+@php
+    $roleNames = auth()->user()->roles->pluck('name')->map(fn($r) => strtolower($r))->toArray();
+    $isDeveloper = in_array('developer', $roleNames);
+    $isMentor = in_array('mentor', $roleNames);
+    $isInvestor = in_array('investor', $roleNames);
+@endphp
+@section('sidebar')
+    @include('layouts.sidebar', ['active' => 'dashboard'])
+@endsection
 
-<div class="layout">
-
-    {{-- ── Sidebar ── --}}
-    <aside class="sidebar">
-        <a href="/" class="sidebar-logo">
-            <div class="logo-mark">D</div>
-            <span>DevSpace</span>
-        </a>
-
-        <div class="sidebar-section">
-            <div class="sidebar-label">Main</div>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                Dashboard
-            </a>
-            <a href="{{ route('projects.index') }}" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/><rect x="2" y="5" width="20" height="14" rx="2"/></svg>
-                All Projects
-            </a>
-            <a href="{{ route('projects.my') }}" class="nav-item active">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2zM12 11v4M10 13h4"/></svg>
-                My Projects
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                Graduates
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                Investors
-            </a>
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                Mentors
-            </a>
-        </div>
-
-        <div class="sidebar-section" style="margin-top: auto;">
-            <a href="#" class="nav-item">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-                Settings
-            </a>
-        </div>
-    </aside>
-
+@section('content')
     {{-- ── Main ── --}}
     <div class="main">
 
@@ -668,6 +587,9 @@
                 </div>
             @endif
 
+        </div>{{-- /content --}}
+    </div>{{-- /main --}}
+@endsection
         </div>
     </div>
 </div>

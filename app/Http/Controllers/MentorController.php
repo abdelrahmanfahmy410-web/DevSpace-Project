@@ -9,7 +9,6 @@ use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Role;
-use App\Models\UserRole;
 
 
 class MentorController extends Controller
@@ -75,7 +74,7 @@ class MentorController extends Controller
                 'user_id' => $user->id,
                 'role_id' => Role::where('name','mentor')->first()->id
           ]);
-        return redirect('/')->with('success', 'Registered successfully!');
+        return redirect('/dashboard')->with('success', 'Registered successfully!');
     }
 
     public function show(Mentor $mentor)

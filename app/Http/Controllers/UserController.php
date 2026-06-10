@@ -74,30 +74,58 @@ class UserController extends Controller
     }
 
 
-public function showMemberProfile($id)
+public function showMemberProfile()
 {
-    // جلب المستخدم مع كافة العلاقات المحتملة بما فيها المهارات الخاصة بالمطور
     $user = \App\Models\User::with([
         'roles', 
         'developer.specialization', 
-        'developer.skills', // تأكد من وجود علاقة skills في موديل Developer
+        'developer.skills',
         'mentor.specialization',
         'teamProjects'
-
-    ])->findOrFail($id);
+    ])->findOrFail(auth()->id());
 
     $userRole = $user->roles->first()->name ?? 'member';
 
-    // جلب المهارات بشكل مرن
     $skills = collect();
     if ($userRole == 'developer' && $user->developer) {
         $skills = $user->developer->skills;
     } elseif ($userRole == 'mentor' && $user->mentor) {
-        // إذا كان للمينتور مهارات مخصصة أو نستخدم مهارات التخصص تبعه
         $skills = $user->mentor->specialization?->skills ?? collect();
     }
 
-    // نمرر المتغيرات للـ Blade
     return view('member.profile', compact('user', 'userRole', 'skills'));
 }
+
+// ✅ ضيف الـ method دي جديدة
+public function showOtherProfile($id)
+{
+    $user = \App\Models\User::with([
+        'roles', 
+        'developer.specialization', 
+        'developer.skills',
+        'mentor.specialization',
+        'teamProjects'
+    ])->findOrFail($id);
+
+    $userRole = $user->roles->first()->name ?? 'member';
+
+    $skills = collect();
+    if ($userRole == 'developer' && $user->developer) {
+        $skills = $user->developer->skills;
+    } elseif ($userRole == 'mentor' && $user->mentor) {
+        $skills = $user->mentor->specialization?->skills ?? collect();
+    }
+
+    return view('member.profile', compact('user', 'userRole', 'skills'));
+}
+
+public function logout(Request $request)
+{
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/')->with('success', 'Logged out successfully!');
+}
+
 }

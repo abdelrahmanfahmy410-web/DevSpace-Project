@@ -62,7 +62,7 @@
    ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
+.dashboard-body {
     font-family: 'DM Sans', sans-serif;
     font-size: var(--text-base);
     line-height: 1.6;
@@ -85,19 +85,34 @@ body {
 
 /* ============================================================
    SIDEBAR
+   -- position: relative so it flows inside .layout (app.blade)
+   -- dedicated dashboard pages using .dashboard-layout
+      still get fixed positioning via the override below
    ============================================================ */
 .sidebar {
-    position: fixed;
-    left: 0; top: 0;
+    /* Flow layout — works inside app.blade .layout flex row */
+    position: relative;
     width: var(--sidebar-w);
-    height: 100vh;
+    height: calc(100vh - var(--navbar-h, 61px));
     background: var(--color-surface);
     border-right: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    z-index: 200;
+    overflow-y: auto;
+    flex-shrink: 0;
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Dedicated dashboard pages that use .dashboard-layout
+   still need the sidebar fixed to the left */
+.dashboard-layout .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 200;
+}
+
 
 /* Brand */
 .sidebar-brand {
@@ -127,6 +142,7 @@ body {
     color: var(--color-text);
     letter-spacing: -0.3px;
 }
+
 
 /* Nav */
 .sidebar-menu {
@@ -174,6 +190,10 @@ body {
     opacity: 0.8;
 }
 
+.menu-link--danger { color: #e74c3c; }
+.menu-link--danger:hover { background: rgba(231, 76, 60, 0.08); }
+
+
 /* Sidebar footer */
 .sidebar-footer {
     padding: 16px 20px;
@@ -181,9 +201,13 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
-    flex-shrink: 0;
+    flex-shrink: 0; 
+    
 }
-
+.sidebar-footer:hover {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 16px 20px; /* adjust to match your current padding */
+}
 .sidebar-user {
     display: flex;
     flex-direction: column;
@@ -204,6 +228,7 @@ body {
     color: var(--color-muted);
 }
 
+
 /* Overlay for mobile */
 .sidebar-overlay {
     display: none;
@@ -221,7 +246,7 @@ body {
 
 
 /* ============================================================
-   AVATAR — shared base, size variants override
+   AVATAR
    ============================================================ */
 .avatar {
     border-radius: 50%;
@@ -247,13 +272,20 @@ body {
 
 
 /* ============================================================
-   MAIN CONTENT
+   DASHBOARD LAYOUT
+   (used by standalone dashboard pages, NOT app.blade)
    ============================================================ */
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
 .main-content {
     margin-left: var(--sidebar-w);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    width: calc(100% - var(--sidebar-w));
 }
 
 
@@ -272,6 +304,14 @@ body {
     top: 0;
     z-index: 100;
     flex-shrink: 0;
+    overflow-x: visible;
+}
+
+/* Lock brand area to same height as topbar */
+.sidebar-brand {
+    height: var(--topbar-h);
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .topbar-title {
@@ -300,6 +340,7 @@ body {
     border-radius: 2px;
     transition: transform 0.2s, opacity 0.2s;
 }
+
 
 /* Search */
 .search-wrap {
@@ -341,6 +382,7 @@ body {
    PAGE BODY PADDING
    ============================================================ */
 .page-body {
+    flex: 1;
     padding: 24px;
     display: flex;
     flex-direction: column;
@@ -498,7 +540,7 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 20px;
-    width: 100%; /* ensure it spans full content width */
+    width: 100%;
 }
 
 .card {
@@ -563,8 +605,6 @@ body {
 
 .project-icon svg { width: 20px; height: 20px; }
 
-.project-content { min-width: 0; }
-
 .project-name {
     font-size: var(--text-sm);
     font-weight: 600;
@@ -580,7 +620,6 @@ body {
     color: var(--color-muted);
     line-height: 1.5;
     display: -webkit-box;
-
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -588,16 +627,14 @@ body {
 .project-content {
     display: flex;
     align-items: center;
-    gap: var(--space-4);
+    gap: 16px;
 }
 
-.project-text {
-    flex: 1;
-}
+.project-text { flex: 1; }
 
-.project-content a.btn {
-    flex-shrink: 0;
-}
+.project-content a.btn { flex-shrink: 0; }
+
+
 /* ============================================================
    SKILLS
    ============================================================ */
@@ -640,43 +677,7 @@ body {
 .empty-state--sm { padding: 16px; }
 .empty-state--sm svg { width: 28px; height: 28px; }
 
-.menu-link--danger { color: #e74c3c; }
-.menu-link--danger:hover { background: rgba(231, 76, 60, 0.08); }
 
-/* Ensure the outer wrapper is flex */
-.dashboard-layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Align topbar height with sidebar brand block */
-.topbar {
-    height: var(--topbar-h);        /* already set to 68px */
-}
-
-.sidebar-brand {
-    height: var(--topbar-h);        /* lock brand area to same 68px */
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-/* Remove any gap the browser adds between sidebar and content */
-.main-content {
-    margin-left: var(--sidebar-w);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    width: calc(100% - var(--sidebar-w)); /* fill remaining space */
-}
-
-/* Make page-body fill and not leave trailing space */
-.page-body {
-    flex: 1;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -687,6 +688,11 @@ body {
 @media (max-width: 768px) {
     /* Sidebar becomes a drawer */
     .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        z-index: 200;
         transform: translateX(-100%);
     }
 
@@ -695,19 +701,13 @@ body {
         box-shadow: var(--shadow-lg);
     }
 
-    .sidebar-overlay {
-        display: block;
-    }
+    .sidebar-overlay { display: block; }
 
     /* Main content takes full width */
-    .main-content {
-        margin-left: 0;
-    }
+    .main-content { margin-left: 0; }
 
     /* Show hamburger */
-    .hamburger {
-        display: flex;
-    }
+    .hamburger { display: flex; }
 
     /* Profile banner stacks */
     .profile-banner {
@@ -716,7 +716,6 @@ body {
     }
 
     .profile-info { width: 100%; }
-
     .role-list { justify-content: center; }
 
     .banner-actions {
@@ -724,13 +723,35 @@ body {
         justify-content: center;
     }
 
-    /* Search shrinks */
     .search-box { width: 180px; }
-
-    /* Stats can stack to 2 cols */
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
-
     .page-body { padding: 16px; }
+}
+.navbar__user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.navbar__avatar img,
+.navbar__avatar-initials {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.navbar__avatar-initials {
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (max-width: 480px) {
@@ -738,4 +759,33 @@ body {
     .search-box { width: 140px; }
     .banner-actions { flex-direction: column; }
     .btn { width: 100%; justify-content: center; }
+}
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.dashboard-main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - var(--sidebar-w));
+}
+@media (max-width: 768px) {
+    .dashboard-main {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.dashboard-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }

@@ -27,6 +27,18 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 //investor Routes
 Route::get('/investor/register',[InvestorController::class, 'create']);
+
+
+//all users
+Route::get('/', function () {
+    return view('layouts.app');
+});
+Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
+Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+
+//investor Routes
+Route::get('/investor/register',[InvestorController::class, 'create']);
 Route::get('/investor/edit', [InvestorController::class, 'edit'])->name('investor.edit');
 Route::get('/investor/profile', [InvestorController::class, 'showProfile'])->name('investor.profile');
 // ----------------------------------------------------
@@ -151,7 +163,6 @@ Route::get('/member/profile', [UserController::class, 'showMemberProfile'])
     ->middleware('auth');
 // ----------------------------------------------------
 // API / AJAX Routes
-// ----------------------------------------------------
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
      ->name('api.skills.by_specialization');
 
@@ -192,4 +203,5 @@ Route::get('/dev-login', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
+Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');
 Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');

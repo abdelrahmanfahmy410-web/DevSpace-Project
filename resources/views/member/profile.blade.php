@@ -9,6 +9,8 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
+    {{-- In <head> --}}
+@livewireStyles
 </head>
 <body class="bg-[#f3f2ef] text-slate-900 antialiased min-h-screen pb-12 text-left">
 
@@ -53,19 +55,27 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap gap-2 mt-5 w-full">
-                            <form action="{{ url('/follow') }}" method="POST" class="inline">
-                                @csrf
-                                <input type="hidden" name="following_id" value="{{ $user->id }}">
-                                <button type="submit" class="bg-[#0a66c2] hover:bg-[#004182] text-white text-base font-semibold px-5 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-xs">
-                                    <span class="text-lg">+</span> Follow
-                                </button>
-                            </form>
+            <div class="flex flex-wrap gap-2 mt-5 w-full">
+    <form action="{{ url('/follow') }}" method="POST" class="inline">
+        @csrf
+        <input type="hidden" name="following_id" value="{{ $user->id }}">
+        <button type="submit" class="bg-[#0a66c2] hover:bg-[#004182] text-white text-base font-semibold px-5 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-xs">
+            <span class="text-lg">+</span> Follow
+        </button>
+    </form>
 
-                            <a href="{{ url('/messages/create?receiver_id=' . $user->id) }}" class="border border-[#0a66c2] text-[#0a66c2] hover:bg-blue-50 hover:border-2 text-base font-semibold px-5 py-1.5 rounded-full transition-all">
-                                Send message
-                            </a>
-                        </div>
+    {{-- Message Button --}}
+        @auth
+    @if(auth()->id() !== $user->id)
+        <a href="{{ route('conversations.start', $user->id) }}"
+           class="border border-[#0a66c2] text-[#0a66c2] ...">
+            Message
+        </a>
+    @endif
+@endauth
+
+
+</div>
 
                     </div>
                 </div>
@@ -163,6 +173,7 @@
 
         </div>
     </div>
-
+{{-- In your main layout, before </body> --}}
+@livewireScripts
 </body>
 </html>

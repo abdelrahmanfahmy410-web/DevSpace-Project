@@ -74,7 +74,7 @@ class MentorController extends Controller
                 'user_id' => $user->id,
                 'role_id' => Role::where('name','mentor')->first()->id
           ]);
-        return redirect('/')->with('success', 'Registered successfully!');
+        return redirect('/dashboard')->with('success', 'Registered successfully!');
     }
 
     public function show(Mentor $mentor)

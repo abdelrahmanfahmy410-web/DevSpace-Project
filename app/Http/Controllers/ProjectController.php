@@ -80,7 +80,9 @@ class ProjectController extends Controller
             'repository_link' => $request->repository_link,
             'live_demo_link'  => $request->live_demo_link,
             'type'            => $request->type,
+            'updated_by'      => auth()->id(),
         ]);
+
 
         // Upload images
         if ($request->hasFile('project_images')) {
@@ -106,6 +108,7 @@ class ProjectController extends Controller
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
                     'role' => $member['role'],
+                    'status' => 'pending',
                 ]);
             }
         }

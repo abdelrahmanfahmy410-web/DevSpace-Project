@@ -26,8 +26,9 @@
         <div class="navbar__links" id="navLinks">
             <a href="#" class="navbar__link is-active">Home</a>
             <a href="{{ route('projects.index') }}" class="navbar__link">Projects</a>
-            <a href="#" class="navbar__link">Mentors</a>
-            <a href="#" class="navbar__link">Developers</a>
+            <a href="/developer/developers" class="navbar__link">Developers</a>
+            <a href="#" class="navbar__link">About</a>
+
             @auth
                 @if (!($fullWidth ?? false))
                     <a href="{{ route('dashboard') }}" class="navbar__link">Dashboard</a>
@@ -36,7 +37,9 @@
 
             @guest
                 <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
-                <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join the Space</a>
+                <a href="/developer/register" class="btn btn-outline">  Join the Space </a>
+                <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join as Mentor</a>
+
             @else
                 <div class="navbar__user" style="margin-left: 8px; display: flex; align-items: center; gap: 12px;">
                     <a href="{{ route('member.profile') }}"

@@ -22,7 +22,7 @@
 /storage/pail
 /vendor
 database/factories/
-database/seeders/
+
 _ide_helper.php
 Homestead.json
 Homestead.yaml

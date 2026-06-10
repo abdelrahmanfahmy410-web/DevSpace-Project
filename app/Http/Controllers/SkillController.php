@@ -13,7 +13,7 @@ class SkillController extends Controller
     public function index()
     {
       $skills = Skill::all();
-        return view('skill.skill', compact('skills'));
+        return view('admin.skill.skill', compact('skills'));
     }
 
     /**
@@ -22,7 +22,7 @@ class SkillController extends Controller
     public function create()
     {
        $skills = Skill::all();
-     return view('skill.add_skill', compact('skills'));
+     return view('admin.skill.add_skill', compact('skills'));
     }
 
     /**
@@ -38,7 +38,7 @@ class SkillController extends Controller
         Skill::create([
             'name' => $request->name,
         ]);
-        return redirect('/')->with('success', 'Skill added successfully!');
+        return redirect('admin.skill.skill')->with('success', 'Skill added successfully!');
     }
 
     /**

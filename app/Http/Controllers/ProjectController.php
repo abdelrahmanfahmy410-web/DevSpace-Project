@@ -17,7 +17,8 @@ class ProjectController extends Controller
     {
         $types             = $request->input('type', []);
         $specializationIds = $request->input('specialization', []);
-        $skillIds          = $request->input('skills', []);
+        $skillIds          = $request->input('skill', []);
+        $search            = trim($request->input('search', ''));
         $sort              = $request->input('sort', 'newest');
 
         $projects = Project::with(['skills', 'specializations', 'media'])
@@ -28,6 +29,10 @@ class ProjectController extends Controller
             ->when($skillIds, fn($q) => $q->whereHas('skills',
                 fn($q2) => $q2->whereIn('skills.id', $skillIds)
             ))
+            ->when($search, fn($q) => $q->where(function ($q2) use ($search) {
+                $q2->where('title', 'like', "%{$search}%")
+                   ->orWhere('description', 'like', "%{$search}%");
+            }))
             ->when($sort, function ($q, $sort) {
                 match ($sort) {
                     'oldest' => $q->oldest(),
@@ -80,7 +85,9 @@ class ProjectController extends Controller
             'repository_link' => $request->repository_link,
             'live_demo_link'  => $request->live_demo_link,
             'type'            => $request->type,
+            'updated_by'      => auth()->id(),
         ]);
+
 
         // Upload images
         if ($request->hasFile('project_images')) {
@@ -106,6 +113,7 @@ class ProjectController extends Controller
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
                     'role' => $member['role'],
+                    'status' => 'pending',
                 ]);
             }
         }
@@ -235,15 +243,27 @@ class ProjectController extends Controller
         $skills = $specialization->skills;
         return response()->json($skills);
     }
-    public function assignedProjects()
-    {
-        $userId   = auth()->id();
-        $projects = Project::whereHas('team_roles', function ($q) use ($userId) {
-            $q->where('user_id', $userId);
-        })->with(['skills', 'specializations', 'team_roles', 'media'])->get();
-        return view('project.assigned_projects', compact('projects'));
-    }
+  public function assignedProjects(Request $request) 
+{
+    $userId = auth()->id();
+    $search = $request->input('search'); 
 
+    $projects = Project::whereHas('team_roles', function ($q) use ($userId) {
+        $q->where('user_id', $userId);
+    })
+   
+    ->when($search, function ($query) use ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', '%' . $search . '%') 
+              ->orWhere('description', 'like', '%' . $search . '%'); 
+        });
+    })
+    ->with(['skills', 'specializations', 'team_roles', 'media'])
+    ->paginate(10) // استبدال get() بـ paginate وتحديد عدد العناصر في الصفحة (مثلاً 10)
+    ->withQueryString(); // هذه الدالة مهمة جداً للحفاظ على كلمة البحث أثناء التنقل بين الصفحات
+
+    return view('project.assigned_projects', compact('projects'));
+}
 /**
  * Search users for team member selection (AJAX)
  */

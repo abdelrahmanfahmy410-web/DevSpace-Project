@@ -29,32 +29,32 @@ class ConversationController extends Controller
      * Enforces: only investors/mentors can initiate.
      */
     public function start(User $user): RedirectResponse
-    {
-        $auth = Auth::user();
+{
+    $auth = Auth::user();
 
-        // Prevent messaging yourself
-        abort_if($auth->id === $user->id, 403, 'You cannot message yourself.');
+    // Prevent messaging yourself
+    abort_if($auth->id === $user->id, 403, 'You cannot message yourself.');
 
-        // Only investors and mentors can initiate
-        // Developers can only initiate if a conversation already exists
-        $allowedToInitiate = in_array($auth->role, ['investor', 'mentor']);
+    // ✅ جلب الـ role صح من الـ relationship
+    $authRole = $auth->roles()->first()?->name ?? '';
+    $allowedToInitiate = in_array($authRole, ['investor', 'mentor']);
 
-        $existing = Conversation::where(function ($q) use ($auth, $user) {
-                $q->where('sender_id', $auth->id)->where('receiver_id', $user->id);
-            })
-            ->orWhere(function ($q) use ($auth, $user) {
-                $q->where('sender_id', $user->id)->where('receiver_id', $auth->id);
-            })
-            ->first();
+    $existing = Conversation::where(function ($q) use ($auth, $user) {
+            $q->where('sender_id', $auth->id)->where('receiver_id', $user->id);
+        })
+        ->orWhere(function ($q) use ($auth, $user) {
+            $q->where('sender_id', $user->id)->where('receiver_id', $auth->id);
+        })
+        ->first();
 
-        if (! $existing && ! $allowedToInitiate) {
-            abort(403, 'Only investors and mentors can start new conversations.');
-        }
-
-        $conversation = $this->service->getOrCreate($auth->id, $user->id);
-
-        return redirect()->route('conversations.show', $conversation);
+    if (! $existing && ! $allowedToInitiate) {
+        abort(403, 'Only investors and mentors can start new conversations.');
     }
+
+    $conversation = $this->service->getOrCreate($auth->id, $user->id);
+
+    return redirect()->route('conversations.show', $conversation);
+}
 
     /**
      * Show the chat page for a conversation.

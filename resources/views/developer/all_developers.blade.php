@@ -3,8 +3,8 @@
 @section('title', 'Page Title')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/all_developers.css') }}">
 
+<link rel="stylesheet" href="{{ asset('assets/all_developers.css') }}">
 <div class="container">
     
     <div class="header-box">
@@ -52,7 +52,55 @@
         </aside>
 
         <main class="main-content">
-            <div class="developers-grid" id="developersGrid"></div>
+            <div class="developers-grid" id="developersGrid">
+                @foreach($developers as $dev)
+                    @php
+                        $specLower = strtolower($dev['specialization'] ?? '');
+                        $badgeClass = 'badge-fullstack';
+                        
+                        if (str_contains($specLower, 'backend')) $badgeClass = 'badge-backend';
+                        if (str_contains($specLower, 'frontend')) $badgeClass = 'badge-frontend';
+                    @endphp
+
+                    <div class="dev-card" 
+                         data-name="{{ strtolower($dev['name'] ?? '') }}" 
+                         data-spec="{{ $dev['specialization'] ?? '' }}" 
+                         data-skills="{{ json_encode($dev['skills'] ?? []) }}">
+                        <div>
+                            <div class="card-top">
+                                <img src="{{ $dev['avatar'] ?? asset('images/default-avatar.png') }}" alt="{{ $dev['name'] ?? 'Developer' }}" class="dev-avatar">
+                                <span class="badge {{ $badgeClass }}">{{ $dev['specialization'] ?? 'Developer' }}</span>
+                            </div>
+                            <h3 class="dev-name">{{ $dev['name'] ?? 'Unknown Developer' }}</h3>
+                            <p class="dev-bio">{{ $dev['bio'] ?? 'No bio available.' }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <span class="skills-title">Skills</span>
+                            <div class="skills-list">
+                                {{-- تم تعديل الأقواس والتحقق هنا لحل المشكلة تماماً --}}
+                                @if(!empty($dev['skills']) && is_array($dev['skills']) && count($dev['skills']) > 0)
+                                    @foreach($dev['skills'] as $skill)
+                                        <span class="skill-tag">{{ $skill }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="text-xs text-gray-400">No skills listed</span>
+                                @endif
+                            </div>
+                            
+                            <a href="{{ route('member.profile', $dev['id'] ?? '') }}" class="btn-view-profile">
+                                View Profile
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+
+                <div class="no-results" id="noResultsMessage" style="display: none;">
+                    No developers found matching the criteria.
+                </div>
+            </div>
 
             <div class="d-flex justify-content-center mt-4">
                 {{ $developers->links() }}
@@ -64,91 +112,45 @@
 </div>
 
 <script>
-    const developersData = @json($developers->items());
-
-    const grid = document.getElementById('developersGrid');
+    const cards = document.querySelectorAll('.dev-card');
     const searchName = document.getElementById('searchName');
+    const noResultsMessage = document.getElementById('noResultsMessage');
 
-    // دالة بناء كروت المطورين داخل الـ Grid
-    function displayDevelopers(data) {
-        grid.innerHTML = ''; 
-        
-        if (data.length === 0) {
-            grid.innerHTML = `<div class="no-results">No developers found matching the criteria.</div>`;
-            return;
-        }
-
-        data.forEach(dev => {
-            const specLower = dev.specialization ? dev.specialization.toLowerCase() : '';
-            let badgeClass = 'badge-fullstack';
-            
-            if (specLower.includes('backend')) badgeClass = 'badge-backend';
-            if (specLower.includes('frontend')) badgeClass = 'badge-frontend';
-
-            const skillsHTML = dev.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('');
-
-            /* توليد رابط البروفايل ديناميكياً باستخدام الـ Named Route الخاص باللارافيل.
-               إذا كان اسم الـ route في ملف web.php مختلف عن 'developer.profile'، قومي بتعديله هنا فقط.
-            */
-            const profileUrl = `{{ route('developer.profile', ':id') }}`.replace(':id', dev.id);
-
-            const card = `
-                <div class="dev-card">
-                    <div>
-                        <div class="card-top">
-                            <img src="${dev.avatar}" alt="${dev.name}" class="dev-avatar">
-                            <span class="badge ${badgeClass}">${dev.specialization || 'Developer'}</span>
-                        </div>
-                        <h3 class="dev-name">${dev.name}</h3>
-                        <p class="dev-bio">${dev.bio || 'No bio available.'}</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="skills-title">Skills</span>
-                        <div class="skills-list">
-                            ${skillsHTML || '<span class="text-xs text-gray-400">No skills listed</span>'}
-                        </div>
-                        
-                        <a href="${profileUrl}" class="btn-view-profile">
-                            View Profile
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            `;
-            grid.insertAdjacentHTML('beforeend', card);
-        });
-    }
-
-    // دالة الفلترة بناءً على المدخلات وخيارات الـ Checkbox
     function filterDevelopers() {
         const nameQuery = searchName.value.toLowerCase();
-        
-        // تجميع الخيارات المحددة في مصفوفات واضحة
         const selectedSpecs = Array.from(document.querySelectorAll('.filter-spec-checkbox:checked')).map(cb => cb.value);
         const selectedSkills = Array.from(document.querySelectorAll('.filter-skill-checkbox:checked')).map(cb => cb.value);
 
-        const filteredList = developersData.filter(dev => {
-            const matchesName = dev.name.toLowerCase().includes(nameQuery);
-            const matchesSpec = selectedSpecs.length === 0 || selectedSpecs.includes(dev.specialization);
-            const matchesSkill = selectedSkills.length === 0 || selectedSkills.some(skill => dev.skills.includes(skill));
+        let visibleCardsCount = 0;
 
-            return matchesName && matchesSpec && matchesSkill;
+        cards.forEach(card => {
+            const cardName = card.getAttribute('data-name') || '';
+            const cardSpec = card.getAttribute('data-spec') || '';
+            const cardSkills = JSON.parse(card.getAttribute('data-skills') || '[]');
+
+            const matchesName = cardName.includes(nameQuery);
+            const matchesSpec = selectedSpecs.length === 0 || selectedSpecs.includes(cardSpec);
+            const matchesSkill = selectedSkills.length === 0 || selectedSkills.some(skill => cardSkills.includes(skill));
+
+            if (matchesName && matchesSpec && matchesSkill) {
+                card.style.display = 'flex';
+                visibleCardsCount++;
+            } else {
+                card.style.display = 'none';
+            }
         });
 
-        displayDevelopers(filteredList);
+        if (visibleCardsCount === 0) {
+            noResultsMessage.style.display = 'block';
+        } else {
+            noResultsMessage.style.display = 'none';
+        }
     }
 
-    // الاستماع الفوري لأحداث عناصر الإدخال والـ Checkboxes
     searchName.addEventListener('input', filterDevelopers);
-
     document.querySelectorAll('.filter-spec-checkbox, .filter-skill-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', filterDevelopers);
     });
-
-    // العرض الأول عند فتح الصفحة مباشرة
-    displayDevelopers(developersData);
 </script>
 
 <div class="toaster-container">

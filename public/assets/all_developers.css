@@ -88,11 +88,25 @@ body {
     pointer-events: none;
 }
 
-/* --- الهيكل الجانبي --- */
+/* --- الهيكل الجانبي (تم التعديل وحل مشكلة الفراغ) --- */
 .page-layout {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;                /* تم إصلاح المسافة هنا */
     align-items: flex-start;
+    width: 100%;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;               /* تمنع تمدد الجريد بشكل وهمي وعمل فراغ */
+    width: 100%;                
+}
+
+.developers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    width: 100%;
 }
 
 /* الفلتر الجانبي المحدث */
@@ -135,7 +149,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.625rem;
-    max-height: 180px; /* شريط تمرير داخلي إذا زادت العناصر عن الحد */
+    max-height: 180px; 
     overflow-y: auto;
     padding-right: 0.5rem;
 }
@@ -212,17 +226,6 @@ body {
     outline: 2px solid rgba(16, 185, 129, 0.3);
 }
 
-/* الجزء الرئيسي لشبكة المطورين */
-.main-content {
-    flex: 1;
-}
-
-.developers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
 /* كارت المطور */
 .dev-card {
     background-color: #ffffff;
@@ -287,8 +290,8 @@ body {
     border-top: 1px solid #f3f4f6;
     padding-top: 1rem;
     display: flex;
-    flex-direction: column; /* ترتيب العناصر تحت بعضها */
-    align-items: flex-start; /* المهارات تبدأ من اليسار */
+    flex-direction: column; 
+    align-items: flex-start; 
 }
 
 .skills-title {
@@ -339,34 +342,33 @@ body {
         max-height: 150px;
     }
 }
-/* تحويل الزرار ليكون عبارة عن نص وسهم بدون خلفية أو حدود */
+
+/* زر عرض الملف الشخصي السهم والنص */
 .btn-view-profile {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
     width: fit-content;
-    align-self: flex-end;    /* لدفعه إلى جهة اليمين تماماً داخل الحاوية */
-    margin-top: auto;        /* يضمن نزوله لأسفل الكارت دائماً */
-    padding: 0.5rem 0;       /* إزالة الحشو الجانبي ليكون محاذياً للنص */
-    background: transparent;  /* إزالة الخلفية البيضاء */
-    color: #15803d;          /* درجة الأخضر الداكنة الشبيهة بالصورة */
-    border: none;            /* إزالة الحدود (Border) */
+    align-self: flex-end;    
+    margin-top: auto;        
+    padding: 0.5rem 0;       
+    background: transparent;  
+    color: #15803d;          
+    border: none;            
     border-radius: 0;
-    font-size: 0.875rem;     /* حجم خط متناسق */
+    font-size: 0.875rem;     
     font-weight: 600;
     text-decoration: none;
     transition: color 0.2s ease-in-out;
     cursor: pointer;
 }
 
-/* تأثير الـ Hover عند مرور الماوس (يصبح أغمق قليلاً) */
 .btn-view-profile:hover {
     color: #166534;
-    background: transparent;  /* التأكد من عدم ظهور خلفية عند الـ Hover */
-    box-shadow: none;        /* إلغاء الظل القديم */
+    background: transparent;  
+    box-shadow: none;        
 }
 
-/* تنسيق السهم وحركته اللطيفة */
 .btn-view-profile svg {
     width: 16px;
     height: 16px;
@@ -374,5 +376,5 @@ body {
 }
 
 .btn-view-profile:hover svg {
-    transform: translateX(4px); /* حركة السهم لليمين عند الـ Hover مثل الصورة الأصلية */
+    transform: translateX(4px); 
 }

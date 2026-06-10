@@ -9,7 +9,9 @@
     <div class="project-directory-header">
         <h2>Project Directory</h2>
         <div class="search-container">
-            <input type="text" id="projectSearchInput" placeholder="Search projects..." class="search-input">
+            <form action="{{ url()->current() }}" method="GET" id="searchForm">
+                <input type="text" name="search" id="projectSearchInput" value="{{ request('search') }}" placeholder="Search projects..." class="search-input">
+            </form>
         </div>
     </div>
 
@@ -26,29 +28,25 @@
     <div class="projects-grid">
         
         @forelse($projects as $project)
-           @php
-    $projectType = strtolower($project->type); 
-    
-    if ($project->media && $project->media->first() && !empty($project->media->first()->file_path)) {
-        $path = $project->media->first()->file_path;
-        
-        // 1. لو المسار متخزن فيه كلمة public/ في الأول بنشيلها
-        if (\Illuminate\Support\Str::startsWith($path, 'public/')) {
-            $path = \Illuminate\Support\Str::replaceFirst('public/', '', $path);
-        }
-        
-        // 2. لو المسار بيبدأ بـ storage/ أو رابط خارجي بنمرره مباشرة للـ asset
-        if (\Illuminate\Support\Str::startsWith($path, ['storage/', 'http://', 'https://'])) {
-            $projectImage = asset($path);
-        } else {
-            // 3. لو متخزن اسم الفولدر علطول زي (uploads/pic.png) بنضيف له storage/
-            $projectImage = asset('storage/' . ltrim($path, '/'));
-        }
-    } else {
-        // صورة افتراضية لو مفيش ميديا أصلاً للمشروع
-        $projectImage = 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=500'; 
-    }
-@endphp
+            @php
+                $projectType = strtolower($project->type); 
+                
+                if ($project->media && $project->media->first() && !empty($project->media->first()->file_path)) {
+                    $path = $project->media->first()->file_path;
+                    
+                    if (\Illuminate\Support\Str::startsWith($path, 'public/')) {
+                        $path = \Illuminate\Support\Str::replaceFirst('public/', '', $path);
+                    }
+                    
+                    if (\Illuminate\Support\Str::startsWith($path, ['storage/', 'http://', 'https://'])) {
+                        $projectImage = asset($path);
+                    } else {
+                        $projectImage = asset('storage/' . ltrim($path, '/'));
+                    }
+                } else {
+                    $projectImage = 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=500'; 
+                }
+            @endphp
 
             <div class="project-card" data-status="{{ $projectType }}">
                 
@@ -86,25 +84,50 @@
                     </div>
                 </div>
 
+                {{-- منطقة الـ الفوتر المحدثة والمقسمة لسطرين --}}
                 <div class="card-footer">
-                    <div class="left-links">
-                        @if($project->repository_link)
-                            <a href="{{ $project->repository_link }}" target="_blank" class="footer-link-btn">
-                                <i class="fa-regular fa-file-lines"></i> Repo
-                            </a>
-                        @endif
-                        @if($project->live_demo_link)
-                            <a href="{{ $project->live_demo_link }}" target="_blank" class="footer-link-btn">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
-                            </a>
-                        @endif
-                    </div>
                     
-                    {{-- التعديل هنا: تم تحديث اسم الراوت ليمرر الـ ID بنجاح --}}
-                    <a href="{{ route('projects.my_details', $project->id) }}" class="btn-link">
-                        View Details &rarr;
-                    </a>
-                </div>
+                    {{-- السطر العلوي: الروابط الأساسية --}}
+                    <div class="footer-top-row">
+                        <div class="left-links">
+                            @if($project->repository_link)
+                                <a href="{{ $project->repository_link }}" target="_blank" class="footer-link-btn">
+                                    <i class="fa-regular fa-file-lines"></i> Repo
+                                </a>
+                            @endif
+                            
+                            @if($project->live_demo_link)
+                                <a href="{{ $project->live_demo_link }}" target="_blank" class="footer-link-btn">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
+                                </a>
+                            @endif
+                        </div>
+                        
+                        <a href="{{ route('projects.my_details', $project->id) }}" class="view-details-btn">
+                            View Details &rarr;
+                        </a>
+                    </div>
+
+                    {{-- السطر السفلي: أزرار التحكم جنب بعضها --}}
+                    <div class="footer-buttons-row">
+                        {{-- فورم Accept --}}
+                        <form action="#" method="POST" style="display: inline; margin: 0;">
+                            @csrf
+                            <button type="submit" class="footer-link-btn-accept">
+                                <i class="fa-solid fa-check"></i> Accept
+                            </button>
+                        </form>
+
+                        {{-- فورم Reject --}}
+                        <form action="#" method="POST" style="display: inline; margin: 0;">
+                            @csrf
+                            <button type="submit" class="footer-link-btn-reject">
+                                <i class="fa-solid fa-xmark"></i> Reject
+                            </button>
+                        </form>
+                    </div>
+
+                </div> {{-- نهاية الفوتر --}}
             </div>
 
         @empty
@@ -114,6 +137,10 @@
         @endforelse
 
     </div>
+
+    <div class="pagination-wrapper" style="margin-top: 30px; display: flex; justify-content: center;">
+        {{ $projects->links() }}
+    </div>
 </div>
 
 <script>
@@ -121,6 +148,7 @@
         const filterButtons = document.querySelectorAll('.filter-section .filter-btn');
         const projectCards = document.querySelectorAll('.projects-grid .project-card');
         const searchInput = document.getElementById('projectSearchInput');
+        const searchForm = document.getElementById('searchForm');
 
         function filterProjects() {
             const activeBtn = document.querySelector('.filter-section .filter-btn.active');
@@ -160,7 +188,7 @@
             searchInput.addEventListener('input', filterProjects);
             searchInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
-                    e.preventDefault(); 
+                    searchForm.submit();
                 }
             });
         }

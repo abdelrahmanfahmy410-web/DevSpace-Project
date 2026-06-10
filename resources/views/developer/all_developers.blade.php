@@ -55,7 +55,7 @@
             <div class="developers-grid" id="developersGrid">
                 @foreach($developers as $dev)
                     @php
-                        $specLower = strtolower($dev->specialization ?? '');
+                        $specLower = strtolower($dev['specialization'] ?? '');
                         $badgeClass = 'badge-fullstack';
                         
                         if (str_contains($specLower, 'backend')) $badgeClass = 'badge-backend';
@@ -63,22 +63,23 @@
                     @endphp
 
                     <div class="dev-card" 
-                         data-name="{{ strtolower($dev->name) }}" 
-                         data-spec="{{ $dev->specialization }}" 
-                         data-skills="{{ json_encode($dev->skills ?? []) }}">
+                         data-name="{{ strtolower($dev['name'] ?? '') }}" 
+                         data-spec="{{ $dev['specialization'] ?? '' }}" 
+                         data-skills="{{ json_encode($dev['skills'] ?? []) }}">
                         <div>
                             <div class="card-top">
-                                <img src="{{ $dev->avatar }}" alt="{{ $dev->name }}" class="dev-avatar">
-                                <span class="badge {{ $badgeClass }}">{{ $dev->specialization ?? 'Developer' }}</span>
+                                <img src="{{ $dev['avatar'] ?? asset('images/default-avatar.png') }}" alt="{{ $dev['name'] ?? 'Developer' }}" class="dev-avatar">
+                                <span class="badge {{ $badgeClass }}">{{ $dev['specialization'] ?? 'Developer' }}</span>
                             </div>
-                            <h3 class="dev-name">{{ $dev->name }}</h3>
-                            <p class="dev-bio">{{ $dev->bio ?? 'No bio available.' }}</p>
+                            <h3 class="dev-name">{{ $dev['name'] ?? 'Unknown Developer' }}</h3>
+                            <p class="dev-bio">{{ $dev['bio'] ?? 'No bio available.' }}</p>
                         </div>
                         <div class="card-footer">
                             <span class="skills-title">Skills</span>
                             <div class="skills-list">
-                                @if(!empty($dev->skills) && count($dev->skills) > 0)
-                                    @foreach($dev->skills as $skill)
+                                {{-- تم تعديل الأقواس والتحقق هنا لحل المشكلة تماماً --}}
+                                @if(!empty($dev['skills']) && is_array($dev['skills']) && count($dev['skills']) > 0)
+                                    @foreach($dev['skills'] as $skill)
                                         <span class="skill-tag">{{ $skill }}</span>
                                     @endforeach
                                 @else
@@ -86,7 +87,7 @@
                                 @endif
                             </div>
                             
-                            <a href="{{ route('member.profile', $dev->id) }}" class="btn-view-profile">
+                            <a href="{{ route('member.profile', $dev['id'] ?? '') }}" class="btn-view-profile">
                                 View Profile
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -111,12 +112,10 @@
 </div>
 
 <script>
-    // جلب جميع الكروت المجهزة مسبقاً من الـ Blade
     const cards = document.querySelectorAll('.dev-card');
     const searchName = document.getElementById('searchName');
     const noResultsMessage = document.getElementById('noResultsMessage');
 
-    // دالة الفلترة الذكية (إخفاء وإظهار)
     function filterDevelopers() {
         const nameQuery = searchName.value.toLowerCase();
         const selectedSpecs = Array.from(document.querySelectorAll('.filter-spec-checkbox:checked')).map(cb => cb.value);
@@ -125,16 +124,14 @@
         let visibleCardsCount = 0;
 
         cards.forEach(card => {
-            // قراءة البيانات المخزنة في الـ attributes لكل كارت
-            const cardName = card.getAttribute('data-name');
-            const cardSpec = card.getAttribute('data-spec');
+            const cardName = card.getAttribute('data-name') || '';
+            const cardSpec = card.getAttribute('data-spec') || '';
             const cardSkills = JSON.parse(card.getAttribute('data-skills') || '[]');
 
             const matchesName = cardName.includes(nameQuery);
             const matchesSpec = selectedSpecs.length === 0 || selectedSpecs.includes(cardSpec);
             const matchesSkill = selectedSkills.length === 0 || selectedSkills.some(skill => cardSkills.includes(skill));
 
-            // إذا تحققت الشروط يظهر الكارت، وإلا يختفي فوراً
             if (matchesName && matchesSpec && matchesSkill) {
                 card.style.display = 'flex';
                 visibleCardsCount++;
@@ -143,7 +140,6 @@
             }
         });
 
-        // إظهار أو إخفاء رسالة "لا توجد نتائج"
         if (visibleCardsCount === 0) {
             noResultsMessage.style.display = 'block';
         } else {
@@ -151,7 +147,6 @@
         }
     }
 
-    // الاستماع الفوري لعمليات الإدخال والـ Checkboxes
     searchName.addEventListener('input', filterDevelopers);
     document.querySelectorAll('.filter-spec-checkbox, .filter-skill-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', filterDevelopers);

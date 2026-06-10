@@ -95,6 +95,30 @@ public function showMemberProfile()
 
     return view('member.profile', compact('user', 'userRole', 'skills'));
 }
+
+// ✅ ضيف الـ method دي جديدة
+public function showOtherProfile($id)
+{
+    $user = \App\Models\User::with([
+        'roles', 
+        'developer.specialization', 
+        'developer.skills',
+        'mentor.specialization',
+        'teamProjects'
+    ])->findOrFail($id);
+
+    $userRole = $user->roles->first()->name ?? 'member';
+
+    $skills = collect();
+    if ($userRole == 'developer' && $user->developer) {
+        $skills = $user->developer->skills;
+    } elseif ($userRole == 'mentor' && $user->mentor) {
+        $skills = $user->mentor->specialization?->skills ?? collect();
+    }
+
+    return view('member.profile', compact('user', 'userRole', 'skills'));
+}
+
 public function logout(Request $request)
 {
     Auth::logout();
@@ -103,4 +127,5 @@ public function logout(Request $request)
 
     return redirect('/')->with('success', 'Logged out successfully!');
 }
+
 }

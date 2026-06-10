@@ -1,67 +1,76 @@
 {{-- resources/views/livewire/chat-box.blade.php --}}
+
 <div>
     {{-- Messages window --}}
     <div id="messages-container"
-         class="border border-gray-200 rounded-lg bg-white shadow-sm p-4 space-y-4 overflow-y-auto"
-         style="height: 450px;"
+         style="height:450px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; background:#fff;"
          x-data
          x-on:message-sent.window="$el.scrollTop = $el.scrollHeight">
 
         @foreach($conversation->messages as $message)
             @php $isMine = $message->user_id === auth()->id(); @endphp
 
-            <div class="flex {{ $isMine ? 'justify-end' : 'justify-start' }}">
-                <div class="max-w-xs lg:max-w-md">
+            <div style="display:flex; justify-content:{{ $isMine ? 'flex-end' : 'flex-start' }};">
+                <div style="max-width:320px;">
+
                     {{-- Sender name (only for received messages) --}}
                     @unless($isMine)
-                        <p class="text-xs text-gray-400 mb-1 ml-1">{{ $message->sender->name }}</p>
+                        <p style="font-size:12px; color:#9CA3AF; margin-bottom:4px; margin-left:4px;">
+                            {{ $message->sender->name }}
+                        </p>
                     @endunless
 
-                    <div class="px-4 py-2 rounded-2xl text-sm
+                    <div style="
+                        padding: 10px 16px;
+                        border-radius: 18px;
+                        font-size: 14px;
+                        word-wrap: break-word;
                         {{ $isMine
-                            ? 'bg-green-600 text-white rounded-br-sm'
-                            : 'bg-gray-100 text-gray-800 rounded-bl-sm' }}">
+                            ? 'background:#1A7A4A; color:#ffffff; border-bottom-right-radius:4px;'
+                            : 'background:#F0F2F5; color:#111827; border-bottom-left-radius:4px;' }}
+                    ">
                         {{ $message->body }}
                     </div>
 
                     {{-- Timestamp + read status --}}
-                    <p class="text-xs text-gray-400 mt-1 {{ $isMine ? 'text-right' : 'text-left' }}">
+                    <p style="font-size:11px; color:#9CA3AF; margin-top:4px; text-align:{{ $isMine ? 'right' : 'left' }};">
                         {{ $message->created_at->format('g:i A') }}
                         @if($isMine)
                             · {{ $message->isRead() ? 'Seen' : 'Sent' }}
                         @endif
                     </p>
+
                 </div>
             </div>
         @endforeach
 
         @if($conversation->messages->isEmpty())
-            <div class="flex items-center justify-center h-full text-gray-400 text-sm">
+            <div style="display:flex; align-items:center; justify-content:center; height:100%; color:#9CA3AF; font-size:14px;">
                 No messages yet. Say hello!
             </div>
         @endif
     </div>
 
     {{-- Message Input --}}
-    <div class="mt-4 flex gap-3">
+    <div style="padding:16px; border-top:1px solid rgba(0,0,0,0.08); display:flex; gap:12px; background:#fff;">
         <input
             type="text"
             wire:model="newMessage"
             wire:keydown.enter="sendMessage"
             placeholder="Type a message..."
-            class="flex-1 border border-gray-300 rounded-full px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            style="flex:1; border:1px solid #D1D5DB; border-radius:999px; padding:10px 20px; font-size:14px; outline:none; font-family:'DM Sans',sans-serif;"
             maxlength="2000"
         />
         <button
             wire:click="sendMessage"
             wire:loading.attr="disabled"
-            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full text-sm font-medium transition disabled:opacity-50">
+            style="background:#1A7A4A; color:#fff; border:none; border-radius:999px; padding:10px 24px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;">
             <span wire:loading.remove>Send</span>
             <span wire:loading>...</span>
         </button>
     </div>
 
     @error('newMessage')
-        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+        <p style="color:#C0392B; font-size:12px; margin-top:8px; padding:0 16px;">{{ $message }}</p>
     @enderror
 </div>

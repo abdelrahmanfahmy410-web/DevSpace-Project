@@ -1,5 +1,4 @@
 {{-- resources/views/layouts/app.blade.php --}}
-@php $isAdmin = Auth::user()->isAdmin(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,21 +29,22 @@
             <a href="/developer/developers" class="navbar__link">Developers</a>
             <a href="#" class="navbar__link">About</a>
 
-            @auth
-                @php
-                    $isAdmin = DB::table('user_roles')
-                        ->join('roles', 'roles.id', '=', 'user_roles.role_id')
-                        ->where('user_roles.user_id', Auth::id())
-                        ->where('roles.name', 'admin')
-                        ->exists();
-                @endphp
+            @guest
+                <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
+                <a href="/developer/register" class="btn btn-outline">Join the Space</a>
+                <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join as Mentor</a>
+            @else
+                @php $isAdmin = Auth::user()->isAdmin(); @endphp
 
-                @if ($isAdmin)
+                @if($isAdmin)
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-primary" style="margin-left: 8px;">
-                        Admin Dashboard
+                        <i class="fas fa-gauge"></i> Admin Dashboard
                     </a>
+                    <form method="POST" action="{{ route('logout') }}" style="margin-left: 8px;">
+                        @csrf
+                        <button type="submit" class="btn btn-outline">Log Out</button>
+                    </form>
                 @else
-                    {{-- existing user nav --}}
                     @if (!($fullWidth ?? false))
                         <a href="{{ route('dashboard') }}" class="navbar__link">Dashboard</a>
                     @endif
@@ -54,14 +54,14 @@
                             style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
                             <div class="navbar__avatar">
                                 @if (Auth::user()->avatar)
-                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
+                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                        alt="{{ Auth::user()->name }}"
                                         style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
                                 @else
-                                    <div
-                                        style="width: 36px; height: 36px; border-radius: 50%;
-                            background: var(--color-primary);
-                            display: flex; align-items: center; justify-content: center;
-                            color: white; font-weight: 600; font-size: 14px;">
+                                    <div style="width: 36px; height: 36px; border-radius: 50%;
+                                        background: var(--color-primary);
+                                        display: flex; align-items: center; justify-content: center;
+                                        color: white; font-weight: 600; font-size: 14px;">
                                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                     </div>
                                 @endif
@@ -77,41 +77,6 @@
                         @endif
                     </div>
                 @endif
-            @endauth
-
-            @guest
-                <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
-                <a href="/developer/register" class="btn btn-outline"> Join the Space </a>
-                <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join as Mentor</a>
-            @else
-                <div class="navbar__user" style="margin-left: 8px; display: flex; align-items: center; gap: 12px;">
-                    <a href="{{ route('member.profile') }}"
-                        style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
-                        <div class="navbar__avatar">
-                            @if (Auth::user()->avatar)
-                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
-                                    style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
-                            @else
-                                <div
-                                    style="width: 36px; height: 36px; border-radius: 50%;
-                    background: var(--color-primary);
-                    display: flex; align-items: center; justify-content: center;
-                    color: white; font-weight: 600; font-size: 14px;">
-                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                </div>
-                            @endif
-                        </div>
-                        <span style="font-weight: 500;">{{ Auth::user()->name }}</span>
-                    </a>
-
-                    {{-- Only show logout when NOT on a dashboard page --}}
-                    @if (!($fullWidth ?? false))
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-outline">Log Out</button>
-                        </form>
-                    @endif
-                </div>
             @endguest
         </div>
 
@@ -153,10 +118,8 @@
                     <p class="footer-brand-desc">Where developers showcase their work, connect with mentors, and turn
                         side projects into real products.</p>
                     <div class="social-links">
-                        <a href="#" class="social-btn" aria-label="LinkedIn"><i
-                                class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-btn" aria-label="Twitter / X"><i
-                                class="fab fa-x-twitter"></i></a>
+                        <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-btn" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
                         <a href="#" class="social-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
                         <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     </div>

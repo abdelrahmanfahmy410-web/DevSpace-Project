@@ -195,19 +195,28 @@ body {
     font-weight: 500;
 }
 
-/* Card Footer Action Links */
+/* --- تنسيق حاوية الفوتر الجديد بالكامل --- */
 .card-footer {
     border-top: 1px solid var(--border-color);
     padding: 14px 20px;
     display: flex;
+    flex-direction: column; /* ترتيب العناصر عمودياً ليصبح هناك صف أول وصف ثانٍ */
+    gap: 12px; /* مسافة عمودية متناسقة بين الصفين */
+    background: #fafafa;
+}
+
+/* الصف العلوي للروابط الأساسية */
+.footer-top-row {
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fafafa;
+    width: 100%;
 }
 
 .left-links {
     display: flex;
-    gap: 12px;
+    gap: 14px;
+    align-items: center;
 }
 
 .footer-link-btn {
@@ -237,6 +246,56 @@ body {
 
 .view-details-btn:hover {
     color: var(--primary-green-hover);
+}
+
+/* الصف السفلي لأزرار التحكم (Accept & Reject) */
+.footer-buttons-row {
+    display: flex;
+    gap: 16px; /* المسافة الأفقية بين الأزرار */
+    align-items: center;
+    width: 100%;
+    border-top: 1px solid #f1f5f9; /* خط فاصل خفيف وناعم يفصل بين الصفين */
+    padding-top: 12px;
+}
+
+/* التنسيق النصي الموحد للأزرار */
+.footer-link-btn-accept,
+.footer-link-btn-reject {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+
+/* تلوين زر Accept بالأخضر */
+.footer-link-btn-accept {
+    color: var(--primary-green);
+}
+.footer-link-btn-accept:hover {
+    color: var(--primary-green-hover);
+    transform: translateY(-1px);
+}
+
+/* تلوين زر Reject بالأحمر */
+.footer-link-btn-reject {
+    color: #ef4444;
+}
+.footer-link-btn-reject:hover {
+    color: #dc2626;
+    transform: translateY(-1px);
+}
+
+.footer-link-btn-accept:active, 
+.footer-link-btn-reject:active {
+    transform: translateY(0);
 }
 
 /* No Projects State */

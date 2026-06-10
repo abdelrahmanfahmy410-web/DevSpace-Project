@@ -1,0 +1,380 @@
+
+        /* ============================================================
+                   General page background and typography
+                ============================================================ */
+        body {
+            background-color: #F8FAFC;
+            color: #334155;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .project-page {
+            padding: 3rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ============================================================
+                   Page header: title, breadcrumb, and action buttons
+                ============================================================ */
+        .project-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .project-title {
+            margin: 0.5rem 0 0.25rem 0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #0F172A;
+            letter-spacing: -0.02em;
+        }
+
+        .project-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ============================================================
+                   Type badge — green by default, indigo for "other" type
+                ============================================================ */
+        .project-badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 6px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: #E6F4EA;
+            color: #10B981;
+        }
+
+        .project-badge.other {
+            background: #EEF2FF;
+            color: #4F46E5;
+        }
+
+        /* ============================================================
+                   Action buttons (Back, Repo, Live Demo, Wishlist)
+                ============================================================ */
+        .project-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .btn-view,
+        .btn-secondary,
+        .btn-wishlist-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        /* Primary CTA — live demo */
+        .btn-view {
+            background: #10B981;
+            color: #ffffff;
+            border: 1px solid transparent;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-view:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        /* Secondary buttons — back & repo */
+        .btn-secondary {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #E2E8F0;
+        }
+
+        .btn-secondary:hover {
+            background: #F1F5F9;
+            color: #0F172A;
+            border-color: #CBD5E1;
+        }
+
+        /* Wishlist button in the header — rose */
+        .btn-wishlist-header {
+            background: #FFF1F2;
+            color: #E11D48;
+            border: 1px solid #FFE4E6;
+            cursor: pointer;
+        }
+
+        .btn-wishlist-header:hover {
+            background: #FFE4E6;
+            color: #BE123C;
+            transform: translateY(-1px);
+        }
+
+        /* ============================================================
+                   Two-column content grid (main + sidebar)
+                ============================================================ */
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(340px, 1fr);
+            gap: 2rem;
+        }
+
+        /* ============================================================
+                   Shared card component
+                ============================================================ */
+        .card {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02),
+                0 10px 15px -3px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-title {
+            margin: 0 0 1.5rem 0;
+            font-size: 1.25rem;
+            color: #0F172A;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-description {
+            color: #475569;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* ============================================================
+                   Project detail key/value pairs (Repository, Live Demo URLs)
+                ============================================================ */
+        .project-details dt {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 1.5rem;
+            color: #94A3B8;
+        }
+
+        .project-details dd {
+            margin: 0.5rem 0 0 0;
+            color: #334155;
+            font-size: 1.05rem;
+        }
+
+        .project-details dd a {
+            color: #10B981;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .project-details dd a:hover {
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+                   Tag groups: Specializations and Skills
+                ============================================================ */
+        .tags-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94A3B8;
+            margin-bottom: 0.75rem;
+        }
+
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Base tag style */
+        .project-tag {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 6px;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: #F1F5F9;
+            color: #475569;
+            border: 1px solid #E2E8F0;
+        }
+
+        /* Specialization tag — blue tint */
+        .project-tag.specialization {
+            background: #EFF6FF;
+            color: #2563EB;
+            border-color: #DBEAFE;
+        }
+
+        /* Skill tag — green tint */
+        .project-tag.skill {
+            background: #E6F4EA;
+            color: #059669;
+            border-color: #D1FAE5;
+        }
+
+        /* ============================================================
+                   Team member list items
+                ============================================================ */
+        .project-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .project-list-item {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .member-info strong {
+            color: #0F172A;
+            font-size: 0.95rem;
+            display: block;
+        }
+
+        .member-info span {
+            color: #64748B;
+            font-size: 0.85rem;
+        }
+
+        /* Right side of each member row: role badge + buttons */
+        .member-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .member-role {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            color: #475569;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        /* Shared style for member action buttons */
+        .btn-member {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        /* View Profile button — subtle blue */
+        .btn-profile {
+            background: #EFF6FF;
+            color: #2563EB;
+            border-color: #DBEAFE;
+        }
+
+        .btn-profile:hover {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        /* ============================================================
+                   Media / image grid
+                ============================================================ */
+        .project-image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .project-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16 / 10;
+            background: #F1F5F9;
+            border: 1px solid #E2E8F0;
+            transition: transform 0.2s ease;
+        }
+
+        .project-image:hover {
+            transform: scale(1.02);
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Fallback text for empty sections */
+        .empty-state {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            font-style: italic;
+            margin: 0;
+        }
+
+        /* ============================================================
+                   Responsive — single-column layout on smaller screens
+                ============================================================ */
+        @media (max-width: 900px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .project-actions {
+                width: 100%;
+            }
+
+            .project-actions .btn-view,
+            .project-actions .btn-secondary,
+            .project-actions .btn-wishlist-header {
+                flex: 1;
+                text-align: center;
+                justify-content: center;
+            }
+        }

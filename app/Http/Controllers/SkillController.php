@@ -12,7 +12,7 @@ class SkillController extends Controller
      */
     public function index()
     {
-      $skills = Skill::all();
+      $skills = Skill::paginate(6);
         return view('admin.skill.skill', compact('skills'));
     }
 
@@ -38,7 +38,7 @@ class SkillController extends Controller
         Skill::create([
             'name' => $request->name,
         ]);
-        return redirect('admin.skill.skill')->with('success', 'Skill added successfully!');
+        return redirect('/admin/skill')->with('success', 'Skill added successfully!');
     }
 
     /**

@@ -66,7 +66,13 @@
                     </tr>
                 @endforelse
             </tbody>
+            
         </table>
+        <!-- all laravel pagination -->
+       <div class="table__pagination">
+            {{ $skills->links() }}
+        </div>
+
     </div>
 
 @endsection

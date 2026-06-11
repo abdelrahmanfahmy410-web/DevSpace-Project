@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB; // add this
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -107,4 +109,13 @@ class User extends Authenticatable
     return $this->hasMany(TeamRole::class);
 } 
 
+// app/Models/User.php
+public function isAdmin(): bool
+{
+    return DB::table('user_roles')
+        ->join('roles', 'roles.id', '=', 'user_roles.role_id')
+        ->where('user_roles.user_id', $this->id)
+        ->where('roles.name', 'admin')
+        ->exists();
+}
 }

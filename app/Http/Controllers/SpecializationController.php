@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Skill;
 use App\Models\Specialization;
 use Illuminate\Http\Request;
-use App\Models\Skill;
 
 class SpecializationController extends Controller
 {
@@ -14,23 +14,27 @@ class SpecializationController extends Controller
     public function index()
     {
         $specializations = Specialization::all();
-    
-        return view('specialization.specialization', compact('specializations'));
+
+        return view('admin.specialization.specialization', compact('specializations'));
     }
-     //display specialization with skills
-        public function specializationSkills( )
-        {
-            $specializations = Specialization::with('skills')->get();
-            return view('specialization.specialization_skills', compact('specializations'));
-        }
+
+    // display specialization with skills
+    public function specializationSkills()
+    {
+        $specializations = Specialization::with('skills')->get();
+
+        return view('admin.specialization.specialization_skills', compact('specializations'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $skills = Skill::all();
-         $specializations = Specialization::all();
-        return view('specialization.add_specialization', compact('skills', 'specializations'));
+        $specializations = Specialization::all();
+
+        return view('admin.specialization.add_specialization', compact('skills', 'specializations'));
     }
 
     /**
@@ -38,43 +42,30 @@ class SpecializationController extends Controller
      */
     public function store(Request $request)
     {
-       
-        //get or create specialization
-
-      if ($request->name == 'Other') {
         $request->validate([
-            'other_specialization' => 'required|string|max:255',
-        ]);
-        
-        $specialization = Specialization::create([
-            'name' => $request->other_specialization,
-        ]);
-    }
-    else {
-        $specialization = Specialization::where('name', $request->name)->first();
-         if (!$specialization) {
-            $specialization = Specialization::create([
-                'name' => $request->other_specialization,
-            ]);
-             $request->validate([
             'name' => 'required|string|max:255|unique:specializations,name',
-            'skills' => 'array',
+            'skills' => 'nullable|array',
             'skills.*' => 'exists:skills,id',
         ]);
-         }
+
+        $specialization = Specialization::create(['name' => $request->name]);
+
+        if ($request->filled('skills')) {
+            $specialization->skills()->sync($request->skills);
+        }
+
+        return redirect()->route('admin.specialization.index')
+            ->with('success', 'Specialization created successfully.');
     }
-        $specialization->skills()->sync($request->skills);
-    
-        return redirect('/')->with('success', 'Specialization added successfully!');
-    }
-     
+
     /**
      * Display the specified resource.
      */
     public function show(Specialization $specialization)
     {
-      //
+        //
     }
+
     /**
      * Show the form for editing the specified resource.
      */

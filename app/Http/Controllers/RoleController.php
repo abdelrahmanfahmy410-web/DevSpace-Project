@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
-
 
 class RoleController extends Controller
 {
@@ -14,7 +12,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Role::withCount('users')->latest()->get();
+
+        return view('admin.all_roles', compact('roles'));
     }
 
     /**
@@ -22,8 +22,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //show form to create new role
-        return view('Admin.add_role');
+        // show form to create new role
+        return view('admin.add_role');
 
     }
 
@@ -35,12 +35,14 @@ class RoleController extends Controller
         //
         $request->validate([
             'name' => 'required|string|max:255|unique:roles',
-     
+
         ]);
         Role::create([
             'name' => $request->name,
         ]);
-        return redirect()->back()->with('success', 'Role created successfully!');
+
+        return redirect()->route('admin.all_roles')->with('success', 'Role created successfully!');
+
 
     }
 

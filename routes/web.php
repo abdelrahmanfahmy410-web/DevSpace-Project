@@ -15,6 +15,9 @@ use App\Http\Controllers\DashboardController;
 use App\Models\Project;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\TeamRoleController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin;
+
 
 
 //all users
@@ -101,19 +104,7 @@ Route::post('/project/store_media/{project}', [ProjectController::class, 'storeM
 Route::post('/wishlist/toggle/{project}', [ProjectController::class, 'toggleWishlist'])->name('wishlist.toggle');
 Route::get('/wishlist', [ProjectController::class, 'wishlist'])->name('wishlist.index');
 
-// ----------------------------------------------------
-// Admin Areas
-// ----------------------------------------------------
-Route::get('/role/add_role', [RoleController::class, 'create']);
-Route::post('/role/add_role', [RoleController::class, 'store']);
-
-Route::get('/skill/add_skill', [SkillController::class, 'create']);
-Route::post('/skill/add_skill', [SkillController::class, 'store']);
-Route::get('/skill', [SkillController::class, 'index'])->name('skill.index');
-
-Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
-Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
-
+//////////////////////
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('api.skills.by_specialization');
 
 Route::get('/projects/skills/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
@@ -196,3 +187,38 @@ Route::get('/dev-login', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
 Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');
+
+// ----------------------------------------------------
+// Admin Areas
+// ----------------------------------------------------
+Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
+
+    // Dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    //All users 
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+
+    // All projects
+    Route::get('/projects', [AdminController::class, 'projects'])->name('projects.index');
+    Route::get('/projects/{project}', [AdminController::class, 'showProject'])->name('projects.show');
+
+    // Roles
+    Route::get('/role/add_role',  [RoleController::class, 'create'])->name('role.create');
+    Route::post('/role/add_role', [RoleController::class, 'store'])->name('role.store');
+    Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+
+    // Skills
+    Route::get('/skill',           [SkillController::class, 'index'])->name('skill.index');
+    Route::get('/skill/add_skill', [SkillController::class, 'create'])->name('skill.create');
+    Route::post('/skill/add_skill',[SkillController::class, 'store'])->name('skill.store');
+
+    // Specializations
+    Route::get('/specialization',                      [SpecializationController::class, 'index'])->name('specialization.index');
+    Route::get('/specialization/add_specialization',   [SpecializationController::class, 'create'])->name('specialization.create');
+    Route::post('/specialization/add_specialization',  [SpecializationController::class, 'store'])->name('specialization.store');
+    Route::get('/specialization/skills',              [SpecializationController::class, 'specializationSkills'])->name('specialization.skills');
+    
+    
+
+});

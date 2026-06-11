@@ -210,10 +210,16 @@
                     <div class="projects-grid">
                         @foreach($projects as $project)
                             @php $type = strtolower($project->type ?? 'web'); @endphp
-                            <article class="project-card">
+                            <div class="project-card">
+
+                                {{-- ── Top of card: thumbnail OR accent bar ── --}}
                                 @if($project->media && $project->media->isNotEmpty())
                                     <div class="card-thumbnail">
-                                        <img src="{{ asset('storage/' . $project->media->first()->file_path) }}" alt="{{ $project->title }}" loading="lazy">
+                                        <img
+                                            src="{{ asset('storage/' . $project->media->first()->file_path) }}"
+                                            alt="{{ $project->title }}"
+                                            loading="lazy"
+                                        >
                                         <span class="type-badge-over {{ $type }}">{{ $project->type }}</span>
                                     </div>
                                 @else
@@ -222,15 +228,13 @@
 
                                 <div class="pi-card-body">
                                     <div class="pi-card-header">
-                                        @if(!$project->media || $project->media->isEmpty())
+                                        @if($project->media && $project->media->isEmpty())
                                             <span class="type-badge {{ $type }}">{{ $project->type }}</span>
                                         @else
                                             <span></span>
                                         @endif
-                                        <button class="card-menu-btn" aria-label="Options">
-                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
-                                        </button>
                                     </div>
+
                                     <h3 class="pi-card-title">{{ $project->title }}</h3>
                                     <p class="pi-card-desc">{{ $project->description }}</p>
 
@@ -241,11 +245,49 @@
                                                 @foreach($project->specializations->take(4) as $spec)
                                                     <span class="tag spec">{{ $spec->name }}</span>
                                                 @endforeach
+                                                @if($project->specializations->count() > 4)
+                                                    <span class="tag spec">+{{ $project->specializations->count() - 4 }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if($project->skills && $project->skills->isNotEmpty())
+                                        <div class="tags-group">
+                                            <span class="tags-label">Skills</span>
+                                            <div class="tags-row">
+                                                @foreach($project->skills->take(4) as $skill)
+                                                    <span class="tag skill">{{ $skill->name }}</span>
+                                                @endforeach
+                                                @if($project->skills->count() > 4)
+                                                    <span class="tag skill">+{{ $project->skills->count() - 4 }}</span>
+                                                @endif
                                             </div>
                                         </div>
                                     @endif
                                 </div>
-                            </article>
+
+                                <div class="pi-card-footer">
+                                    <div class="footer-links">
+                                        @if($project->repository_link)
+                                            <a href="{{ $project->repository_link }}" target="_blank" class="link-btn">
+                                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                                                Repo
+                                            </a>
+                                        @endif
+                                        @if($project->live_demo_link)
+                                            <a href="{{ $project->live_demo_link }}" target="_blank" class="link-btn">
+                                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                                Live
+                                            </a>
+                                        @endif
+                                    </div>
+                                    <a href="{{ route('projects.show', $project->id) }}" class="view-btn">
+                                        View
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </a>
+                                </div>{{-- /pi-card-footer --}}
+                            </div>
                         @endforeach
                     </div>
 

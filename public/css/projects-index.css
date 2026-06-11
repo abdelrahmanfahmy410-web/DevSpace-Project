@@ -204,7 +204,7 @@ main .container, .layout__main .container {
    6. PROJECTS GRID & CARDS
    ========================================================================== */
 .projects-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
 }
 
 .project-card {
@@ -289,9 +289,11 @@ main .container, .layout__main .container {
 @media (max-width: 1024px) {
     .filter-sidebar { width: 220px; }
     .pi-stats-row { grid-template-columns: repeat(2, 1fr); }
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
     .filter-sidebar { display: none; }
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
     .pi-content-body { padding: 1.25rem; }

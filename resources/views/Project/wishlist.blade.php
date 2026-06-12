@@ -60,6 +60,11 @@
         .navbar {
             margin-bottom: var(--space-6);
         }
+
+        /* Override the grid layout to give cards more width */
+        .grid-cards {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        }
     </style>
 </head>
 <body>

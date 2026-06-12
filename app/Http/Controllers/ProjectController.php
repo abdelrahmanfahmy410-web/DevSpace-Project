@@ -46,7 +46,11 @@ class ProjectController extends Controller
         $specializations = \App\Models\Specialization::orderBy('name')->get();
         $skills          = \App\Models\Skill::orderBy('name')->get();
 
-        return view('Project.projects-index', compact('projects', 'specializations', 'skills'));
+        $wishlistedIds = auth()->check()
+            ? auth()->user()->wishlist()->pluck('projects.id')->toArray()
+            : [];
+
+        return view('Project.projects-index', compact('projects', 'specializations', 'skills' , 'wishlistedIds'));
     }
 
     /**

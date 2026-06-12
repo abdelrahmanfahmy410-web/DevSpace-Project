@@ -80,22 +80,13 @@ class DeveloperController extends Controller
                 'role_id' => Role::where('name', 'developer')->first()->id,
             ]);
 
-            return redirect('/developer/profile')
+             return redirect('/member/profile')
                 ->with('success', 'Developer account created successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()
                 ->withErrors(['error' => $e->getMessage()])
-                ->withInput();
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()
-                ->withErrors([
-                    'error' => $e->getMessage(),
-                ])
                 ->withInput();
         }
     }

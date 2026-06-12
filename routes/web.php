@@ -16,6 +16,10 @@ use App\Models\Project;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\TeamRoleController;
 use App\Http\Controllers\FollowingController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin;
+
+
 
 //all users
 Route::get('/', function () {
@@ -101,19 +105,7 @@ Route::post('/project/store_media/{project}', [ProjectController::class, 'storeM
 Route::post('/wishlist/toggle/{project}', [ProjectController::class, 'toggleWishlist'])->name('wishlist.toggle');
 Route::get('/wishlist', [ProjectController::class, 'wishlist'])->name('wishlist.index');
 
-// ----------------------------------------------------
-// Admin Areas
-// ----------------------------------------------------
-Route::get('/role/add_role', [RoleController::class, 'create']);
-Route::post('/role/add_role', [RoleController::class, 'store']);
-
-Route::get('/skill/add_skill', [SkillController::class, 'create']);
-Route::post('/skill/add_skill', [SkillController::class, 'store']);
-Route::get('/skill', [SkillController::class, 'index'])->name('skill.index');
-
-Route::get('/specialization/add_specialization', [SpecializationController::class, 'create']);
-Route::post('/specialization/add_specialization', [SpecializationController::class, 'store']);
-
+//////////////////////
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])->name('api.skills.by_specialization');
 
 Route::get('/projects/skills/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
@@ -196,5 +188,4 @@ Route::get('/dev-login', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
 Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');
-Route::get('/my-followers', [FollowingController::class, 'show'])->name('followers.my_followers');
-Route::delete('/followers/{id}/remove', [FollowingController::class, 'remove'])->name('followers.remove');
+Route::get('/my-followers', [FollowingController::class, 'followers'])->name('followers.index');

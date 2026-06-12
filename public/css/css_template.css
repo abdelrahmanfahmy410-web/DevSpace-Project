@@ -1290,3 +1290,118 @@ h3,
   color: var(--color-accent);
   font-weight: var(--font-weight-medium);
 }
+/* ====================== Pagination Styles ====================== */
+
+/* ====================== Professional Pagination ====================== */
+
+.table__pagination {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-6) 0;
+  margin:  0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: var(--space-1);
+  margin: 0;
+  gap: 4px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 6px rgba(15, 31, 46, 0.06),
+              0 1px 3px rgba(15, 31, 46, 0.04);
+  overflow: hidden;
+}
+
+.page-item {
+  margin: 0;
+}
+
+.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-body-text);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  position: relative;
+  user-select: none;
+}
+
+/* Hover State */
+.page-link:hover {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+/* Active State */
+.page-item.active .page-link {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08),
+              0 0 0 3px rgba(26, 122, 74, 0.15);
+}
+
+/* Disabled State */
+.page-item.disabled .page-link {
+  color: var(--color-muted);
+  background: var(--color-bg-light);
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+}
+
+/* Focus State - Accessibility */
+.page-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 122, 74, 0.3);
+}
+
+/* Previous / Next Arrows */
+.page-link[aria-label*="Previous"],
+.page-link[aria-label*="Next"],
+.page-link[rel="prev"],
+.page-link[rel="next"] {
+  font-size: 18px;
+  font-weight: var(--font-weight-semibold);
+  width: 40px;
+  color: var(--color-muted);
+}
+
+.page-link[aria-label*="Previous"]:hover,
+.page-link[aria-label*="Next"]:hover {
+  color: var(--color-primary);
+}
+
+/* Ellipsis (...) styling */
+.page-item span.page-link {
+  color: var(--color-muted);
+  cursor: default;
+  background: transparent;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .pagination {
+    padding: var(--space-1);
+    gap: 3px;
+  }
+  
+  .page-link {
+    min-width: 36px;
+    height: 36px;
+    font-size: 13.5px;
+  }
+}

@@ -80,22 +80,13 @@ class DeveloperController extends Controller
                 'role_id' => Role::where('name', 'developer')->first()->id,
             ]);
 
-            return redirect('/developer/profile')
+             return redirect('/member/profile')
                 ->with('success', 'Developer account created successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()
                 ->withErrors(['error' => $e->getMessage()])
-                ->withInput();
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()
-                ->withErrors([
-                    'error' => $e->getMessage(),
-                ])
                 ->withInput();
         }
     }
@@ -201,7 +192,7 @@ class DeveloperController extends Controller
     public function allDevelopers()
     {
         // 1. جلب المطورين مع العلاقات وعمل Pagination
-        $developersPaginator = Developer::with(['user', 'specialization', 'skills'])->paginate(10);
+        $developersPaginator = Developer::with(['user', 'specialization', 'skills'])->paginate(3);
 
         // 2. تعديل شكل البيانات جوه الـ Paginator
         $developersPaginator->setCollection(

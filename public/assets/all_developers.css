@@ -1,380 +1,298 @@
-/* الألوان الأساسية والهيكل العام */
-body {
-    background-color: #f9fafb;
+/* ==========================================================================
+   1. الهيكل الرئيسي وإلغاء الهوامش تماماً لملء الشاشة
+   ========================================================================== */
+body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #f9fafb !important;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #1f2937;
+    width: 100% !important;
 }
 
+/* إلغاء أي قيود جانبية للمساحة الخارجية */
 .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
 }
 
-/* شريط البحث العلوي مفرود هيدر وببحث جنب بعض */
+/* الهيدر العلوي - ملتصق بالكامل وممتد */
 .header-box {
-    background-color: #ffffff;
-    padding: 1.5rem;
-    border-radius: 0.75rem;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-@media (min-width: 768px) {
-    .header-box {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
+    background-color: #ffffff !important;
+    padding: 1rem 1.5rem !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 0 1.5rem 0 !important;
 }
 
 .header-title h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
-    margin: 0;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    margin: 0 !important;
 }
 
 .header-title p {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0.25rem 0 0 0;
+    font-size: 0.875rem !important;
+    color: #6b7280 !important;
+    margin: 0.25rem 0 0 0 !important;
 }
 
-/* خانة البحث العلوي وتنسيقها */
+/* ==========================================================================
+   2. تخطيط الصفحة وإلغاء الفراغات تماماً
+   ========================================================================== */
+.page-layout {
+    display: flex !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important; /* ملتصق تماماً بالـ sidebar */
+}
+
+/* الفلتر الجانبي */
+.sidebar-filters {
+    width: 260px !important;
+    min-width: 260px !important;
+    background-color: #ffffff !important;
+    border-right: 1px solid #e5e7eb !important;
+    padding: 1.5rem 1rem !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+}
+
+/* المحتوى الرئيسي للمطورين */
+.main-content {
+    flex-grow: 1 !important;
+    padding: 0 1.5rem 1.5rem 1.5rem !important;
+    box-sizing: border-box !important;
+    background-color: #f9fafb !important;
+    width: calc(100% - 260px) !important;
+    margin-left: 0 !important;
+}
+
+/* التعديل الجوهري: توزيع 3 كاردات جنب بعض بشكل منسق ومحاذي لليسار */
+.developers-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important; /* 3 كاردات متساوية */
+    gap: 1rem !important; /* مسافة متزنة بين الأعمدة والصفوف */
+    width: 100% !important;
+    justify-content: flex-start !important;
+}
+
+/* كارت المطور المعدل والمصمم ليتناسب مع توزيع الـ 3 كاردات */
+.dev-card {
+    background-color: #ffffff !important;
+    border-radius: 0.5rem !important;
+    border: 1px solid #e5e7eb !important;
+    padding: 1.25rem !important;
+    max-width: 360px !important; /* تصغير العرض الأقصى ليناسب التوزيع الثلاثي */
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+}
+
+/* ==========================================================================
+   3. بقية التنسيقات الداخلية للبحث والأزرار والبادجات
+   ========================================================================== */
 .search-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-@media (min-width: 768px) {
-    .search-wrapper {
-        width: 320px;
-    }
+    position: relative !important;
+    width: 320px !important;
 }
 
 .search-input {
-    width: 100%;
-    padding: 0.625rem 1rem 0.625rem 2.5rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
-    outline: none;
-    background-color: #f9fafb;
-    transition: all 0.2s;
-    box-sizing: border-box;
-}
-
-.search-input:focus {
-    border-color: #10b981;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    width: 100% !important;
+    padding: 0.625rem 1rem 0.625rem 2.5rem !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.5rem !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+    background-color: #f9fafb !important;
+    box-sizing: border-box !important;
 }
 
 .search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af;
-    width: 1.25rem;
-    height: 1.25rem;
-    pointer-events: none;
+    position: absolute !important;
+    left: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #9ca3af !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
 }
 
-/* --- الهيكل الجانبي (تم التعديل وحل مشكلة الفراغ) --- */
-.page-layout {
-    display: flex;
-    gap: 1rem;                /* تم إصلاح المسافة هنا */
-    align-items: flex-start;
-    width: 100%;
-}
-
-.main-content {
-    flex: 1;
-    min-width: 0;               /* تمنع تمدد الجريد بشكل وهمي وعمل فراغ */
-    width: 100%;                
-}
-
-.developers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    width: 100%;
-}
-
-/* الفلتر الجانبي المحدث */
-.sidebar-filters {
-    flex: 0 0 280px;
-    background-color: #ffffff;
-    padding: 1.5rem;
-    border-radius: 0.75rem;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 2rem;
-    box-sizing: border-box;
+.mini-filter-search {
+    width: 100% !important;
+    padding: 0.4rem 0.6rem !important;
+    margin-bottom: 0.625rem !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.75rem !important;
+    box-sizing: border-box !important;
 }
 
 .sidebar-filters h3 {
-    margin-top: 0;
-    margin-bottom: 1.25rem;
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #111827;
-    border-bottom: 2px solid #f3f4f6;
-    padding-bottom: 0.5rem;
+    margin-top: 0 !important;
+    margin-bottom: 1rem !important;
+    font-size: 1.125rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    border-bottom: 2px solid #f3f4f6 !important;
+    padding-bottom: 0.5rem !important;
 }
 
 .filter-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem !important;
 }
 
-.filter-group label {
-    display: block;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-    color: #4b5563;
-    font-size: 0.875rem;
+.filter-group label.group-label {
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 600 !important;
+    color: #4b5563 !important;
+    font-size: 0.875rem !important;
 }
 
-/* تنسيق حاويات الـ Checkboxes */
 .checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    max-height: 180px; 
-    overflow-y: auto;
-    padding-right: 0.5rem;
-}
-
-/* تخصيص الـ Scrollbar بشكل ناعم */
-.checkbox-group::-webkit-scrollbar {
-    width: 4px;
-}
-.checkbox-group::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-.checkbox-group::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
-}
-.checkbox-group::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* تنسيق خيار الاختيار المفرد */
-.checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    font-size: 0.875rem;
-    color: #4b5563;
-    user-select: none;
-    transition: color 0.2s;
-}
-
-.checkbox-item:hover {
-    color: #111827;
-}
-
-/* تصميم عصري ومخصص للـ Checkbox */
-.checkbox-item input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 1rem;
-    height: 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.25rem;
-    background-color: #fff;
-    display: inline-grid;
-    place-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.checkbox-item input[type="checkbox"]::before {
-    content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em #ffffff;
-    background-color: CanvasText;
-    transform-origin: center;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-
-.checkbox-item input[type="checkbox"]:checked {
-    background-color: #10b981;
-    border-color: #10b981;
-}
-
-.checkbox-item input[type="checkbox"]:checked::before {
-    transform: scale(1);
-}
-
-.checkbox-item input[type="checkbox"]:focus-visible {
-    outline: 2px solid rgba(16, 185, 129, 0.3);
-}
-
-/* كارت المطور */
-.dev-card {
-    background-color: #ffffff;
-    border-radius: 0.75rem;
-    border: 1px solid #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.dev-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    max-height: 160px !important; 
+    overflow-y: auto !important;
 }
 
 .card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 1rem !important;
 }
 
 .dev-avatar {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(16, 185, 129, 0.2);
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
 }
 
-/* الـ Badges الخاصة بالتخصصات */
 .badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.25rem 0.625rem;
-    border-radius: 9999px;
-    border: 1px solid;
+    font-size: 0.725rem !important;
+    font-weight: 600 !important;
+    padding: 0.2rem 0.5rem !important;
+    border-radius: 9999px !important;
+    border: 1px solid !important;
 }
 
-.badge-backend { background-color: #faf5ff; color: #7c3aed; border-color: #e9d5ff; }
-.badge-frontend { background-color: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
-.badge-fullstack { background-color: #fff7ed; color: #ea580c; border-color: #fed7aa; }
+.badge-backend { background-color: #faf5ff !important; color: #7c3aed !important; border-color: #e9d5ff !important; }
+.badge-frontend { background-color: #eff6ff !important; color: #2563eb !important; border-color: #bfdbfe !important; }
+.badge-fullstack { background-color: #fff7ed !important; color: #ea580c !important; border-color: #fed7aa !important; }
 
 .dev-name {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0 0 0.25rem 0;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+    margin: 0 0 0.25rem 0 !important;
 }
 
 .dev-bio {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0 0 1.5rem 0;
-    line-height: 1.4;
+    font-size: 0.85rem !important;
+    color: #6b7280 !important;
+    margin: 0 0 1.25rem 0 !important;
+    line-height: 1.4 !important;
 }
 
 .card-footer {
-    border-top: 1px solid #f3f4f6;
-    padding-top: 1rem;
-    display: flex;
-    flex-direction: column; 
-    align-items: flex-start; 
+    border-top: 1px solid #f3f4f6 !important;
+    padding-top: 0.875rem !important;
+    display: flex !important;
+    flex-direction: column !important; 
+    align-items: flex-start !important; 
 }
 
 .skills-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-    display: block;
+    font-size: 0.725rem !important;
+    font-weight: 600 !important;
+    color: #9ca3af !important;
+    text-transform: uppercase !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.375rem;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.375rem !important;
 }
 
 .skill-tag {
-    font-size: 0.75rem;
-    background-color: #f3f4f6;
-    color: #4b5563;
-    padding: 0.125rem 0.5rem;
-    border-radius: 0.25rem;
+    font-size: 0.725rem !important;
+    background-color: #f3f4f6 !important;
+    color: #4b5563 !important;
+    padding: 0.125rem 0.5rem !important;
+    border-radius: 0.25rem !important;
 }
 
-.no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 2rem;
-    color: #6b7280;
-}
-
-/* متجاوب مع الشاشات الصغيرة (الموبايل) */
-@media (max-width: 768px) {
-    .page-layout {
-        flex-direction: column;
-    }
-    
-    .sidebar-filters {
-        flex: 1;
-        width: 100%;
-        position: static;
-        margin-bottom: 1rem;
-    }
-    
-    .checkbox-group {
-        max-height: 150px;
-    }
-}
-
-/* زر عرض الملف الشخصي السهم والنص */
 .btn-view-profile {
-    display: inline-flex;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    align-self: flex-end !important;    
+    color: #15803d !important;          
+    font-size: 0.85rem !important;     
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+/* حاوية الـ Pagination بالكامل */
+.main-content .d-flex.justify-content-center {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 0.25rem;
-    width: fit-content;
-    align-self: flex-end;    
-    margin-top: auto;        
-    padding: 0.5rem 0;       
-    background: transparent;  
-    color: #15803d;          
-    border: none;            
-    border-radius: 0;
-    font-size: 0.875rem;     
-    font-weight: 600;
+}
+
+/* تنسيق أزرار Previous و Next */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0; /* نفس لون بوردر الفلاتر والكروت */
+}
+
+.pagination li a, 
+.pagination li span {
+    display: inline-block;
+    padding: 5px 10px;
+    color: #4a5568; /* لون النص الرمادي الداكن المريح */
+    background-color: #ffffff;
     text-decoration: none;
-    transition: color 0.2s ease-in-out;
-    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+    transition: all 0.2s ease-in-out;
 }
 
-.btn-view-profile:hover {
-    color: #166534;
-    background: transparent;  
-    box-shadow: none;        
+/* الحد الفاصل بين الزرين */
+.pagination li:first-child a, 
+.pagination li:first-child span {
+    border-right: 1px solid #e2e8f0;
 }
 
-.btn-view-profile svg {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.2s ease;
+/* تأثير الـ Hover عند الوقوف بالماوس على الأزرار المتاحة */
+.pagination li a:hover {
+    background-color: #f8fafc;
+    color: #10b981; /* اللون الأخضر المميز لـ DevSpace */
 }
 
-.btn-view-profile:hover svg {
-    transform: translateX(4px); 
+/* تنسيق الزر غير المفعل (مثلاً Previous وأنتِ في الصفحة الأولى) */
+.pagination li.disabled span {
+    color: #cbd5e1; /* لون رمادي فاتح يدل على أنه غير قابل للضغط */
+    background-color: #f8fafc;
+    cursor: not-allowed;
 }

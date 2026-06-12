@@ -201,7 +201,7 @@ class DeveloperController extends Controller
     public function allDevelopers()
     {
         // 1. جلب المطورين مع العلاقات وعمل Pagination
-        $developersPaginator = Developer::with(['user', 'specialization', 'skills'])->paginate(10);
+        $developersPaginator = Developer::with(['user', 'specialization', 'skills'])->paginate(3);
 
         // 2. تعديل شكل البيانات جوه الـ Paginator
         $developersPaginator->setCollection(

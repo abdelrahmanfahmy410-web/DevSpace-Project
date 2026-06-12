@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Page Title')
+@section('title', 'Developers')
 
 @section('content')
 
@@ -9,7 +9,7 @@
     
     <div class="header-box">
         <div class="header-title">
-            <h1>Developer Directory</h1>
+            <h1>Developers</h1>
             <p>Discover and connect with talented developers</p>
         </div>
         
@@ -27,10 +27,12 @@
             <h3>Filter By</h3>
 
             <div class="filter-group">
-                <label>Specialization</label>
-                <div class="checkbox-group">
+                <label class="group-label">Specialization</label>
+                <input type="text" id="searchSpec" placeholder="Search specs..." class="mini-filter-search">
+                
+                <div class="checkbox-group" id="specGroup">
                     @foreach($specializations as $spec)
-                        <label class="checkbox-item">
+                        <label class="checkbox-item" data-value="{{ strtolower($spec) }}">
                             <input type="checkbox" name="specialization" value="{{ $spec }}" class="filter-spec-checkbox">
                             <span>{{ $spec }}</span>
                         </label>
@@ -39,10 +41,12 @@
             </div>
 
             <div class="filter-group">
-                <label>Skill</label>
-                <div class="checkbox-group">
+                <label class="group-label">Skill</label>
+                <input type="text" id="searchSkill" placeholder="Search skills..." class="mini-filter-search">
+                
+                <div class="checkbox-group" id="skillGroup">
                     @foreach($skills as $skill)
-                        <label class="checkbox-item">
+                        <label class="checkbox-item" data-value="{{ strtolower($skill) }}">
                             <input type="checkbox" name="skill" value="{{ $skill }}" class="filter-skill-checkbox">
                             <span>{{ $skill }}</span>
                         </label>
@@ -77,7 +81,6 @@
                         <div class="card-footer">
                             <span class="skills-title">Skills</span>
                             <div class="skills-list">
-                                {{-- تم تعديل الأقواس والتحقق هنا لحل المشكلة تماماً --}}
                                 @if(!empty($dev['skills']) && is_array($dev['skills']) && count($dev['skills']) > 0)
                                     @foreach($dev['skills'] as $skill)
                                         <span class="skill-tag">{{ $skill }}</span>
@@ -103,7 +106,7 @@
             </div>
 
             <div class="d-flex justify-content-center mt-4">
-                {{ $developers->links() }}
+                {{ $developers->links('pagination::simple-bootstrap-4') }}
             </div>
         </main>
 
@@ -115,42 +118,63 @@
     const cards = document.querySelectorAll('.dev-card');
     const searchName = document.getElementById('searchName');
     const noResultsMessage = document.getElementById('noResultsMessage');
+    const searchSpecInput = document.getElementById('searchSpec');
+    const searchSkillInput = document.getElementById('searchSkill');
 
     function filterDevelopers() {
-        const nameQuery = searchName.value.toLowerCase();
-        const selectedSpecs = Array.from(document.querySelectorAll('.filter-spec-checkbox:checked')).map(cb => cb.value);
-        const selectedSkills = Array.from(document.querySelectorAll('.filter-skill-checkbox:checked')).map(cb => cb.value);
+        const nameQuery = searchName.value.toLowerCase().trim();
+        
+        const selectedSpecs = Array.from(document.querySelectorAll('.filter-spec-checkbox:checked')).map(cb => cb.value.toLowerCase());
+        const selectedSkills = Array.from(document.querySelectorAll('.filter-skill-checkbox:checked')).map(cb => cb.value.toLowerCase());
 
         let visibleCardsCount = 0;
 
         cards.forEach(card => {
-            const cardName = card.getAttribute('data-name') || '';
-            const cardSpec = card.getAttribute('data-spec') || '';
-            const cardSkills = JSON.parse(card.getAttribute('data-skills') || '[]');
+            const cardName = (card.getAttribute('data-name') || '').toLowerCase();
+            const cardSpec = (card.getAttribute('data-spec'] || '').toLowerCase();
+            
+            const cardSkills = JSON.parse(card.getAttribute('data-skills') || '[]').map(s => s.toLowerCase());
 
             const matchesName = cardName.includes(nameQuery);
             const matchesSpec = selectedSpecs.length === 0 || selectedSpecs.includes(cardSpec);
             const matchesSkill = selectedSkills.length === 0 || selectedSkills.some(skill => cardSkills.includes(skill));
 
             if (matchesName && matchesSpec && matchesSkill) {
-                card.style.display = 'flex';
+                card.style.setProperty('display', 'flex', 'important');
                 visibleCardsCount++;
             } else {
-                card.style.display = 'none';
+                card.style.setProperty('display', 'none', 'important');
             }
         });
 
         if (visibleCardsCount === 0) {
-            noResultsMessage.style.display = 'block';
+            noResultsMessage.style.setProperty('display', 'block', 'important');
         } else {
-            noResultsMessage.style.display = 'none';
+            noResultsMessage.style.setProperty('display', 'none', 'important');
         }
+    }
+
+    function filterCheckboxItems(inputElement, groupContainerId) {
+        const query = inputElement.value.toLowerCase().trim();
+        const items = document.querySelectorAll(`#${groupContainerId} .checkbox-item`);
+        
+        items.forEach(item => {
+            const val = (item.getAttribute('data-value') || '').toLowerCase();
+            if (val.includes(query)) {
+                item.style.setProperty('display', 'flex', 'important');
+            } else {
+                item.style.setProperty('display', 'none', 'important');
+            }
+        });
     }
 
     searchName.addEventListener('input', filterDevelopers);
     document.querySelectorAll('.filter-spec-checkbox, .filter-skill-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', filterDevelopers);
     });
+
+    searchSpecInput.addEventListener('input', () => filterCheckboxItems(searchSpecInput, 'specGroup'));
+    searchSkillInput.addEventListener('input', () => filterCheckboxItems(searchSkillInput, 'skillGroup'));
 </script>
 
 <div class="toaster-container">

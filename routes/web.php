@@ -15,7 +15,7 @@ use App\Http\Controllers\DashboardController;
 use App\Models\Project;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\TeamRoleController;
-
+use App\Http\Controllers\FollowingController;
 
 //all users
 Route::get('/', function () {
@@ -196,3 +196,5 @@ Route::get('/dev-login', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
 Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');
+Route::get('/my-followers', [FollowingController::class, 'show'])->name('followers.my_followers');
+Route::delete('/followers/{id}/remove', [FollowingController::class, 'remove'])->name('followers.remove');

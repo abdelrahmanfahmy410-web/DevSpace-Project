@@ -1,5 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.app_dashboard')
 
+@section('page-title', 'Wishlist Projects')   
 @section('content')
 <!DOCTYPE html>
 <html lang="en">
@@ -82,7 +83,7 @@
         </div>
         
         <div class="navbar__links">
-            <a href="{{ route('projects.index') }}" class="btn btn-outline">
+            <a href="/my-projects" class="btn btn-outline">
                 <i class="fas fa-arrow-left"></i>
                 Back to Project Directory
             </a>

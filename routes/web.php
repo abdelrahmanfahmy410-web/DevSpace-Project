@@ -60,7 +60,7 @@ Route::post('/investor/register', [InvestorController::class, 'store']);
 // ----------------------------------------------------
 Route::get('/developer/register', [DeveloperController::class, 'create']);
 Route::post('/developer/register', [DeveloperController::class, 'store']);
-Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
+//Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
 Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('developer.edit');
 Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
 Route::get('/developer/skills/{id}/edit', [DeveloperSkillController::class, 'edit']);
@@ -189,3 +189,36 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
 Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');
 Route::get('/my-followers', [FollowingController::class, 'followers'])->name('followers.index');
+
+// ----------------------------------------------------
+// Admin Areas
+// ----------------------------------------------------
+Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
+
+    // Dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    //All users 
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+
+    // All projects
+    Route::get('/projects', [AdminController::class, 'projects'])->name('projects.index');
+    Route::get('/projects/{project}', [AdminController::class, 'showProject'])->name('projects.show');
+
+    // Roles
+    Route::get('/role/add_role',  [RoleController::class, 'create'])->name('role.create');
+    Route::post('/role/add_role', [RoleController::class, 'store'])->name('role.store');
+    Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+
+    // Skills
+    Route::get('/skill',           [SkillController::class, 'index'])->name('skill.index');
+    Route::get('/skill/add_skill', [SkillController::class, 'create'])->name('skill.create');
+    Route::post('/skill/add_skill',[SkillController::class, 'store'])->name('skill.store');
+
+    // Specializations
+    Route::get('/specialization',                      [SpecializationController::class, 'index'])->name('specialization.index');
+    Route::get('/specialization/add_specialization',   [SpecializationController::class, 'create'])->name('specialization.create');
+    Route::post('/specialization/add_specialization',  [SpecializationController::class, 'store'])->name('specialization.store');
+    Route::get('/specialization/skills',              [SpecializationController::class, 'specializationSkills'])->name('specialization.skills');
+});
+    

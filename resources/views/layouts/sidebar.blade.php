@@ -41,7 +41,7 @@
         @endif
 
         @if ($isDeveloper || $isMentor)
-            <a href="#" @class(['menu-link', 'active' => $active === 'assigned']) @if ($active === 'assigned') aria-current="page" @endif>
+            <a href="/assigned-projects" @class(['menu-link', 'active' => $active === 'assigned']) @if ($active === 'assigned') aria-current="page" @endif>
                 <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 11l3 3L22 4" />
                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />

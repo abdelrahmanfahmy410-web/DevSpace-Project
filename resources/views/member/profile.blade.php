@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $user->name }} | LinkedIn Profile</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+@extends('layouts.app')
+
+@section('content')
+@push('styles')
+    <title>{{ $user->name }} | Devspace Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        </style>
+    </style>
         @livewireStyles
-</head>
+@endpush
 <body class="bg-[#f3f2ef] text-slate-900 antialiased min-h-screen pb-12 text-left">
 
     <div class="max-w-[1128px] mx-auto px-4 mt-6">
@@ -174,5 +173,4 @@
     </div>
 {{-- In your main layout, before </body> --}}
 @livewireScripts
-</body>
-</html>
+@endsection

@@ -198,6 +198,7 @@ class DeveloperController extends Controller
         $developersPaginator->setCollection(
             $developersPaginator->getCollection()->map(function ($dev) {
                 return [
+                    'id'             => $dev->user ? $dev->user->id : null,
                     'name'           => $dev->user ? $dev->user->name : 'Unknown Developer',
                     'avatar'         => ($dev->user && $dev->user->profile_picture)
                         ? asset('storage/' . $dev->user->profile_picture)

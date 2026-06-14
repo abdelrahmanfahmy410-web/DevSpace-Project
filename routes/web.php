@@ -18,13 +18,18 @@ use App\Http\Controllers\TeamRoleController;
 use App\Http\Controllers\FollowingController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\HomeController;
 
 
 
 //all users
 Route::get('/', function () {
-    return view('layouts.app');
+    return view('home', ['fullWidth' => true, 'active' => '']);
 });
+//home
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+////////////////////
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
@@ -35,9 +40,7 @@ Route::get('/investor/register',[InvestorController::class, 'create']);
 // ----------------------------------------------------
 // All Users & General Routes
 // ----------------------------------------------------
-Route::get('/', function () {
-    return view('layouts.app');
-});
+
 
 Route::get('/add-area-of-interest', [AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest', [AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
@@ -58,7 +61,7 @@ Route::post('/investor/register', [InvestorController::class, 'store']);
 // ----------------------------------------------------
 // Developer Routes
 // ----------------------------------------------------
-Route::get('/developer/register', [DeveloperController::class, 'create']);
+Route::get('/developer/register', [DeveloperController::class, 'create'] )->name('developer.register');
 Route::post('/developer/register', [DeveloperController::class, 'store']);
 //Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
 Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('developer.edit');

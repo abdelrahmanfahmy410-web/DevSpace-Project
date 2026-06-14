@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Following;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FollowingController extends Controller
@@ -62,4 +63,18 @@ class FollowingController extends Controller
     {
         //
     }
+public function toggleFollow(User $user)
+{
+    // نتأكد هل فيه يوزر عامل login؟
+    if (!auth()->check()) {
+        return redirect()->route('login')->with('error', 'يجب تسجيل الدخول أولاً');
+    }
+
+    // لو دخل هنا، معناه إن اليوزر موجود ومسجل دخول
+    auth()->user()->following()->toggle($user->id);
+
+    return back();
+}
+
+
 }

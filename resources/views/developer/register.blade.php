@@ -9,25 +9,11 @@
 <body>
     <main class="register-page">
         <div class="register-container">
-            
             <header class="register-header">
-                <div class="register-eyebrow">
-                    <span class="eyebrow-dot"></span>
-                    Join Us
-                </div>
+                <div class="register-eyebrow"><span class="eyebrow-dot"></span> Join Us</div>
                 <h2 class="register-title">Developer Registration</h2>
                 <p class="register-subtitle">Create your developer profile and showcase your skills</p>
             </header>
-
-            @if ($errors->any())
-                <div class="form-card" style="border-color: var(--color-accent); background: var(--color-accent-bg); padding: 16px; margin-bottom: 20px;">
-                    <ul style="list-style-position: inside; color: var(--color-accent); font-size: 14px;">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
             <form method="POST" action="/developer/register" enctype="multipart/form-data">
                 @csrf
@@ -35,135 +21,85 @@
 
                 <div class="form-card">
                     <div class="form-card-header">
-                        <div class="form-card-icon">
-                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                        </div>
+                        <div class="form-card-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                         <div>
-                            <h3 class="form-card-title">Account Information</h3>
-                            <p class="form-card-sub">Your official identification and contact credentials</p>
+                            <h3 class="form-card-title">Account & Professional Information</h3>
+                            <p class="form-card-sub">Complete your details to get started</p>
                         </div>
                     </div>
                     
                     <div class="form-card-body">
                         <div class="form-group-row">
-                            <div class="form-group">
-                                <label class="form-label" rfor="name">
-                                    Name <span class="required">*</span>
-                                </label>
-                                <input id="name" class="form-input" type="text" name="name" value="{{ old('name') }}" required autofocus>
-                                @error('name') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="email">
-                                    Email <span class="required">*</span>
-                                </label>
-                                <input id="email" class="form-input" type="email" name="email" value="{{ old('email') }}" required>
-                                @error('email') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
-                            </div>
+                            <div class="form-group"><label class="form-label">Name <span class="required">*</span></label><input type="text" name="name" class="form-input" required></div>
+                            <div class="form-group"><label class="form-label">Email <span class="required">*</span></label><input type="email" name="email" class="form-input" required></div>
                         </div>
 
                         <div class="form-group-row">
-                            <div class="form-group">
-                                <label class="form-label" for="phone_number">
-                                    Phone Number <span class="optional">(Optional)</span>
-                                </label>
-                                <input id="phone_number" class="form-input" type="text" name="phone_number" value="{{ old('phone_number') }}">
-                                @error('phone_number') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="specialization_id">
-                                    Specialization <span class="required">*</span>
-                                </label>
-                                <select id="specialization_id" class="form-input" name="specialization_id" required>
-                                    <option value="">Select specialization</option>
-                                    @foreach($specializations as $specialization)
-                                        <option value="{{ $specialization->id }}" @selected(old('specialization_id') == $specialization->id)>
-                                            {{ $specialization->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('specialization_id') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
-                            </div>
+                            <div class="form-group"><label class="form-label">Phone Number <span class="optional">(Optional)</span></label><input type="text" name="phone_number" class="form-input"></div>
+                            <div class="form-group"><label class="form-label">Specialization <span class="required">*</span></label><select name="specialization_id" class="form-input" required></select></div>
                         </div>
 
                         <div class="form-group-row">
-                            <div class="form-group">
-                                <label class="form-label" for="password">
-                                    Password <span class="required">*</span>
-                                </label>
-                                <input id="password" class="form-input" type="password" name="password" required>
-                                @error('password') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
+                            <div class="form-group"><label class="form-label">Password <span class="required">*</span></label><input type="password" name="password" class="form-input" required></div>
+                            <div class="form-group"><label class="form-label">Confirm Password <span class="required">*</span></label><input type="password" name="password_confirmation" class="form-input" required></div>
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <div class="profile-section">
+                   <div class="avatar-upload-wrapper">
+    <div class="avatar-preview-box" onclick="document.getElementById('profile_picture').click()">
+        <img id="avatarPreview" src="" style="display:none;">
+        <span id="avatarPlaceholder" class="avatar-placeholder">Upload</span>
+    </div>
+    
+    <label for="profile_picture" class="upload-btn-label">
+        Choose photo
+    </label>
+    
+    <input id="profile_picture" type="file" name="profile_picture" accept="image/*" style="display:none" onchange="previewAvatar(this)">
+    
+    <small style="font-size: 10px; color: var(--color-muted); margin-top: 4px;">JPG, PNG up to 2MB</small>
+</div>
+
+                            <div class="bio-fields-wrapper">
+                                <div class="form-group">
+                                    <label class="form-label">Bio</label>
+                                    <textarea name="bio" class="form-textarea" placeholder="Tell us about your experience..."></textarea>
+                                </div>
+                                <div class="form-group-row">
+                                    <div class="form-group"><label class="form-label">Portfolio URL</label><input type="url" name="portfolio_url" class="form-input"></div>
+                                    <div class="form-group"><label class="form-label">LinkedIn Profile</label><input type="url" name="linkedin_url" class="form-input"></div>
+                                </div>
                             </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="password_confirmation">
-                                    Confirm Password <span class="required">*</span>
-                                </label>
-                                <input id="password_confirmation" class="form-input" type="password" name="password_confirmation" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-card">
-                    <div class="form-card-header">
-                        <div class="form-card-icon">
-                            <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
-                        </div>
-                        <div>
-                            <h3 class="form-card-title">Professional Profile</h3>
-                            <p class="form-card-sub">Showcase your portfolio, bio, and networks</p>
-                        </div>
-                    </div>
-
-                    <div class="form-card-body">
-                        <div class="form-group">
-                            <label class="form-label" for="bio">Bio</label>
-                            <textarea id="bio" class="form-textarea" name="bio" placeholder="Tell us about your experience and skills...">{{ old('bio') }}</textarea>
-                            @error('bio') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div class="form-group-row">
-                            <div class="form-group">
-                                <label class="form-label" for="portfolio_url">Portfolio URL</label>
-                                <input id="portfolio_url" class="form-input" type="url" name="portfolio_url" placeholder="https://yourportfolio.com" value="{{ old('portfolio_url') }}">
-                                @error('portfolio_url') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="linkedin_url">LinkedIn Profile</label>
-                                <input id="linkedin_url" class="form-input" type="url" name="linkedin_url" placeholder="https://linkedin.com/in/username" value="{{ old('linkedin_url') }}">
-                                @error('linkedin_url') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="profile_picture">Profile Picture</label>
-                            <input id="profile_picture" class="form-input" type="file" name="profile_picture" accept="image/*">
-                            @error('profile_picture') <span style="color: var(--color-accent); font-size: 12px;">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div class="form-footer">
-                        <div class="form-footer-note">
-                            <span class="required">*</span> Indicates required fields
-                        </div>
+                        <div class="form-footer-note"><span class="required">*</span> Indicates required fields</div>
                         <div class="form-footer-actions">
-                            <button type="submit" class="btn btn-primary">
-                                Register as Developer
-                            </button>
+                            <button type="submit" class="btn btn-primary">Register as Developer</button>
                         </div>
                     </div>
                 </div>
             </form>
 
-            <div class="login-link">
-                Already have an account? <a href="/login">Log in</a>
-            </div>
-
+            <div class="login-link">Already have an account? <a href="/login">Log in</a></div>
         </div>
     </main>
+
+    <script>
+        function previewAvatar(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                    document.getElementById('avatarPreview').style.display = 'block';
+                    document.getElementById('avatarPlaceholder').style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 </body>
 </html>

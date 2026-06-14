@@ -128,4 +128,5 @@ public function logout(Request $request)
     return redirect('/')->with('success', 'Logged out successfully!');
 }
 
+
 }

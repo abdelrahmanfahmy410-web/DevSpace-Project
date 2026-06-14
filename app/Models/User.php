@@ -39,11 +39,7 @@ class User extends Authenticatable
     {
        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     }
-    //watchlist
-    public function watchlist()
-    {
-        return $this->hasMany(Project::class, 'watchlist');
-    }
+    
     //
     public function areaOfInterests()
     {
@@ -106,5 +102,19 @@ class User extends Authenticatable
 {
     return $this->hasMany(TeamRole::class);
 } 
+
+public function following()
+{
+    
+    return $this->belongsToMany(User::class, 'followings', 'follower_id', 'following_id')
+                ->withTimestamps();
+}
+
+public function followers()
+{
+   
+    return $this->belongsToMany(User::class, 'followings', 'following_id', 'follower_id')
+                ->withTimestamps();
+}
 
 }

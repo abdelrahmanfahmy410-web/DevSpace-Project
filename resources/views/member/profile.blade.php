@@ -56,13 +56,12 @@
                         </div>
 
             <div class="flex flex-wrap gap-2 mt-5 w-full">
-    <form action="{{ url('/follow') }}" method="POST" class="inline">
-        @csrf
-        <input type="hidden" name="following_id" value="{{ $user->id }}">
-        <button type="submit" class="bg-[#0a66c2] hover:bg-[#004182] text-white text-base font-semibold px-5 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-xs">
-            <span class="text-lg">+</span> Follow
-        </button>
-    </form>
+<form action="{{ route('user.follow', $user->id) }}" method="POST">
+    @csrf
+    <button type="submit">
+        {{ auth()->user()->following->contains($user->id) ? 'Unfollow' : 'Follow' }}
+    </button>
+</form>
 
     {{-- Message Button --}}
         @auth

@@ -15,6 +15,7 @@ use App\Http\Controllers\DashboardController;
 use App\Models\Project;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\TeamRoleController;
+use App\Http\Controllers\FollowingController;
 
 
 //all users
@@ -24,9 +25,6 @@ Route::get('/', function () {
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
-
-//investor Routes
-Route::get('/investor/register',[InvestorController::class, 'create']);
 
 
 //all users
@@ -161,7 +159,7 @@ Route::get('/member/profile', [UserController::class, 'showMemberProfile'])->nam
 Route::get('/member/profile', [UserController::class, 'showMemberProfile'])
     ->name('member.profile')
     ->middleware('auth');
-// ----------------------------------------------------
+Route::post('/user/follow/{user}', [FollowingController::class, 'toggleFollow'])->name('user.follow');    // ----------------------------------------------------
 // API / AJAX Routes
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
      ->name('api.skills.by_specialization');

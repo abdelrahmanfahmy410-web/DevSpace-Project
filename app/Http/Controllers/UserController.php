@@ -96,7 +96,6 @@ public function showMemberProfile()
     return view('member.profile', compact('user', 'userRole', 'skills'));
 }
 
-// ✅ ضيف الـ method دي جديدة
 public function showOtherProfile($id)
 {
     $user = \App\Models\User::with([
@@ -116,16 +115,29 @@ public function showOtherProfile($id)
         $skills = $user->mentor->specialization?->skills ?? collect();
     }
 
-    return view('member.profile', compact('user', 'userRole', 'skills'));
-}
+    $specializationId = $user->developer->specialization_id
+                     ?? $user->mentor->specialization_id
+                     ?? null;
 
-public function logout(Request $request)
-{
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+    $suggestions = collect();
 
-    return redirect('/')->with('success', 'Logged out successfully!');
+    if ($specializationId) {
+        $suggestions = \App\Models\User::where('id', '!=', $user->id)
+            ->where('id', '!=', auth()->id())
+            ->where(function ($q) use ($specializationId) {
+                $q->whereHas('developer', fn($d) =>
+                    $d->where('specialization_id', $specializationId)
+                )
+                ->orWhereHas('mentor', fn($m) =>
+                    $m->where('specialization_id', $specializationId)
+                );
+            })
+            ->with(['developer.specialization', 'mentor.specialization'])
+            ->limit(5)
+            ->get();
+    }
+
+    return view('member.profile', compact('user', 'userRole', 'skills', 'suggestions'));
 }
 
 }

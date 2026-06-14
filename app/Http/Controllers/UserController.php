@@ -164,4 +164,11 @@ public function showOtherProfile($id)
     return view('member.profile', compact('user', 'userRole', 'skills', 'suggestions'));
 }
 
+
+public function logout()
+{
+    Auth::logout();
+    return redirect('/login');
+}
+
 }

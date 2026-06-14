@@ -236,6 +236,7 @@ class ProjectController extends Controller
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
                     'role' => $member['role'],
+                    'status' => 'pending',
                 ]);
             }
         }
@@ -265,27 +266,36 @@ class ProjectController extends Controller
         $skills = $specialization->skills;
         return response()->json($skills);
     }
+  //assigned projects for the current user
 
     public function assignedProjects(Request $request)
-    {
-        $userId = auth()->id();
-        $search = $request->input('search');
+{
+    $userId = auth()->id();
+    $search = $request->input('search');
 
-        $projects = Project::whereHas('team_roles', function ($q) use ($userId) {
-            $q->where('user_id', $userId);
+    $projects = Project::whereHas('teamRoleRecords', function ($q) use ($userId) {
+        $q->where('user_id', $userId)
+        ->where('role', '!=', 'Project Creator') // Exclude projects where the user is the creator
+        ->where('status', 'pending'); // Only include projects where the user's role is pending
         })
-        ->when($search, function ($query) use ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%');
-            });
-        })
-        ->with(['skills', 'specializations', 'team_roles', 'media'])
-        ->paginate(10)
-        ->withQueryString();
 
-        return view('project.assigned_projects', compact('projects'));
-    }
+    ->when($search, function ($query) use ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', '%' . $search . '%')
+              ->orWhere('description', 'like', '%' . $search . '%');
+        });
+    })
+    ->with(['skills', 'specializations', 'media',
+        'teamRoleRecords' => function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+            ->where('role', '!=', 'Project Creator');
+        }
+    ])
+    ->paginate(9)
+    ->withQueryString();
+
+    return view('project.assigned_projects', compact('projects'));
+}
 
     /**
      * Search users for team member selection (AJAX)
@@ -312,15 +322,19 @@ class ProjectController extends Controller
      * Display projects assigned to the current user via team roles.
      */
     public function myProjects()
-    {
-        if (Auth::user()->id != null) {
-            $projects = Project::whereHas('team_roles', function ($query) {
-                $query->where('user_id', auth()->id());
-            })->latest()->get();
-        }
-
-        return view('Project.my-projects', compact('projects'));
+{
+    if (Auth::user()->id != null) {
+        $projects = Project::whereHas('teamRoleRecords', function ($query) {
+            $query->where('user_id', auth()->id())
+                  ->where(function($q) {
+                      $q->where('status', 'approved')
+                        ->orWhere('role', 'Project Creator');
+                  });
+        })->latest()->get();
     }
+
+    return view('Project.my-projects', compact('projects'));
+}
 
     public function addMedia(Project $project)
     {

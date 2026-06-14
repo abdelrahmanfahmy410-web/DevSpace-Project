@@ -189,3 +189,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
 Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');
 Route::get('/my-followers', [FollowingController::class, 'followers'])->name('followers.index');
+
+Route::post('/team-roles/{teamRole}/accept', [TeamRoleController::class, 'accept'])->name('team_roles.accept');
+Route::post('/team-roles/{teamRole}/reject', [TeamRoleController::class, 'reject'])->name('team_roles.reject');

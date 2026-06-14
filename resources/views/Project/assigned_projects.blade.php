@@ -46,6 +46,9 @@
                 } else {
                     $projectImage = 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=500'; 
                 }
+
+                // ✅ بنجيب TeamRole record مش User object
+                $myTeamRole = $project->teamRoleRecords->first();
             @endphp
 
             <div class="project-card" data-status="{{ $projectType }}">
@@ -84,10 +87,8 @@
                     </div>
                 </div>
 
-                {{-- منطقة الـ الفوتر المحدثة والمقسمة لسطرين --}}
                 <div class="card-footer">
                     
-                    {{-- السطر العلوي: الروابط الأساسية --}}
                     <div class="footer-top-row">
                         <div class="left-links">
                             @if($project->repository_link)
@@ -108,26 +109,39 @@
                         </a>
                     </div>
 
-                    {{-- السطر السفلي: أزرار التحكم جنب بعضها --}}
-                    <div class="footer-buttons-row">
-                        {{-- فورم Accept --}}
-                        <form action="#" method="POST" style="display: inline; margin: 0;">
-                            @csrf
-                            <button type="submit" class="footer-link-btn-accept">
-                                <i class="fa-solid fa-check"></i> Accept
-                            </button>
-                        </form>
+                    @if($myTeamRole && $myTeamRole->status === 'pending')
+                        <div class="footer-buttons-row">
+                            <form action="{{ route('team_roles.accept', $myTeamRole->id) }}" method="POST" style="display: inline; margin: 0;">
+                                @csrf
+                                <button type="submit" class="footer-link-btn-accept">
+                                    <i class="fa-solid fa-check"></i> Accept
+                                </button>
+                            </form>
 
-                        {{-- فورم Reject --}}
-                        <form action="#" method="POST" style="display: inline; margin: 0;">
-                            @csrf
-                            <button type="submit" class="footer-link-btn-reject">
-                                <i class="fa-solid fa-xmark"></i> Reject
-                            </button>
-                        </form>
-                    </div>
+                            <form action="{{ route('team_roles.reject', $myTeamRole->id) }}" method="POST" style="display: inline; margin: 0;">
+                                @csrf
+                                <button type="submit" class="footer-link-btn-reject">
+                                    <i class="fa-solid fa-xmark"></i> Reject
+                                </button>
+                            </form>
+                        </div>
 
-                </div> {{-- نهاية الفوتر --}}
+                    @elseif($myTeamRole && $myTeamRole->status === 'approved')
+                        <div class="footer-buttons-row">
+                            <span style="color: green; font-weight: 500;">
+                                <i class="fa-solid fa-circle-check"></i> Accepted
+                            </span>
+                        </div>
+
+                    @elseif($myTeamRole && $myTeamRole->status === 'rejected')
+                        <div class="footer-buttons-row">
+                            <span style="color: red; font-weight: 500;">
+                                <i class="fa-solid fa-circle-xmark"></i> Rejected
+                            </span>
+                        </div>
+                    @endif
+
+                </div>
             </div>
 
         @empty

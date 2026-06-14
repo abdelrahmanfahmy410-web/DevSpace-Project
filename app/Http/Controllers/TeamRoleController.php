@@ -116,6 +116,33 @@ class TeamRoleController extends Controller
         return view('mentor.mentees', compact('mentees', 'total'));
     }
 
+
+
+    //accept and reject team role invitations //
+
+    public function accept(TeamRole $teamRole)
+    {
+        if ($teamRole->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $teamRole->update(['status' => 'approved']);
+
+        return back()->with('success', 'Project approved successfully!');
+    }
+
+    public function reject(TeamRole $teamRole)
+    {
+        if ($teamRole->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $teamRole->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Project rejected successfully!');
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */

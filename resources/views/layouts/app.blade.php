@@ -24,51 +24,60 @@
         </div>
 
         <div class="navbar__links" id="navLinks">
-            <a href="#" class="navbar__link is-active">Home</a>
+            <a href="{{ url('/') }}" class="navbar__link is-active">Home</a>
             <a href="{{ route('projects.index') }}" class="navbar__link">Projects</a>
             <a href="/developer/developers" class="navbar__link">Developers</a>
-            <a href="#" class="navbar__link">About</a>
-
-            @auth
-                @if (!($fullWidth ?? false))
-                    <a href="{{ route('dashboard') }}" class="navbar__link">Dashboard</a>
-                @endif
-            @endauth
+            <a href="{{ url('/') }}#about">About</a>
 
             @guest
                 <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
-                <a href="/developer/register" class="btn btn-outline">  Join the Space </a>
+                <a href="/developer/register" class="btn btn-outline">Join the Space</a>
                 <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join as Mentor</a>
-
             @else
-                <div class="navbar__user" style="margin-left: 8px; display: flex; align-items: center; gap: 12px;">
-                    <a href="{{ route('member.profile') }}"
-                        style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
-                        <div class="navbar__avatar">
-                            @if (Auth::user()->avatar)
-                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
-                                    style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
-                            @else
-                                <div
-                                    style="width: 36px; height: 36px; border-radius: 50%;
-                    background: var(--color-primary);
-                    display: flex; align-items: center; justify-content: center;
-                    color: white; font-weight: 600; font-size: 14px;">
-                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                </div>
-                            @endif
-                        </div>
-                        <span style="font-weight: 500;">{{ Auth::user()->name }}</span>
-                    </a>
+                @php $isAdmin = Auth::user()->isAdmin(); @endphp
 
-                    {{-- Only show logout when NOT on a dashboard page --}}
+                @if ($isAdmin)
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary" style="margin-left: 8px;">
+                        <i class="fas fa-gauge"></i> Admin Dashboard
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}" style="margin-left: 8px;">
+                        @csrf
+                        <button type="submit" class="btn btn-outline">Log Out</button>
+                    </form>
+                @else
                     @if (!($fullWidth ?? false))
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-outline">Log Out</button>
-                        </form>
+                        <a href="{{ route('dashboard') }}" class="navbar__link">Dashboard</a>
                     @endif
-                </div>
+
+                    <div class="navbar__user" style="margin-left: 8px; display: flex; align-items: center; gap: 12px;">
+                        <a href="{{ route('member.profile') }}"
+                            style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+                            <div class="navbar__avatar">
+                                @if (Auth::user()->avatar)
+                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                        alt="{{ Auth::user()->name }}"
+                                        style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                                @else
+                                    <div
+                                        style="width: 36px; height: 36px; border-radius: 50%;
+                                        background: var(--color-primary);
+                                        display: flex; align-items: center; justify-content: center;
+                                        color: white; font-weight: 600; font-size: 14px;">
+                                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                    </div>
+                                @endif
+                            </div>
+                            <span style="font-weight: 500;">{{ Auth::user()->name }}</span>
+                        </a>
+
+                        @if (!($fullWidth ?? false))
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-outline">Log Out</button>
+                            </form>
+                        @endif
+                    </div>
+                @endif
             @endguest
         </div>
 
@@ -94,9 +103,13 @@
         </div>
     @else
         <main>
-            <div class="container">
+            @if ($fullWidth ?? false)
                 @yield('content')
-            </div>
+            @else
+                <div class="container">
+                    @yield('content')
+                </div>
+            @endif
         </main>
     @endauth
 

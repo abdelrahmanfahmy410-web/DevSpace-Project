@@ -46,7 +46,11 @@ class ProjectController extends Controller
         $specializations = \App\Models\Specialization::orderBy('name')->get();
         $skills          = \App\Models\Skill::orderBy('name')->get();
 
-        return view('Project.projects-index', compact('projects', 'specializations', 'skills'));
+        $wishlistedIds = auth()->check()
+            ? auth()->user()->wishlist()->pluck('projects.id')->toArray()
+            : [];
+
+        return view('Project.projects-index', compact('projects', 'specializations', 'skills' , 'wishlistedIds'));
     }
 
     /**
@@ -74,6 +78,8 @@ class ProjectController extends Controller
             'skills.*'               => 'exists:skills,id',
             'project_images'         => 'nullable|array',
             'project_images.*'       => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'project_videos'         => 'nullable|array',
+            'project_videos.*'       => 'file|mimetypes:video/mp4,video/webm,video/ogg|max:51200',
             'team_members'           => 'nullable|array',
             'team_members.*.user_id' => 'required|exists:users,id',
             'team_members.*.role'    => 'required|string',
@@ -88,14 +94,26 @@ class ProjectController extends Controller
             'updated_by'      => auth()->id(),
         ]);
 
-
         // Upload images
         if ($request->hasFile('project_images')) {
             foreach ($request->file('project_images') as $image) {
                 $path = $image->store('projects_media', 'public');
                 $project->media()->create([
-                    'file_path' => $path,
-                    'medianame' => $image->getClientOriginalName(),
+                    'file_path'  => $path,
+                    'medianame'  => $image->getClientOriginalName(),
+                    'media_type' => 'image',
+                ]);
+            }
+        }
+
+        // Upload videos
+        if ($request->hasFile('project_videos')) {
+            foreach ($request->file('project_videos') as $video) {
+                $path = $video->store('projects_videos', 'public');
+                $project->media()->create([
+                    'file_path'  => $path,
+                    'medianame'  => $video->getClientOriginalName(),
+                    'media_type' => 'video',
                 ]);
             }
         }
@@ -112,7 +130,7 @@ class ProjectController extends Controller
         if ($request->has('team_members') && ! empty($request->team_members)) {
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
-                    'role' => $member['role'],
+                    'role'   => $member['role'],
                     'status' => 'pending',
                 ]);
             }
@@ -137,21 +155,12 @@ class ProjectController extends Controller
         return view('Project.project_details', compact('project'));
     }
 
-     
-     public function showmyProjectDetails(Project $project)
-{
-    // // 1. التحقق من الصلاحية: هل المستخدم الحالى هو صاحب المشروع؟
-    // if ($project->user_id !== auth()->user()->id) {
-    //     abort(403) ;
-    // }
+    public function showmyProjectDetails(Project $project)
+    {
+        $project->load(['skills', 'specializations', 'team_roles', 'media', 'watchers']);
+        return view('Project.my_project_details', compact('project'));
+    }
 
-    // 2. تحميل العلاقات الخاصة بالمشروع لتعرض في الصفحة
-    $project->load(['skills', 'specializations', 'team_roles', 'media', 'watchers']);
-
-    // 3. التوجه إلى صفحة العرض وتمرير المتغير
-    return view('Project.my_project_details', compact('project'));
-}
-   
     /**
      * Show the form for editing the specified resource.
      */
@@ -162,9 +171,9 @@ class ProjectController extends Controller
         return view('project.edit_project', compact('project', 'specializations'));
     }
 
-/**
- * Update the specified resource in storage.
- */
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Project $project)
     {
         $request->validate([
@@ -177,6 +186,8 @@ class ProjectController extends Controller
             'skills.*'               => 'exists:skills,id',
             'project_images'         => 'nullable|array',
             'project_images.*'       => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'project_videos'         => 'nullable|array',
+            'project_videos.*'       => 'file|mimetypes:video/mp4,video/webm,video/ogg|max:51200',
             'team_members'           => 'nullable|array',
             'team_members.*.user_id' => 'required|exists:users,id',
             'team_members.*.role'    => 'required|string',
@@ -192,15 +203,30 @@ class ProjectController extends Controller
 
         // Update images
         if ($request->hasFile('project_images')) {
-            foreach ($project->media as $media) {
+            foreach ($project->media->where('media_type', 'image') as $media) {
                 Storage::disk('public')->delete($media->file_path);
                 $media->delete();
             }
             foreach ($request->file('project_images') as $image) {
-                $newPath = $image->store('projects_media', 'public');
                 $project->media()->create([
-                    'file_path' => $newPath,
-                    'medianame' => $image->getClientOriginalName(),
+                    'file_path'  => $image->store('projects_media', 'public'),
+                    'medianame'  => $image->getClientOriginalName(),
+                    'media_type' => 'image',
+                ]);
+            }
+        }
+
+        // Update videos
+        if ($request->hasFile('project_videos')) {
+            foreach ($project->media->where('media_type', 'video') as $media) {
+                Storage::disk('public')->delete($media->file_path);
+                $media->delete();
+            }
+            foreach ($request->file('project_videos') as $video) {
+                $project->media()->create([
+                    'file_path'  => $video->store('projects_videos', 'public'),
+                    'medianame'  => $video->getClientOriginalName(),
+                    'media_type' => 'video',
                 ]);
             }
         }
@@ -214,6 +240,7 @@ class ProjectController extends Controller
             foreach ($request->team_members as $member) {
                 $project->team_roles()->attach($member['user_id'], [
                     'role' => $member['role'],
+                    'status' => 'pending',
                 ]);
             }
         }
@@ -221,9 +248,9 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Project updated successfully');
     }
 
-/**
- * Remove the specified resource from storage.
- */
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Project $project)
     {
         if ($project->media()->exists()) {
@@ -235,38 +262,48 @@ class ProjectController extends Controller
         return redirect()->back()->with('success', 'Project deleted successfully');
     }
 
-/**
- * Get skills by specialization (AJAX)
- */
+    /**
+     * Get skills by specialization (AJAX)
+     */
     public function getSkillsBySpecialization(Specialization $specialization)
     {
         $skills = $specialization->skills;
         return response()->json($skills);
     }
-  public function assignedProjects(Request $request) 
+  //assigned projects for the current user
+
+    public function assignedProjects(Request $request)
 {
     $userId = auth()->id();
-    $search = $request->input('search'); 
+    $search = $request->input('search');
 
-    $projects = Project::whereHas('team_roles', function ($q) use ($userId) {
-        $q->where('user_id', $userId);
-    })
-   
+    $projects = Project::whereHas('teamRoleRecords', function ($q) use ($userId) {
+        $q->where('user_id', $userId)
+        ->where('role', '!=', 'Project Creator') // Exclude projects where the user is the creator
+        ->where('status', 'pending'); // Only include projects where the user's role is pending
+        })
+
     ->when($search, function ($query) use ($search) {
         $query->where(function ($q) use ($search) {
-            $q->where('title', 'like', '%' . $search . '%') 
-              ->orWhere('description', 'like', '%' . $search . '%'); 
+            $q->where('title', 'like', '%' . $search . '%')
+              ->orWhere('description', 'like', '%' . $search . '%');
         });
     })
-    ->with(['skills', 'specializations', 'team_roles', 'media'])
-    ->paginate(10) // استبدال get() بـ paginate وتحديد عدد العناصر في الصفحة (مثلاً 10)
-    ->withQueryString(); // هذه الدالة مهمة جداً للحفاظ على كلمة البحث أثناء التنقل بين الصفحات
+    ->with(['skills', 'specializations', 'media',
+        'teamRoleRecords' => function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+            ->where('role', '!=', 'Project Creator');
+        }
+    ])
+    ->paginate(9)
+    ->withQueryString();
 
     return view('project.assigned_projects', compact('projects'));
 }
-/**
- * Search users for team member selection (AJAX)
- */
+
+    /**
+     * Search users for team member selection (AJAX)
+     */
     public function searchUsers(Request $request)
     {
         $query = $request->get('q', '');
@@ -288,21 +325,21 @@ class ProjectController extends Controller
     /**
      * Display projects assigned to the current user via team roles.
      */
-    public function myProjects(Request $request)
+public function myProjects(Request $request)
     {
-        if (Auth::user()->id != null) {
-            $projects = Project::whereHas('team_roles', function ($query) {
-                $query->where('user_id', auth()->id());
-            })->latest()->get();
-        }
-
         $search = $request->input('search');
         $type   = $request->input('type');
 
-        $query = Project::whereHas('team_roles', function($q) {
-            $q->where('user_id', auth()->id());
+        // 
+        $query = Project::whereHas('teamRoleRecords', function ($query) {
+            $query->where('user_id', auth()->id())
+                  ->where(function($q) {
+                      $q->where('status', 'approved')
+                        ->orWhere('role', 'Project Creator');
+                  });
         })->with(['skills', 'specializations', 'media']);
 
+        // إضافة الفلاتر
         $query->when($search, function($q, $search) {
             return $q->where('title', 'like', "%{$search}%");
         });
@@ -311,7 +348,7 @@ class ProjectController extends Controller
             return $q->where('type', $type);
         });
 
-        $projects = $query->latest()->paginate(9);
+        $projects = $query->latest()->paginate(9)->withQueryString();
 
         return view('Project.my-projects', compact('projects', 'search', 'type'));
     }
@@ -321,9 +358,9 @@ class ProjectController extends Controller
         return view('project.add_media', compact('project'));
     }
 
-/**
- * Toggle project wishlist status (AJAX)
- */
+    /**
+     * Toggle project wishlist status (AJAX)
+     */
     public function toggleWishlist(Project $project)
     {
         if (! auth()->check()) {

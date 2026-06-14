@@ -1,50 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Role</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/add-role.css') }}">
-</head>
-<body>
-    <div class="register-page">
-        <div class="register-container">
-            <div class="register-header">
-                <div class="register-eyebrow"><span class="eyebrow-dot"></span>Role Management</div>
-                <h1 class="register-title">Create New Role</h1>
-                <p class="register-subtitle">Add a new role to DevSpace</p>
+@extends('admin.layouts.admin')
+
+@php
+    $pageTitle    = 'Create Role';
+    $pageSubtitle = 'Add a new role to DevSpace';
+@endphp
+
+@section('content')
+
+    <div class="admin-form-wrap">
+
+        @if(session('success'))
+            <div class="admin-alert admin-alert--success">
+                <i class="fas fa-check-circle"></i> {{ session('success') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="admin-alert admin-alert--error">
+                <i class="fas fa-exclamation-circle"></i>
+                <ul style="margin:0; padding-left: var(--space-3);">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="card admin-form-card">
+            <div class="admin-form-card__header">
+                <div class="admin-form-card__icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div>
+                    <div class="admin-form-card__title">Role Details</div>
+                    <div class="admin-form-card__sub">Provide the name of the role</div>
+                </div>
             </div>
 
-            <form method="POST" action="/role/add_role" enctype="multipart/form-data">
-                @csrf
+            <div class="admin-form-card__body">
+                <form method="POST" action="{{ route('admin.role.store') }}">
+                    @csrf
 
-                <div class="form-card">
-                    <div class="form-card-header">
-                        <div class="form-card-icon">📋</div>
-                        <div>
-                            <div class="form-card-title">Role Details</div>
-                            <div class="form-card-sub">Provide the name of the role</div>
-                        </div>
+                    <div class="form-group">
+                        <label for="name" class="form-label">
+                            Role Name <span class="admin-form__required">*</span>
+                        </label>
+                        <input
+                            id="name"
+                            type="text"
+                            name="name"
+                            value="{{ old('name') }}"
+                            class="form-input {{ $errors->has('name') ? 'is-error' : '' }}"
+                            required
+                            autofocus>
+                        @error('name')
+                            <span class="form-error">{{ $message }}</span>
+                        @enderror
                     </div>
-                    <div class="form-card-body">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Role Name <span class="required">*</span></label>
-                            <input id="name" type="text" name="name" class="form-input" required autofocus>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="form-footer">
-                    <p class="form-footer-note">🔒 Your data is encrypted and secure</p>
-                    <div class="form-footer-actions">
-                        <button type="submit" class="btn btn-primary">Create Role</button>
+                    <div class="admin-form-card__footer">
+                        <a href="{{ route('admin.role.index') }}" class="btn btn-outline">
+                            ← Back to Roles
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Role
+                        </button>
                     </div>
-                </div>
-            </form>
+
+                </form>
+            </div>
         </div>
+
     </div>
-</body>
-</html>
+
+@endsection

@@ -76,13 +76,14 @@ class UserController extends Controller
 
 public function showMemberProfile()
 {
+    $id = auth()->id();
     $user = \App\Models\User::with([
         'roles', 
         'developer.specialization', 
         'developer.skills',
         'mentor.specialization',
         'teamProjects'
-    ])->findOrFail(auth()->id());
+    ])->findOrFail($id);
 
     $userRole = $user->roles->first()->name ?? 'member';
 
@@ -93,10 +94,33 @@ public function showMemberProfile()
         $skills = $user->mentor->specialization?->skills ?? collect();
     }
 
-    return view('member.profile', compact('user', 'userRole', 'skills'));
+    $specializationId = $user->developer->specialization_id
+                     ?? $user->mentor->specialization_id
+                     ?? null;
+
+    $suggestions = collect();
+
+    if ($specializationId) {
+        $suggestions = \App\Models\User::where('id', '!=', $user->id)
+            ->where('id', '!=', auth()->id())
+            ->where(function ($q) use ($specializationId) {
+                $q->whereHas('developer', fn($d) =>
+                    $d->where('specialization_id', $specializationId)
+                )
+                ->orWhereHas('mentor', fn($m) =>
+                    $m->where('specialization_id', $specializationId)
+                );
+            })
+            ->with(['developer.specialization', 'mentor.specialization'])
+            ->limit(5)
+            ->get();
+    }
+    return view('member.profile', compact('user', 'userRole', 'skills', 'suggestions'));
 }
 
-// ✅ ضيف الـ method دي جديدة
+
+
+
 public function showOtherProfile($id)
 {
     $user = \App\Models\User::with([
@@ -116,16 +140,35 @@ public function showOtherProfile($id)
         $skills = $user->mentor->specialization?->skills ?? collect();
     }
 
-    return view('member.profile', compact('user', 'userRole', 'skills'));
+    $specializationId = $user->developer->specialization_id
+                     ?? $user->mentor->specialization_id
+                     ?? null;
+
+    $suggestions = collect();
+
+    if ($specializationId) {
+        $suggestions = \App\Models\User::where('id', '!=', $user->id)
+            ->where('id', '!=', auth()->id())
+            ->where(function ($q) use ($specializationId) {
+                $q->whereHas('developer', fn($d) =>
+                    $d->where('specialization_id', $specializationId)
+                )
+                ->orWhereHas('mentor', fn($m) =>
+                    $m->where('specialization_id', $specializationId)
+                );
+            })
+            ->with(['developer.specialization', 'mentor.specialization'])
+            ->limit(5)
+            ->get();
+    }
+    return view('member.profile', compact('user', 'userRole', 'skills', 'suggestions'));
 }
 
-public function logout(Request $request)
+
+public function logout()
 {
     Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    return redirect('/')->with('success', 'Logged out successfully!');
+    return redirect('/login');
 }
 
 

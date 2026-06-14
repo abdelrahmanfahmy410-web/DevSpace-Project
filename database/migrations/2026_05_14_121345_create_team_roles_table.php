@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('role')->nullable();
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 
@@ -27,4 +27,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('team_roles');
     }
+
 };

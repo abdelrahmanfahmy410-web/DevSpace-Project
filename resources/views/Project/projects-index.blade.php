@@ -3,6 +3,7 @@
 @section('content')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/projects-index.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 
 @php
@@ -210,10 +211,16 @@
                     <div class="projects-grid">
                         @foreach($projects as $project)
                             @php $type = strtolower($project->type ?? 'web'); @endphp
-                            <article class="project-card">
+                            <div class="project-card">
+
+                                {{-- ── Top of card: thumbnail OR accent bar ── --}}
                                 @if($project->media && $project->media->isNotEmpty())
                                     <div class="card-thumbnail">
-                                        <img src="{{ asset('storage/' . $project->media->first()->file_path) }}" alt="{{ $project->title }}" loading="lazy">
+                                        <img
+                                            src="{{ asset('storage/' . $project->media->first()->file_path) }}"
+                                            alt="{{ $project->title }}"
+                                            loading="lazy"
+                                        >
                                         <span class="type-badge-over {{ $type }}">{{ $project->type }}</span>
                                     </div>
                                 @else
@@ -222,15 +229,13 @@
 
                                 <div class="pi-card-body">
                                     <div class="pi-card-header">
-                                        @if(!$project->media || $project->media->isEmpty())
+                                        @if($project->media && $project->media->isEmpty())
                                             <span class="type-badge {{ $type }}">{{ $project->type }}</span>
                                         @else
                                             <span></span>
                                         @endif
-                                        <button class="card-menu-btn" aria-label="Options">
-                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
-                                        </button>
                                     </div>
+
                                     <h3 class="pi-card-title">{{ $project->title }}</h3>
                                     <p class="pi-card-desc">{{ $project->description }}</p>
 
@@ -241,11 +246,65 @@
                                                 @foreach($project->specializations->take(4) as $spec)
                                                     <span class="tag spec">{{ $spec->name }}</span>
                                                 @endforeach
+                                                @if($project->specializations->count() > 4)
+                                                    <span class="tag spec">+{{ $project->specializations->count() - 4 }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if($project->skills && $project->skills->isNotEmpty())
+                                        <div class="tags-group">
+                                            <span class="tags-label">Skills</span>
+                                            <div class="tags-row">
+                                                @foreach($project->skills->take(4) as $skill)
+                                                    <span class="tag skill">{{ $skill->name }}</span>
+                                                @endforeach
+                                                @if($project->skills->count() > 4)
+                                                    <span class="tag skill">+{{ $project->skills->count() - 4 }}</span>
+                                                @endif
                                             </div>
                                         </div>
                                     @endif
                                 </div>
-                            </article>
+
+                                <div class="pi-card-footer">
+                                    <div class="footer-links">
+                                        @if($project->repository_link)
+                                            <a href="{{ $project->repository_link }}" target="_blank" class="link-btn">
+                                                {{-- SVG موجود --}}
+                                                Repo
+                                            </a>
+                                        @endif
+                                        @if($project->live_demo_link)
+                                            <a href="{{ $project->live_demo_link }}" target="_blank" class="link-btn">
+                                                {{-- SVG موجود --}}
+                                                Live
+                                            </a>
+                                        @endif
+                                    </div>
+
+                                    <div class="footer-actions">
+                                        {{-- ✅ Heart Button --}}
+                                        @auth
+                                            <button
+                                                class="wishlist-heart-btn {{ in_array($project->id, $wishlistedIds) ? 'active' : '' }}"
+                                                data-id="{{ $project->id }}"
+                                                title="{{ in_array($project->id, $wishlistedIds) ? 'Remove from wishlist' : 'Save to wishlist' }}"
+                                            >
+                                                <svg viewBox="0 0 24 24" fill="{{ in_array($project->id, $wishlistedIds) ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2">
+                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                                </svg>
+                                            </button>
+                                        @endauth
+    
+                                        <a href="{{ route('projects.show', $project->id) }}" class="view-btn">
+                                            View
+                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
 
@@ -264,6 +323,44 @@
         document.getElementById(id).classList.toggle('collapsed');
     }
 
+    // Wishlist toggle
+document.querySelectorAll('.wishlist-heart-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const id  = this.dataset.id;
+        const btn = this;
+
+        // Pop animation
+        btn.classList.remove('popping');
+        void btn.offsetWidth; // reflow
+        btn.classList.add('popping');
+
+        fetch(`/wishlist/toggle/${id}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept':       'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+
+            const svg = btn.querySelector('svg');
+            if (data.attached) {
+                btn.classList.add('active');
+                svg.setAttribute('fill', 'currentColor');
+                btn.title = 'Remove from wishlist';
+            } else {
+                btn.classList.remove('active');
+                svg.setAttribute('fill', 'none');
+                btn.title = 'Save to wishlist';
+            }
+        })
+        .catch(err => console.error('Wishlist error:', err));
+    });
+});
+
     function filterList(input, listId) {
         let filter = input.value.toLowerCase();
         let container = document.getElementById(listId);
@@ -281,6 +378,8 @@
             }
         }
     }
+
+    
 </script>
 
 @endsection

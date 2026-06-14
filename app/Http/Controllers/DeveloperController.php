@@ -80,22 +80,13 @@ class DeveloperController extends Controller
                 'role_id' => Role::where('name', 'developer')->first()->id,
             ]);
 
-            return redirect('/developer/profile')
+             return redirect('/member/profile')
                 ->with('success', 'Developer account created successfully');
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()
                 ->withErrors(['error' => $e->getMessage()])
-                ->withInput();
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()
-                ->withErrors([
-                    'error' => $e->getMessage(),
-                ])
                 ->withInput();
         }
     }
@@ -198,15 +189,15 @@ class DeveloperController extends Controller
     /**
      * List all developers with filters and pagination.
      */
-    public function allDevelopers()
-    {
-        // 1. جلب المطورين مع العلاقات وعمل Pagination
-        $developersPaginator = Developer::with(['user', 'specialization', 'skills'])->paginate(10);
 
+    public function allDevelopers(Request $request)
+  {
+    $query = Developer::with(['user', 'specialization', 'skills']);
         // 2. تعديل شكل البيانات جوه الـ Paginator
         $developersPaginator->setCollection(
             $developersPaginator->getCollection()->map(function ($dev) {
                 return [
+                    'id'             => $dev->user ? $dev->user->id : null,
                     'name'           => $dev->user ? $dev->user->name : 'Unknown Developer',
                     'avatar'         => ($dev->user && $dev->user->profile_picture)
                         ? asset('storage/' . $dev->user->profile_picture)
@@ -218,15 +209,51 @@ class DeveloperController extends Controller
             })
         );
 
-        // 3. جلب التخصصات والمهارات للفلاتر
-        $specializations = \App\Models\Specialization::whereNotNull('name')->pluck('name');
-        $skills          = \App\Models\Skill::pluck('name');
-
-        // 4. تمرير البيانات للـ View
-        return view('developer.all_developers', [
-            'developers'      => $developersPaginator,
-            'specializations' => $specializations,
-            'skills'          => $skills,
-        ]);
+    // فلتر الاسم
+    if ($request->filled('search')) {
+        $query->whereHas('user', function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%');
+        });
     }
+
+    // فلتر التخصص
+    if ($request->filled('specialization')) {
+        $query->whereHas('specialization', function ($q) use ($request) {
+            $q->whereIn('name', $request->specialization);
+        });
+    }
+
+    // فلتر السكيلز
+    if ($request->filled('skills')) {
+        $query->whereHas('skills', function ($q) use ($request) {
+            $q->whereIn('name', $request->skills);
+        });
+    }
+
+    $developersPaginator = $query->paginate(9)->withQueryString(); // مهم جداً
+
+    $developersPaginator->setCollection(
+        $developersPaginator->getCollection()->map(function ($dev) {
+            return [
+                'id'             => $dev->id,
+                'name'           => $dev->user?->name ?? 'Unknown Developer',
+                'avatar'         => $dev->user?->profile_picture
+                    ? asset('storage/' . $dev->user->profile_picture)
+                    : 'https://via.placeholder.com/150',
+                'specialization' => $dev->specialization?->name ?? 'General',
+                'bio'            => $dev->user?->bio ?? 'No bio available.',
+                'skills'         => $dev->skills->pluck('name')->toArray(),
+            ];
+        })
+    );
+
+    $specializations = \App\Models\Specialization::whereNotNull('name')->pluck('name');
+    $skills          = \App\Models\Skill::pluck('name');
+
+    return view('developer.all_developers', [
+        'developers'      => $developersPaginator,
+        'specializations' => $specializations,
+        'skills'          => $skills,
+    ]);
+}
 }

@@ -14,8 +14,14 @@ class Project extends Model
     //teamrole
     public function team_roles()
     {
-        return $this->belongsToMany(User::class, 'team_roles')->withPivot('role');
+        return $this->belongsToMany(User::class, 'team_roles')->withPivot('role','status');
     }
+   //new team role relation to get all records for a project
+   public function teamRoleRecords()
+   {
+    return $this->hasMany(TeamRole::class, 'project_id');
+   }
+
     //watchlist
     public function watchers()
     {

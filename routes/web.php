@@ -191,7 +191,7 @@ Route::get('/dev-login', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('/teammates', [TeamRoleController::class, 'index'])->name('my_team.index');
 Route::get('/mentees', [TeamRoleController::class, 'mentees'])->name('mentees.index');
-Route::get('/my-followers', [FollowingController::class, 'followers'])->name('followers.index');
+Route::get('/my-followers', [FollowingController::class, 'show'])->name('followers.index');
 
 // ----------------------------------------------------
 // Admin Areas

@@ -158,7 +158,7 @@
                                 </a>
                             @endif
 
-                            <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary" style="font-size: 13px; padding: 6px 14px;">
+                            <a href="{{ route('projects.my_details', $project->id) }}" class="btn btn-primary" style="font-size: 13px; padding: 6px 14px;">
                                 View Project
                             </a>
 

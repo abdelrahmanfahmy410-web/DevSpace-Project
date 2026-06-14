@@ -107,15 +107,6 @@
                     </div>
                 </div>
 
-                {{-- Sort Block Option --}}
-                <div class="filter-section" style="border-bottom:none;">
-                    <div class="filter-section-label" style="margin-bottom:0.6rem;display:block;">Sort By</div>
-                    <select name="sort" class="sidebar-sort-select" onchange="this.form.submit()">
-                        <option value="newest" {{ $selectedSort === 'newest' ? 'selected' : '' }}>Newest first</option>
-                        <option value="oldest" {{ $selectedSort === 'oldest' ? 'selected' : '' }}>Oldest first</option>
-                        <option value="az"     {{ $selectedSort === 'az'     ? 'selected' : '' }}>A → Z</option>
-                    </select>
-                </div>
             </form>
         </aside>
 
@@ -141,8 +132,13 @@
                 <div class="pi-topbar-right">
                     <div class="pi-search-box">
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                        <input type="text" name="search" form="filter-form" placeholder="Search projects…" value="{{ request('search') }}">
+                        <input type="text" name="search" form="filter-form" placeholder="Search projects…" value="{{ request('search') }}" onkeypress="if(event.key === 'Enter') { event.preventDefault(); document.getElementById('filter-form').submit(); }">
                     </div>
+                    <select name="sort" form="filter-form" class="topbar-sort-select" onchange="this.form.submit()">
+                        <option value="newest" {{ $selectedSort === 'newest' ? 'selected' : '' }}>Newest first</option>
+                        <option value="oldest" {{ $selectedSort === 'oldest' ? 'selected' : '' }}>Oldest first</option>
+                        <option value="az"     {{ $selectedSort === 'az'     ? 'selected' : '' }}>A → Z</option>
+                    </select>
                     <a href="{{ route('projects.create') }}" class="pi-btn-primary">
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
                         New Project
@@ -298,7 +294,7 @@
                                             </button>
                                         @endauth
     
-                                        <a href="{{ route('projects.show', $project->id) }}" class="view-btn">
+                                        <a href="{{ route('projects.my_details', $project->id) }}" class="view-btn">
                                             View
                                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                         </a>

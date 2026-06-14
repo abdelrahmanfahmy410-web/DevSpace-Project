@@ -172,13 +172,20 @@ main .container, .layout__main .container {
 }
 .pi-search-box input::placeholder { color: var(--text-muted); }
 
+.topbar-sort-select {
+    font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 7px 12px;
+    border: 1px solid var(--border); border-radius: 8px; background: var(--bg);
+    color: var(--text-secondary); cursor: pointer; outline: none; transition: border var(--transition);
+}
+.topbar-sort-select:focus { border-color: var(--green); }
+
 .pi-btn-primary {
     display: inline-flex; align-items: center; gap: 6px; background: var(--green); color: #fff;
     font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 600;
     padding: 7px 16px; border-radius: var(--radius-md); border: none; cursor: pointer; text-decoration: none;
     transition: background var(--transition);
 }
-.pi-btn-primary:hover { background: var(--green-mid); }
+.pi-btn-primary:hover { background: var(--green-mid); color: #fff; }
 .pi-btn-primary svg { width: 15px; height: 15px; }
 
 .pi-content-body { padding: 2rem; flex: 1; }

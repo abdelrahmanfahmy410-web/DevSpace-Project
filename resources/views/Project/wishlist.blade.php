@@ -113,4 +113,4 @@ document.querySelectorAll('.wishlist-btn').forEach(button => {
     });
 });
 </script>
-@endsection
+@endsection 

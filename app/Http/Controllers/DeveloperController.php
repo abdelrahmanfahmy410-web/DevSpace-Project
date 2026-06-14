@@ -193,21 +193,6 @@ class DeveloperController extends Controller
     public function allDevelopers(Request $request)
   {
     $query = Developer::with(['user', 'specialization', 'skills']);
-        // 2. تعديل شكل البيانات جوه الـ Paginator
-        $developersPaginator->setCollection(
-            $developersPaginator->getCollection()->map(function ($dev) {
-                return [
-                    'id'             => $dev->user ? $dev->user->id : null,
-                    'name'           => $dev->user ? $dev->user->name : 'Unknown Developer',
-                    'avatar'         => ($dev->user && $dev->user->profile_picture)
-                        ? asset('storage/' . $dev->user->profile_picture)
-                        : 'https://via.placeholder.com/150',
-                    'specialization' => $dev->specialization ? $dev->specialization->name : 'General',
-                    'bio'            => ($dev->user && $dev->user->bio) ? $dev->user->bio : 'No bio available.',
-                    'skills'         => $dev->skills->pluck('name')->toArray(),
-                ];
-            })
-        );
 
     // فلتر الاسم
     if ($request->filled('search')) {
@@ -230,12 +215,12 @@ class DeveloperController extends Controller
         });
     }
 
-    $developersPaginator = $query->paginate(9)->withQueryString(); // مهم جداً
+    $developersPaginator = $query->paginate(9)->withQueryString();
 
     $developersPaginator->setCollection(
         $developersPaginator->getCollection()->map(function ($dev) {
             return [
-                'id'             => $dev->id,
+                'id'             => $dev->user?->id ?? $dev->id,
                 'name'           => $dev->user?->name ?? 'Unknown Developer',
                 'avatar'         => $dev->user?->profile_picture
                     ? asset('storage/' . $dev->user->profile_picture)
@@ -256,4 +241,12 @@ class DeveloperController extends Controller
         'skills'          => $skills,
     ]);
 }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
 }

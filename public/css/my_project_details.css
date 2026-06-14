@@ -378,3 +378,13 @@
                 justify-content: center;
             }
         }
+.btn-wishlist-header {
+    /* استني الستايل الموجود عندك */
+    transition: all 0.2s;
+}
+
+.btn-wishlist-header.active {
+    background-color: #d94f7a;
+    border-color: #d94f7a;
+    color: white;
+}

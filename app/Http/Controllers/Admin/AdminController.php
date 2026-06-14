@@ -102,7 +102,7 @@ class AdminController extends Controller
         default  => $query->latest(),
     };
 
-    $projects        = $query->paginate(15)->withQueryString();
+    $projects        = $query->paginate(9)->withQueryString();
     $types           = Project::select('type')->distinct()->pluck('type');
     $specializations = Specialization::select('id', 'name')->orderBy('name')->get();
 

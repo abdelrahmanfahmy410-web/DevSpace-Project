@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Mentor Profile</title>
-    <link rel="stylesheet" href="{{ asset('css/mentor-profile.css') }}">
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
+@push('styles')
+       <link rel="stylesheet" href="{{ asset('css/mentor-profile.css') }}">
+
+@endpush
+
 
 <div class="container">
     <div class="profile-card">
@@ -60,5 +61,4 @@
     </div>
 </div>
 
-</body>
-</html>
+@endsection

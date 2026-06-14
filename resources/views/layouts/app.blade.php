@@ -24,10 +24,10 @@
         </div>
 
         <div class="navbar__links" id="navLinks">
-            <a href="#" class="navbar__link is-active">Home</a>
+            <a href="{{ url('/') }}" class="navbar__link is-active">Home</a>
             <a href="{{ route('projects.index') }}" class="navbar__link">Projects</a>
             <a href="/developer/developers" class="navbar__link">Developers</a>
-            <a href="#" class="navbar__link">About</a>
+            <a href="{{ url('/') }}#about">About</a>
 
             @guest
                 <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
@@ -36,7 +36,7 @@
             @else
                 @php $isAdmin = Auth::user()->isAdmin(); @endphp
 
-                @if($isAdmin)
+                @if ($isAdmin)
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-primary" style="margin-left: 8px;">
                         <i class="fas fa-gauge"></i> Admin Dashboard
                     </a>
@@ -58,7 +58,8 @@
                                         alt="{{ Auth::user()->name }}"
                                         style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
                                 @else
-                                    <div style="width: 36px; height: 36px; border-radius: 50%;
+                                    <div
+                                        style="width: 36px; height: 36px; border-radius: 50%;
                                         background: var(--color-primary);
                                         display: flex; align-items: center; justify-content: center;
                                         color: white; font-weight: 600; font-size: 14px;">
@@ -102,9 +103,13 @@
         </div>
     @else
         <main>
-            <div class="container">
+            @if ($fullWidth ?? false)
                 @yield('content')
-            </div>
+            @else
+                <div class="container">
+                    @yield('content')
+                </div>
+            @endif
         </main>
     @endauth
 
@@ -118,8 +123,10 @@
                     <p class="footer-brand-desc">Where developers showcase their work, connect with mentors, and turn
                         side projects into real products.</p>
                     <div class="social-links">
-                        <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-btn" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" class="social-btn" aria-label="LinkedIn"><i
+                                class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-btn" aria-label="Twitter / X"><i
+                                class="fab fa-x-twitter"></i></a>
                         <a href="#" class="social-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
                         <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                     </div>

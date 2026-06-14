@@ -89,8 +89,7 @@
                                     <span class="text-xs text-gray-400">No skills listed</span>
                                 @endif
                             </div>
-                            
-                            <a href="{{ route('member.profile', $dev['id'] ?? '') }}" class="btn-view-profile">
+                            <a href="/member/profile/{{ $dev['id'] ?? '' }}" class="btn-view-profile">
                                 View Profile
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M5 12h14M12 5l7 7-7 7"/>

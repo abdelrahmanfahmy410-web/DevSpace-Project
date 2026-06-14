@@ -1,15 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- إضافة CSS و JS الخاص بـ Flowbite لضمان عمل السلايدر --}}
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/my_project_details.css') }}">
 
     <section class="project-page">
 
-        {{-- ============================================================
-             Page header: title and action buttons
-        ============================================================ --}}
         <div class="project-header">
             <div>
                 <div class="project-meta">
@@ -37,13 +33,16 @@
                     </a>
                 @endif
 
-                {{-- ✅ تم تعديله هنا ليصبح رابطًا مباشرًا لصفحة الـ Wishlist --}}
-                <a href="{{ url('/wishlist') }}" class="btn-wishlist-header">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                {{-- ✅ Wishlist Button مع Toggle --}}
+                <button
+                    id="wishlist-btn"
+                    onclick="toggleWishlist({{ $project->id }})"
+                    class="btn-wishlist-header {{ auth()->user()->wishlist()->where('project_id', $project->id)->exists() ? 'active' : '' }}">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                     Wishlist
-                </a>
+                </button>
 
                 @if ($project->live_demo_link)
                     <a href="{{ $project->live_demo_link }}" target="_blank" rel="noopener noreferrer" class="btn-view">
@@ -59,7 +58,6 @@
         <div class="content-grid">
             {{-- العمود الأيسر --}}
             <div>
-                {{-- كارد الوصف --}}
                 <div class="card">
                     <h2 class="section-title">
                         <svg width="20" height="20" fill="none" stroke="#10B981" stroke-width="2" viewBox="0 0 24 24">
@@ -72,7 +70,6 @@
                     </div>
                 </div>
 
-                {{-- قسم الميديا - Animation Carousel --}}
                 <div class="card" style="margin-top: 1.5rem;">
                     <h2 class="section-title">
                         <svg width="20" height="20" fill="none" stroke="#10B981" stroke-width="2" viewBox="0 0 24 24">
@@ -99,7 +96,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            
+
                             <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
                                 <span class="inline-flex items-center justify-center w-10 h-10 rounded-base bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white focus:outline-none">
                                     <svg class="w-5 h-5 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/></svg>
@@ -173,8 +170,32 @@
                 </div>
             </aside>
         </div>
+
+        {{-- ✅ Wishlist Toggle Script --}}
+    <script>
+     function toggleWishlist(projectId) {
+     const btn = document.getElementById('wishlist-btn');
+
+     fetch(`/wishlist/toggle/${projectId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.attached) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    })
+    .catch(err => console.error(err));
+  }
+  </script>
     </section>
 
-    {{-- السكربت داخل السكشن --}}
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 @endsection

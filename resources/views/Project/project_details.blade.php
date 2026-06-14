@@ -599,7 +599,7 @@
                                             {{ $member->pivot->role ?? 'Member' }}
                                         </div>
 
-                                        <a href="{{ route('team-role.profile', $member->id) }}"
+                                        <a href="/member/profile/{{ $member->id }}"
                                             class="btn-member btn-profile">
                                             <svg width="14" height="14" fill="none" stroke="currentColor"
                                                 stroke-width="2" viewBox="0 0 24 24">

@@ -264,6 +264,7 @@ main .container, .layout__main .container {
 /* Card Footer */
 .pi-card-footer { padding: 0.75rem 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(244,247,250,0.5); }
 .footer-links { display: flex; gap: 10px; }
+.footer-actions { display: flex; align-items: center; gap: 10px; }
 .link-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); text-decoration: none; transition: all var(--transition); }
 .link-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-light); }
 .link-btn svg { width: 13px; height: 13px; }
@@ -271,6 +272,53 @@ main .container, .layout__main .container {
 .view-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; padding: 5px 12px; border-radius: 7px; border: none; background: var(--green-light); color: var(--green); text-decoration: none; cursor: pointer; transition: background var(--transition); }
 .view-btn:hover { background: #d1ead9; }
 .view-btn svg { width: 13px; height: 13px; }
+
+/* Wishlist Heart Button */
+.wishlist-heart-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    flex-shrink: 0;
+    padding: 0;
+}
+.wishlist-heart-btn svg {
+    width: 15px;
+    height: 15px;
+    transition: all var(--transition);
+}
+.wishlist-heart-btn:hover {
+    border-color: var(--red);
+    background: var(--red-light);
+    color: var(--red);
+    transform: scale(1.08);
+}
+.wishlist-heart-btn.active {
+    border-color: rgba(192,57,43,0.3);
+    background: var(--red-light);
+    color: var(--red);
+}
+.wishlist-heart-btn.active:hover {
+    background: #f5c6c2;
+}
+
+/* Pop animation on click */
+@keyframes heart-pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.35); }
+    70%  { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+.wishlist-heart-btn.popping {
+    animation: heart-pop 0.35s ease forwards;
+}
 
 /* ==========================================================================
    7. EMPTY STATE & PAGINATION

@@ -1,4 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app_dashboard')
+
+@section('sidebar')
+    @include('layouts.sidebar', ['active' => 'my-followers'])
+@endsection
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/my-followers.css') }}">
@@ -10,10 +14,10 @@
     </div>
 
    <div class="search-bar">
-    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    {{-- <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/>
         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-    </svg>
+    </svg> --}}
     <input type="text" id="searchInput" placeholder="Search by name or username..." autocomplete="off" value="{{ request('search') }}">
     <button type="button" class="search-clear-x" id="clearX" style="{{ request('search') ? '' : 'display:none' }}" onclick="clearSearch()">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">

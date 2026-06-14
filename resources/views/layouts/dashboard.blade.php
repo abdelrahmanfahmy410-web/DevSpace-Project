@@ -138,7 +138,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Projects</h3>
-                    <a href="{{ route('projects.index') }}" class="card-link">View All</a>
+                    <a href="/my-projects" class="card-link">View All</a>
                 </div>
 
                 @forelse($projects as $project)

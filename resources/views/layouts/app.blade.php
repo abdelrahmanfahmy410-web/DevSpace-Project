@@ -24,10 +24,10 @@
         </div>
 
         <div class="navbar__links" id="navLinks">
-            <a href="{{ url('/') }}" class="navbar__link is-active">Home</a>
-            <a href="{{ route('projects.index') }}" class="navbar__link">Projects</a>
-            <a href="/developer/developers" class="navbar__link">Developers</a>
-            <a href="{{ url('/') }}#about">About</a>
+            <a href="{{ url('/') }}" class="navbar__link {{ request()->is('/') ? 'is-active' : '' }}">Home</a>
+            <a href="{{ route('projects.index') }}" class="navbar__link {{ request()->routeIs('projects.*') && !request()->routeIs('projects.my') ? 'is-active' : '' }}">Projects</a>
+            <a href="/developer/developers" class="navbar__link {{ request()->is('developer/developers*') ? 'is-active' : '' }}">Developers</a>
+            <a href="{{ url('/') }}#about" class="navbar__link">About</a>
 
             @guest
                 <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>

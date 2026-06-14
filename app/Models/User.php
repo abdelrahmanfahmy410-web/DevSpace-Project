@@ -119,13 +119,4 @@ public function followers()
                 ->withTimestamps();
 }
 
-// app/Models/User.php
-public function isAdmin(): bool
-{
-    return DB::table('user_roles')
-        ->join('roles', 'roles.id', '=', 'user_roles.role_id')
-        ->where('user_roles.user_id', $this->id)
-        ->where('roles.name', 'admin')
-        ->exists();
-}
 }

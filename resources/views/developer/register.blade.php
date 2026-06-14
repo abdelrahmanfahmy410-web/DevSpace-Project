@@ -3,103 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Registration — DevSpace</title>
+    <link rel="stylesheet" href="{{ asset('css/css_template.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/investor-register.css') }}">
-    <title>Register - Developer</title>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
-    <main class="register-page">
-        <div class="register-container">
-            <header class="register-header">
-                <div class="register-eyebrow"><span class="eyebrow-dot"></span> Join Us</div>
-                <h2 class="register-title">Developer Registration</h2>
-                <p class="register-subtitle">Create your developer profile and showcase your skills</p>
-            </header>
 
-            <form method="POST" action="/developer/register" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="role" value="developer">
+<div class="register-page">
+    <div class="register-container">
+        <div class="register-header">
+            <h1 class="register-title">Developer Registration</h1>
+        </div>
+<form action="{{ route('developer.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
-                <div class="form-card">
-                    <div class="form-card-header">
-                        <div class="form-card-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
-                        <div>
-                            <h3 class="form-card-title">Account & Professional Information</h3>
-                            <p class="form-card-sub">Complete your details to get started</p>
-                        </div>
+    <div class="form-card">
+
+        <div class="form-card-header">
+            <div class="form-card-icon">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+
+            <div>
+                <div class="form-card-title">
+                Become a Developer
+                </div>
+
+                <div class="form-card-sub">
+                   Showcase your skills and build your professional profile
+                </div>
+            </div>
+        </div>
+
+        <div class="form-card-body layout-container">
+
+            <!-- LEFT -->
+
+            <div class="left-column">
+
+                <div class="avatar-upload-wrapper">
+
+                    <label class="form-label">
+                        Profile Picture
+                    </label>
+
+                    <div class="avatar-preview-box"
+                        onclick="document.getElementById('profile_picture').click()">
+
+                        <img id="avatarPreview"
+                            src=""
+                            style="display:none;">
+
+                        <span id="avatarPlaceholder"
+                            class="avatar-placeholder">
+
+                            <i class="fa-solid fa-camera"></i>
+                            <br>
+                            Upload Photo
+
+                        </span>
                     </div>
-                    
-                    <div class="form-card-body">
-                        <div class="form-group-row">
-                            <div class="form-group"><label class="form-label">Name <span class="required">*</span></label><input type="text" name="name" class="form-input" required></div>
-                            <div class="form-group"><label class="form-label">Email <span class="required">*</span></label><input type="email" name="email" class="form-input" required></div>
-                        </div>
 
-                        <div class="form-group-row">
-                            <div class="form-group"><label class="form-label">Phone Number <span class="optional">(Optional)</span></label><input type="text" name="phone_number" class="form-input"></div>
-                            <div class="form-group"><label class="form-label">Specialization <span class="required">*</span></label><select name="specialization_id" class="form-input" required></select></div>
-                        </div>
+                    <input
+                        id="profile_picture"
+                        type="file"
+                        name="profile_picture"
+                        accept="image/*"
+                        style="display:none"
+                        onchange="previewAvatar(this)">
+                </div>
 
-                        <div class="form-group-row">
-                            <div class="form-group"><label class="form-label">Password <span class="required">*</span></label><input type="password" name="password" class="form-input" required></div>
-                            <div class="form-group"><label class="form-label">Confirm Password <span class="required">*</span></label><input type="password" name="password_confirmation" class="form-input" required></div>
-                        </div>
+                <div class="form-group">
 
-                        <hr class="form-divider">
+                    <label class="form-label">
+                        <i class="fa-solid fa-address-card"></i>
+                        Bio
+                    </label>
 
-                        <div class="profile-section">
-                   <div class="avatar-upload-wrapper">
-    <div class="avatar-preview-box" onclick="document.getElementById('profile_picture').click()">
-        <img id="avatarPreview" src="" style="display:none;">
-        <span id="avatarPlaceholder" class="avatar-placeholder">Upload</span>
+                    <textarea
+                        name="bio"
+                        class="form-textarea"
+                        placeholder="Tell us about yourself...">{{ old('bio') }}</textarea>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+
+           <div class="right-column">
+
+    <div class="form-group-row">
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-solid fa-user"></i>
+                Full Name *
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                class="form-input"
+                placeholder="Enter your full name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-solid fa-envelope"></i>
+                Email Address *
+            </label>
+
+            <input
+                type="email"
+                name="email"
+                class="form-input"
+                placeholder="example@gmail.com"
+                required>
+        </div>
+
     </div>
-    
-    <label for="profile_picture" class="upload-btn-label">
-        Choose photo
-    </label>
-    
-    <input id="profile_picture" type="file" name="profile_picture" accept="image/*" style="display:none" onchange="previewAvatar(this)">
-    
-    <small style="font-size: 10px; color: var(--color-muted); margin-top: 4px;">JPG, PNG up to 2MB</small>
+
+    <div class="form-group-row">
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-solid fa-lock"></i>
+                Password *
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                class="form-input"
+                placeholder="Enter password"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-solid fa-shield-halved"></i>
+                Confirm Password *
+            </label>
+
+            <input
+                type="password"
+                name="password_confirmation"
+                class="form-input"
+                placeholder="Confirm password"
+                required>
+        </div>
+
+    </div>
+
+    <div class="form-group-row">
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-solid fa-phone"></i>
+                Phone Number
+            </label>
+
+            <input
+                type="text"
+                name="phone_number"
+                class="form-input"
+                placeholder="Phone number">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-solid fa-code"></i>
+                Specialization *
+            </label>
+
+            <select
+                class="form-select"
+                name="specialization_id"
+                required>
+
+                <option value="">
+                    Select specialization
+                </option>
+
+                @foreach($specializations as $specialization)
+                    <option value="{{ $specialization->id }}">
+                        {{ $specialization->name }}
+                    </option>
+                @endforeach
+
+            </select>
+        </div>
+
+    </div>
+
+    <div class="form-group-row">
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-solid fa-globe"></i>
+                Portfolio URL
+            </label>
+
+            <input
+                type="url"
+                name="portfolio_url"
+                class="form-input"
+                placeholder="Portfolio website">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fa-brands fa-linkedin"></i>
+                LinkedIn Profile
+            </label>
+
+            <input
+                type="url"
+                name="linkedin_url"
+                class="form-input"
+                placeholder="LinkedIn profile">
+        </div>
+
+    </div>
+
+</div>
+        </div>
+
+        <div class="form-footer">
+
+            <div class="form-footer-note">
+                <i class="fa-solid fa-circle-check"></i>
+                Your information is secure and protected
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-user-plus"></i>
+              Register as Developer
+            </button>
+
+        </div>
+
+    </div>
+
+</form>  </div>
 </div>
 
-                            <div class="bio-fields-wrapper">
-                                <div class="form-group">
-                                    <label class="form-label">Bio</label>
-                                    <textarea name="bio" class="form-textarea" placeholder="Tell us about your experience..."></textarea>
-                                </div>
-                                <div class="form-group-row">
-                                    <div class="form-group"><label class="form-label">Portfolio URL</label><input type="url" name="portfolio_url" class="form-input"></div>
-                                    <div class="form-group"><label class="form-label">LinkedIn Profile</label><input type="url" name="linkedin_url" class="form-input"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-footer">
-                        <div class="form-footer-note"><span class="required">*</span> Indicates required fields</div>
-                        <div class="form-footer-actions">
-                            <button type="submit" class="btn btn-primary">Register as Developer</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <div class="login-link">Already have an account? <a href="/login">Log in</a></div>
-        </div>
-    </main>
-
-    <script>
-        function previewAvatar(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    document.getElementById('avatarPreview').src = e.target.result;
-                    document.getElementById('avatarPreview').style.display = 'block';
-                    document.getElementById('avatarPlaceholder').style.display = 'none';
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
+<script>
+    function previewAvatar(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('avatarPreview').src = e.target.result;
+                document.getElementById('avatarPreview').style.display = 'block';
+                document.getElementById('avatarPlaceholder').style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
         }
-    </script>
+    }
+</script>
 </body>
 </html>

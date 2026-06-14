@@ -6,7 +6,7 @@ use App\Models\Following;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+
 
 class FollowingController extends Controller
 {

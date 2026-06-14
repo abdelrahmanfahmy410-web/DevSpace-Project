@@ -86,9 +86,16 @@
                             <div class="relative h-56 overflow-hidden rounded-base md:h-96">
                                 @foreach ($project->media as $media)
                                     <div class="hidden duration-200 ease-linear" data-carousel-item="{{ $loop->first ? 'active' : '' }}">
-                                        <img src="{{ asset('storage/' . $media->file_path) }}" 
-                                             class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" 
-                                             alt="Media">
+                                        @if($media->media_type === 'video')
+                                            <video controls class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                                <source src="{{ asset('storage/' . $media->file_path) }}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        @else
+                                            <img src="{{ asset('storage/' . $media->file_path) }}" 
+                                                 class="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" 
+                                                 alt="Media">
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>

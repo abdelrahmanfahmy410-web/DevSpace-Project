@@ -32,7 +32,7 @@
             @guest
                 <a href="{{ route('login') }}" class="btn btn-outline" style="margin-left: 8px;">Sign In</a>
                 <a href="/developer/register" class="btn btn-outline">Join the Space</a>
-                <a href="{{ route('mentor.register') }}" class="btn btn-primary">Join as Mentor</a>
+                <a href="{{ route('join') }}" class="btn btn-primary">Join as</a>
             @else
                 @php $isAdmin = Auth::user()->isAdmin(); @endphp
 

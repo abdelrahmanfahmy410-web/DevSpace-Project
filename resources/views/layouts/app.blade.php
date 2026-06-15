@@ -25,8 +25,10 @@
 
         <div class="navbar__links" id="navLinks">
             <a href="{{ url('/') }}" class="navbar__link {{ request()->is('/') ? 'is-active' : '' }}">Home</a>
-            <a href="{{ route('projects.index') }}" class="navbar__link {{ request()->routeIs('projects.*') && !request()->routeIs('projects.my') ? 'is-active' : '' }}">Projects</a>
-            <a href="/developer/developers" class="navbar__link {{ request()->is('developer/developers*') ? 'is-active' : '' }}">Developers</a>
+            <a href="{{ route('projects.index') }}"
+                class="navbar__link {{ request()->routeIs('projects.*') && !request()->routeIs('projects.my') ? 'is-active' : '' }}">Projects</a>
+            <a href="/developer/developers"
+                class="navbar__link {{ request()->is('developer/developers*') ? 'is-active' : '' }}">Developers</a>
             <a href="{{ url('/') }}#about" class="navbar__link">About</a>
 
             @guest
@@ -37,7 +39,8 @@
                 @php $isAdmin = Auth::user()->isAdmin(); @endphp
 
                 @if ($isAdmin)
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary" style="margin-left: 8px;">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="navbar__link {{ request()->routeIs('admin.*') ? 'is-active' : '' }}">
                         <i class="fas fa-gauge"></i> Admin Dashboard
                     </a>
                     <form method="POST" action="{{ route('logout') }}" style="margin-left: 8px;">
@@ -45,9 +48,10 @@
                         <button type="submit" class="btn btn-outline">Log Out</button>
                     </form>
                 @else
-                    @if (!($fullWidth ?? false))
-                        <a href="{{ route('dashboard') }}" class="navbar__link">Dashboard</a>
-                    @endif
+                    <a href="{{ route('dashboard') }}"
+                        class="navbar__link {{ request()->routeIs('dashboard') ? 'is-active' : '' }}">
+                        Dashboard
+                    </a>
 
                     <div class="navbar__user" style="margin-left: 8px; display: flex; align-items: center; gap: 12px;">
                         <a href="{{ route('member.profile') }}"
@@ -60,9 +64,9 @@
                                 @else
                                     <div
                                         style="width: 36px; height: 36px; border-radius: 50%;
-                                        background: var(--color-primary);
-                                        display: flex; align-items: center; justify-content: center;
-                                        color: white; font-weight: 600; font-size: 14px;">
+                                                background: var(--color-primary);
+                                                display: flex; align-items: center; justify-content: center;
+                                                color: white; font-weight: 600; font-size: 14px;">
                                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                     </div>
                                 @endif
@@ -70,12 +74,10 @@
                             <span style="font-weight: 500;">{{ Auth::user()->name }}</span>
                         </a>
 
-                        @if (!($fullWidth ?? false))
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-outline">Log Out</button>
-                            </form>
-                        @endif
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-outline">Log Out</button>
+                        </form>
                     </div>
                 @endif
             @endguest
@@ -88,11 +90,13 @@
 
     @auth
         <div class="layout">
-            @if ($fullWidth ?? false)
+            @if ($showSidebar ?? false)
                 @include('layouts.sidebar', ['active' => $active ?? ''])
             @endif
             <main class="layout__main">
-                @if ($fullWidth ?? false)
+                @if ($showSidebar ?? false)
+                    @yield('content')
+                @elseif ($fullWidth ?? false)
                     @yield('content')
                 @else
                     <div class="container">

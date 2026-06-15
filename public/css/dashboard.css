@@ -789,3 +789,19 @@
     flex-direction: column;
     min-width: 0;
 }
+
+.chat-badge {
+    background-color: var(--color-primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    margin-left: auto;
+}
+        

@@ -1,57 +1,63 @@
 @extends('layouts.app')
-@php($fullWidth = true)
+@php
+    $fullWidth = true;
+    $showSidebar = true;
+    $active = View::hasSection('active') ? View::getSection('active') : 'dashboard';
+@endphp
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DevSpace – Dashboard</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/css_template.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/toaster.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/css_template.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+@endpush
 
-    @yield('head')
-</head>
 @section('title', 'Dashboard')
 
 @section('content')
-    <header class="topbar">
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation"
-            aria-expanded="false" aria-controls="sidebar">
-            <span></span><span></span><span></span>
-        </button>
+    <div class="dashboard-wrapper" style="display: flex; min-height: 100vh;">
 
-        <h1 class="topbar-title">@yield('page-title', 'Dashboard')</h1>
+        {{-- Sidebar --}}
+        @include('layouts.sidebar', ['active' => $active])
 
-        <div class="navbar__user">
-            <div class="navbar__avatar">
-                @if(Auth::user()->avatar)
-                    <img class="navbar__avatar-initials"
-                        src="{{ asset('storage/' . Auth::user()->avatar) }}"
-                        alt="{{ Auth::user()->name }}">
-                @else
-                    <div class="navbar__avatar-initials">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        <div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+
+            {{-- Topbar --}}
+            <header class="topbar">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation"
+                    aria-expanded="false" aria-controls="sidebar">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <h1 class="topbar-title">@yield('page-title', 'Dashboard')</h1>
+
+                <div class="navbar__user">
+                    <div class="navbar__avatar">
+                        @if(Auth::user()->avatar)
+                            <img class="navbar__avatar-initials"
+                                src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                alt="{{ Auth::user()->name }}">
+                        @else
+                            <div class="navbar__avatar-initials">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </div>
+                        @endif
                     </div>
-                @endif
-            </div>
+                    <span style="font-weight:500;">{{ Auth::user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline">Log Out</button>
+                    </form>
+                </div>
+            </header>
 
-            <span style="font-weight:500;">{{ Auth::user()->name }}</span>
+            @include('layouts.toaster')
 
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="btn btn-outline">Log Out</button>
-            </form>
+            <main class="page-body">
+                @yield('dashboard-content')
+            </main>
+
         </div>
-    </header>
-
-    @include('layouts.toaster')
-
-    <main class="page-body">
-        @yield('dashboard-content')
-    </main>
+    </div>
 @endsection
 
 @push('scripts')

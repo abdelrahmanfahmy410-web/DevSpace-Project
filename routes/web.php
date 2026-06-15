@@ -28,7 +28,7 @@ Route::get('/', function () {
 });
 //home
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::get('/join', fn() => view('layouts.join'))->name('join');
 ////////////////////
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
@@ -55,8 +55,8 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 // ----------------------------------------------------
 // Investor Routes
 // ----------------------------------------------------
-Route::get('/investor/register', [InvestorController::class, 'create']);
-Route::post('/investor/register', [InvestorController::class, 'store']);
+Route::get('/investor/register', [InvestorController::class, 'create'])->name('investor.register');
+Route::post('/investor/register', [InvestorController::class, 'store'])->name('investor.store');
 
 // ----------------------------------------------------
 // Developer Routes

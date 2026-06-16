@@ -45,8 +45,8 @@ class UserController extends Controller
     }
 
     // 4. regenerate session and log the user in
-    $request->session()->regenerate();
     Auth::login($user);
+    $request->session()->regenerate();
     
     return redirect('/')->with('success', 'Logged in successfully!');
 }

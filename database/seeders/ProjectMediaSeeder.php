@@ -43,6 +43,7 @@ class ProjectMediaSeeder extends Seeder
                 DB::table('project_media')->insert([
                     'project_id' => $project->id,
                     'medianame' => $mediaNames[$index],
+                    'file_path'  => 'media/demo-video.mp4', // add this
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

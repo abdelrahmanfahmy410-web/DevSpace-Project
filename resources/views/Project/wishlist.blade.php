@@ -66,20 +66,14 @@
             <a href="{{ route('projects.index') }}" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Browse All</a>
         </header>
 
-        <div class="grid-cards">
-            @forelse($projects as $project)
-                <div class="card card--project" id="project-card-{{ $project->id }}">
-                    <div class="card__body">
-                        <span class="badge badge--red">{{ strtoupper($project->type ?? 'PROJECT') }}</span>
-                        <h3 class="card__title">{{ $project->title }}</h3>
-                        <p class="card__description">{{ Str::limit($project->description, 100) }}</p>
-                    </div>
-                    <div class="card__footer">
-                        <button class="wishlist-btn" data-id="{{ $project->id }}">
-                            <i class="fa-solid fa-heart" style="color: #ff4757;"></i>
-                        </button>
-                        <div class="card__actions-right">
-                            <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary">View</a>
+                            <a href="{{ route('projects.my_details', $project->id) }}" class="btn btn-primary" style="font-size: 13px; padding: 6px 14px;">
+                                View Project
+                            </a>
+
+                            <!-- Wishlist Button -->
+                            <button class="wishlist-btn" data-id="{{ $project->id }}" title="Remove from wishlist">
+                                <i class="fa-solid fa-heart" style="color: var(--color-accent);"></i>
+                            </button>
                         </div>
                     </div>
                 </div>

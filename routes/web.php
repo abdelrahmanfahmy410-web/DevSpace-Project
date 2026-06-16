@@ -22,12 +22,9 @@ use App\Http\Controllers\HomeController;
 
 
 
-//all users
-Route::get('/', function () {
-    return view('home', ['fullWidth' => true, 'active' => '']);
-});
-//home
+//home for all users 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::get('/join', fn() => view('layouts.join'))->name('join');
 ////////////////////
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
@@ -36,9 +33,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 
 //all users
-Route::get('/', function () {
-    return view('layouts.app');
-});
+
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
@@ -213,9 +208,7 @@ Route::get('/my-followers', [FollowingController::class, 'show'])->name('followe
 // ----------------------------------------------------
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
 
-    // Dashboard
-    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-
+   
     //All users 
     Route::get('/users', [AdminController::class, 'users'])->name('users.index');
 

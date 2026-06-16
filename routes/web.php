@@ -208,8 +208,7 @@ Route::get('/my-followers', [FollowingController::class, 'show'])->name('followe
 // ----------------------------------------------------
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
 
-       Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-
+Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     //All users 
     Route::get('/users', [AdminController::class, 'users'])->name('users.index');
 

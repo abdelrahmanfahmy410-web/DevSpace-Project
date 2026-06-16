@@ -118,5 +118,10 @@ public function followers()
     return $this->belongsToMany(User::class, 'followings', 'following_id', 'follower_id')
                 ->withTimestamps();
 }
+//// is Admin error
+public function isAdmin(): bool
+{
+    return $this->roles()->where('name', 'admin')->exists();
+}
 
 }

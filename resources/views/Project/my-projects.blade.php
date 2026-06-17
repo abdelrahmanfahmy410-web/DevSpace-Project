@@ -64,6 +64,19 @@
             position: sticky; top: 0; z-index: 10;
         }
         .topbar-title { font-size: 17px; font-weight: 600; color: var(--text-primary); }
+        .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+        .search-box {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            width: 220px;
+        }
+        .search-box svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--text-muted); }
 
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
@@ -86,7 +99,7 @@
         /* ── Stats row ── */
         .stats-row {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 1fr); /* تم التعديل ليكون 3 أعمدة بدلاً من 4 لتناسب الكروت المطلوبة */
             gap: 14px;
             margin-bottom: 2rem;
         }
@@ -102,94 +115,35 @@
         .stat-sub { font-size: 12px; color: var(--text-secondary); }
         .stat-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
 
-        /* ── Modern Filter Bar ── */
-        .filter-wrapper-card {
-            background: var(--surface);
+        /* ── Filter bar ── */
+        .filter-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1.5rem; gap: 12px; flex-wrap: wrap;
+        }
+        .filter-tabs { display: flex; gap: 6px; }
+        .filter-tab {
+            font-size: 13px; font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
             border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.25rem;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 1.5rem;
-        }
-        .filter-main-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .filter-search-container {
-            position: relative;
-            flex: 1;
-            min-width: 240px;
-        }
-        .filter-search-container svg {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            color: var(--text-muted);
-        }
-        .filter-input-search {
-            width: 100%;
-            padding: 8px 12px 8px 36px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13.5px;
-            border: 1px solid var(--border-md);
-            border-radius: 8px;
-            background: var(--bg);
-            color: var(--text-primary);
-            outline: none;
-            transition: border-color var(--transition);
-        }
-        .filter-input-search:focus {
-            border-color: var(--green);
-        }
-        .filter-select {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13.5px;
-            font-weight: 500;
-            padding: 8px 12px;
-            border: 1px solid var(--border-md);
-            border-radius: 8px;
             background: var(--surface);
             color: var(--text-secondary);
             cursor: pointer;
-            min-width: 150px;
-            outline: none;
-        }
-        .filter-select:focus {
-            border-color: var(--green);
-        }
-        .btn-filter-submit {
-            background: var(--green);
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13.5px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background var(--transition);
-        }
-        .btn-filter-submit:hover { background: var(--green-mid); }
-        
-        .btn-filter-clear {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-md);
-            padding: 8px 14px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 13.5px;
-            font-weight: 500;
-            border-radius: 8px;
-            text-decoration: none;
-            text-align: center;
             transition: all var(--transition);
         }
-        .btn-filter-clear:hover { background: var(--bg); color: var(--text-primary); }
+        .filter-tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+        .filter-tab:hover:not(.active) { border-color: var(--green); color: var(--green); }
+
+        .sort-select {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
 
         /* ── Grid ── */
         .projects-grid {
@@ -214,7 +168,7 @@
             transform: translateY(-2px);
         }
 
-        /* ── Card Thumbnail ── */
+        /* ── Card Thumbnail (when image exists) ── */
         .card-thumbnail {
             position: relative;
             width: 100%;
@@ -246,13 +200,13 @@
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
         }
-        .type-badge-over.web      { background: rgba(232,245,238,0.92); color: var(--green);  border-color: rgba(26,122,74,0.25); }
-        .type-badge-over.mobile   { background: rgba(239,246,255,0.92); color: #2563EB;       border-color: rgba(37,99,235,0.25); }
-        .type-badge-over.ai        { background: rgba(245,243,255,0.92); color: #7C3AED;       border-color: rgba(124,58,237,0.25); }
-        .type-badge-over.security { background: rgba(253,236,234,0.92); color: var(--red);    border-color: rgba(192,57,43,0.25); }
-        .type-badge-over.other    { background: rgba(244,247,250,0.92); color: var(--text-secondary); border-color: var(--border-md); }
+        .type-badge-over.web        { background: rgba(232,245,238,0.92); color: var(--green);  border-color: rgba(26,122,74,0.25); }
+        .type-badge-over.mobile     { background: rgba(239,246,255,0.92); color: #2563EB;       border-color: rgba(37,99,235,0.25); }
+        .type-badge-over.ai          { background: rgba(245,243,255,0.92); color: #7C3AED;       border-color: rgba(124,58,237,0.25); }
+        .type-badge-over.security   { background: rgba(253,236,234,0.92); color: var(--red);    border-color: rgba(192,57,43,0.25); }
+        .type-badge-over.other      { background: rgba(244,247,250,0.92); color: var(--text-secondary); border-color: var(--border-md); }
 
-        /* ── Card Accent ── */
+        /* ── Card Accent (no-image fallback) ── */
         .card-accent {
             height: 4px;
             background: var(--green);
@@ -264,8 +218,23 @@
         .card-accent.security { background: #C0392B; }
 
         .card-body { padding: 1.1rem 1.25rem; flex: 1; }
+
         .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
 
+        /* badge inside card-header (no-image cards only) */
+        .type-badge {
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            padding: 3px 9px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+        .type-badge.web      { background: var(--green-light); color: var(--green);  border-color: rgba(26,122,74,0.2); }
+        .type-badge.mobile   { background: #EFF6FF;              color: #2563EB;       border-color: rgba(37,99,235,0.2); }
+        .type-badge.ai       { background: #F5F3FF;              color: #7C3AED;       border-color: rgba(124,58,237,0.2); }
+        .type-badge.security { background: var(--red-light);   color: var(--red);    border-color: rgba(192,57,43,0.2); }
+
+        /* ستايل أزرار الحذف والتعديل الجديد */
         .action-buttons { display: flex; gap: 8px; }
         .btn-edit, .btn-delete {
             border: none; background: transparent; padding: 4px 8px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background var(--transition);
@@ -349,7 +318,6 @@
             border-radius: var(--radius-lg);
             padding: 4rem 2rem;
             text-align: center;
-            grid-column: 1 / -1;
         }
         .empty-icon {
             width: 52px; height: 52px;
@@ -376,9 +344,9 @@
             background: var(--surface);
             font-size: 13.5px; font-weight: 500;
             color: var(--text-secondary);
-            text-decoration: none;
             cursor: pointer;
             transition: all var(--transition);
+            text-decoration: none;
         }
         .page-btn:hover { border-color: var(--green); color: var(--green); }
         .page-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
@@ -394,6 +362,7 @@
             .stats-row { grid-template-columns: 1fr; }
             .projects-grid { grid-template-columns: 1fr; }
         }
+        
     </style>
 @endsection
 @php
@@ -414,6 +383,10 @@
         <header class="topbar">
             <span class="topbar-title">My Projects Dashboard</span>
             <div class="topbar-right">
+                <div class="search-box">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    Search my projects…
+                </div>
                 <a href="{{ route('projects.create') }}" class="btn-primary">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
                     New Project
@@ -424,175 +397,189 @@
         {{-- Content --}}
         <div class="content">
 
-            {{-- Stats --}}
+            {{-- Stats (تعديل: كروت إحصائية استاتيكية بالكامل وبترتيب مساحات متناسق 3 أعمدة) --}}
             <div class="stats-row">
                 <div class="stat-card">
                     <div class="stat-label">MY TOTAL PROJECTS</div>
-                    <div class="stat-value">{{ $totalProjectsCount ?? 0 }}</div>
+                    <div class="stat-value">1</div>
                     <div class="stat-sub"><span class="stat-dot" style="background:#9CA3AF"></span>All time</div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-label">MY ASSIGNED PROJECTS</div>
-                    <div class="stat-value">{{ $assignedProjectsCount ?? 0 }}</div>
+                    <div class="stat-value">0</div>
                     <div class="stat-sub"><span class="stat-dot" style="background:#1A7A4A"></span>Assigned to me</div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-label">MY CREATED PROJECTS</div>
-                    <div class="stat-value">{{ $createdProjectsCount ?? 0 }}</div>
+                    <div class="stat-value">1</div>
                     <div class="stat-sub"><span class="stat-dot" style="background:#2563EB"></span>Created by me</div>
                 </div>
             </div>
 
-            {{-- شريط الفلترة العلوي المتكامل --}}
-            <div class="filter-wrapper-card">
-                <form action="{{ url()->current() }}" method="GET" class="filter-main-row">
-                    
-                    {{-- 1. حقل البحث الكلي --}}
-                    <div class="filter-search-container">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                        <input type="text" name="search" class="filter-input-search" placeholder="Search by project name or keywords..." value="{{ request('search') }}">
-                    </div>
-
-                    {{-- 2. فلتر النوع (Project Type) --}}
-                    <select name="type" class="filter-select">
-                        <option value="">All Types</option>
-                        <option value="web" {{ request('type') == 'web' ? 'selected' : '' }}>Web Application</option>
-                        <option value="mobile" {{ request('type') == 'mobile' ? 'selected' : '' }}>Mobile App</option>
-                        <option value="ai" {{ request('type') == 'ai' ? 'selected' : '' }}>AI / ML</option>
-                        <option value="security" {{ request('type') == 'security' ? 'selected' : '' }}>Cybersecurity</option>
-                    </select>
-
-                    <button type="submit" class="btn-filter-submit">Filter</button>
-                    @if(request()->has('search') || request()->has('type'))
-                        <a href="{{ url()->current() }}" class="btn-filter-clear">Clear</a>
-                    @endif
-                </form>
+            {{-- Filter bar --}}
+            <div class="filter-bar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">All</button>
+                    <button class="filter-tab">Web</button>
+                    <button class="filter-tab">Mobile</button>
+                    <button class="filter-tab">AI</button>
+                    <button class="filter-tab">Security</button>
+                </div>
+                <select class="sort-select">
+                    <option>Newest first</option>
+                    <option>Oldest first</option>
+                    <option>A → Z</option>
+                </select>
             </div>
 
-            {{-- Grid Projects --}}
-            <div class="projects-grid">
-                @forelse($projects as $project)
-                    <div class="project-card">
-                        {{-- Thumbnail & Badge Over --}}
-                        <div class="card-thumbnail">
-                            <img src="{{ $project->image_url ?? 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600' }}" alt="{{ $project->title }}">
-                            <span class="type-badge-over {{ $project->type ?? 'other' }}">{{ $project->type ?? 'Project' }}</span>
-                        </div>
+            {{-- Grid --}}
+            @if($projects->isEmpty())
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div class="empty-title">You haven't added any projects yet</div>
+                    <div class="empty-desc">Showcase your skills to mentors and investors by uploading your first project now.</div>
+                    <a href="{{ route('projects.create') }}" class="btn-primary">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                        Add Your First Project
+                    </a>
+                </div>
+            @else
+                <div class="projects-grid">
+                    @foreach($projects as $project)
+                        @php $type = strtolower($project->type ?? 'web'); @endphp
+                        <div class="project-card">
 
-                        {{-- Dynamic Top Accent Line --}}
-                        <div class="card-accent {{ $project->type ?? 'web' }}"></div>
-
-                        <div class="card-body">
-                            <div class="card-header">
-                                <h3 class="card-title">{{ $project->title }}</h3>
-                                
-                                {{-- Actions --}}
-                                <div class="action-buttons">
-                                    <a href="{{ route('projects.edit', $project->id) }}" class="btn-edit" title="Edit">
-                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                    </a>
-                                    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this project?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete" title="Delete">
-                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/></svg>
-                                        </button>
-                                    </form>
+                            {{-- ── Top of card: thumbnail OR accent bar ── --}}
+                            @if($project->media && $project->media->isNotEmpty())
+                                <div class="card-thumbnail">
+                                    <img
+                                        src="{{ asset('storage/' . $project->media->first()->file_path) }}"
+                                        alt="{{ $project->title }}"
+                                        loading="lazy"
+                                    >
+                                    <span class="type-badge-over {{ $type }}">{{ $project->type }}</span>
                                 </div>
-                            </div>
+                            @else
+                                <div class="card-accent {{ $type }}"></div>
+                            @endif
 
-                            <p class="card-desc">{{ $project->description }}</p>
-
-                            {{-- Tags --}}
-                            @if(!empty($project->tags))
-                                <div class="tags-group">
-                                    <div class="tags-row">
-                                        @foreach($project->tags as $tag)
-                                            <span class="tag skill">{{ $tag }}</span>
-                                        @endforeach
+                            <div class="card-body">
+                                <div class="card-header">
+                                    @if($project->media && $project->media->isEmpty())
+                                        <span class="type-badge {{ $type }}">{{ $project->type }}</span>
+                                    @else
+                                        <span></span>
+                                    @endif
+                                    
+                                    <div class="action-buttons">
+                                        <a href="{{ route('projects.edit', $project->id) }}" class="btn-edit" title="Edit Project">
+                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                        </a>
+                                        
+                                        <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?');" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-delete" title="Delete Project">
+                                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/></svg>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
-                            @endif
-                        </div>
 
-                        {{-- Card Footer --}}
-                        <div class="card-footer">
-                            <div class="footer-links">
-                                @if($project->github_url)
-                                    <a href="{{ $project->github_url }}" target="_blank" class="link-btn" title="GitHub Repository">
-                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                                        Code
-                                    </a>
+                                <h2 class="card-title">{{ $project->title }}</h2>
+                                <p class="card-desc">{{ $project->description }}</p>
+
+                                @if($project->specializations && $project->specializations->isNotEmpty())
+                                    <div class="tags-group">
+                                        <span class="tags-label">Specializations</span>
+                                        <div class="tags-row">
+                                            @foreach($project->specializations->take(4) as $spec)
+                                                <span class="tag spec">{{ $spec->name }}</span>
+                                            @endforeach
+                                            @if($project->specializations->count() > 4)
+                                                <span class="tag spec">+{{ $project->specializations->count() - 4 }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 @endif
-                                @if($project->demo_url)
-                                    <a href="{{ $project->demo_url }}" target="_blank" class="link-btn" title="Live Preview">
-                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                        Live
-                                    </a>
+
+                                @if($project->skills && $project->skills->isNotEmpty())
+                                    <div class="tags-group">
+                                        <span class="tags-label">Skills</span>
+                                        <div class="tags-row">
+                                            @foreach($project->skills->take(4) as $skill)
+                                                <span class="tag skill">{{ $skill->name }}</span>
+                                            @endforeach
+                                            @if($project->skills->count() > 4)
+                                                <span class="tag skill">+{{ $project->skills->count() - 4 }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
-                            <a href="{{ route('projects.show', $project->id) }}" class="view-btn">
-                                View Details
-                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 5l7 7-7 7"/></svg>
-                            </a>
-                        </div>
-                    </div>
-                @empty
-                    {{-- Empty State Card --}}
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 13V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7m16 0a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2m16 0v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5M9 11l3 3 3-3"/></svg>
-                        </div>
-                        <h4 class="empty-title">No projects found</h4>
-                        <p class="empty-desc">You haven't uploaded or been assigned any projects that match your current filters.</p>
-                        <a href="{{ route('projects.create') }}" class="btn-primary">Create Your First Project</a>
-                    </div>
-                @endforelse
-            </div>
 
-            {{-- Pagination Row --}}
-            @if($projects->hasPages())
-                <div class="pagination">
-                    {{-- Previous Page Link --}}
-                    @if ($projects->onFirstPage())
-                        <span class="page-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 19l-7-7 7-7"/></svg></span>
-                    @else
-                        <a href="{{ $projects->previousPageUrl() }}" class="page-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 19l-7-7 7-7"/></svg></a>
-                    @endif
-
-                    {{-- Pagination Elements --}}
-                    @foreach ($elements as $element)
-                        @if (is_string($element))
-                            <span class="page-btn">{{ $element }}</span>
-                        @endif
-                        @if (is_array($element))
-                            @foreach ($element as $page => $url)
-                                @if ($page == $projects->currentPage())
-                                    <span class="page-btn active">{{ $page }}</span>
-                                @else
-                                    <a href="{{ $url }}" class="page-btn">{{ $page }}</a>
-                                @endif
-                            @endforeach
-                        @endif
+                            <div class="card-footer">
+                                <div class="footer-links">
+                                    @if($project->repository_link)
+                                        <a href="{{ $project->repository_link }}" target="_blank" class="link-btn">
+                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                                            Repo
+                                        </a>
+                                    @endif
+                                    @if($project->live_demo_link)
+                                        <a href="{{ $project->live_demo_link }}" target="_blank" class="link-btn">
+                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                            Live
+                                        </a>
+                                    @endif
+                                </div>
+                                <a href="{{ route('projects.show', $project->id) }}" class="view-btn">
+                                    View
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
                     @endforeach
-
-                    {{-- Next Page Link --}}
-                    @if ($projects->hasMorePages())
-                        <a href="{{ $projects->nextPageUrl() }}" class="page-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 5l7 7-7 7"/></svg></a>
-                    @else
-                        <span class="page-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 5l7 7-7 7"/></svg></span>
-                    @endif
                 </div>
+
+                {{-- Pagination --}}
+                @if(method_exists($projects, 'hasPages') && $projects->hasPages())
+                    <div class="pagination">
+                        {{-- Previous --}}
+                        @if($projects->onFirstPage())
+                            <span class="page-btn" style="opacity:0.4; cursor:default;">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                            </span>
+                        @else
+                            <a href="{{ $projects->previousPageUrl() }}" class="page-btn">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                            </a>
+                        @endif
+
+                        @foreach($projects->getUrlRange(1, $projects->lastPage()) as $page => $url)
+                            <a href="{{ $url }}" class="page-btn {{ $page == $projects->currentPage() ? 'active' : '' }}">
+                                {{ $page }}
+                            </a>
+                        @endforeach
+
+                        {{-- Next --}}
+                        @if($projects->hasMorePages())
+                            <a href="{{ $projects->nextPageUrl() }}" class="page-btn">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                            </a>
+                        @else
+                            <span class="page-btn" style="opacity:0.4; cursor:default;">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                            </span>
+                        @endif
+                    </div>
+                @endif
             @endif
 
         </div>{{-- /content --}}
     </div>{{-- /main --}}
 @endsection
-        </div>
-    </div>
-</div>
-
-</body>
-</html>

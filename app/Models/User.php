@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB; // add this
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -117,5 +117,9 @@ public function isAdmin(): bool
         ->where('user_roles.user_id', $this->id)
         ->where('roles.name', 'admin')
         ->exists();
+}
+public function following(): BelongsToMany
+{
+    return $this->belongsToMany(User::class, 'followings', 'follower_id', 'following_id')->withTimestamps();
 }
 }

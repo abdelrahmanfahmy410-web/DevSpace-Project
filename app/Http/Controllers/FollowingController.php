@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
+
 class FollowingController extends Controller
 {
     /**
@@ -39,51 +40,67 @@ class FollowingController extends Controller
 
 
 
+    public function toggleFollow(User $user)
+{
+    if (!auth()->check()) {
+        return redirect()->route('login')->with('error', 'يجب تسجيل الدخول أولاً');
+    }
+
+    // toggle() بيرجع array فيه 'attached' و 'detached'
+    $result = auth()->user()->following()->toggle($user->id);
+
+    $isNowFollowing = !empty($result['attached']);
+    $message = $isNowFollowing
+        ? 'You are now following ' . $user->name
+        : 'You have unfollowed ' . $user->name;
+
+    return back()->with('follow_status', $message);
+}
+
+
 public function show(Request $request)
 {
-    // 1. جلب الأشخاص المتابعين لي (بدون تحميل علاقة المهارات المسببة للمشكلة)
-    $query = Following::where('following_id', auth()->id())->with('follower');
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
 
-    // 2. تطبيق البحث
+    $authId = auth()->id();
+
+    // الناس اللي بيتبعوك
+    $followersQuery = Following::where('following_id', $authId)->with('follower.developer.specialization');
+
+    // الناس اللي بتتبعهم
+    $followingQuery = Following::where('follower_id', $authId)->with('following.developer.specialization');
+
     if ($request->filled('search')) {
         $searchTerm = $request->search;
-        $query->whereHas('follower', function ($q) use ($searchTerm) {
-            $q->where('name', 'LIKE', "%{$searchTerm}%")
-              ->orWhere('username', 'LIKE', "%{$searchTerm}%");
-        });
+        $followersQuery->whereHas('follower', fn($q) => $q->where('name', 'LIKE', "%{$searchTerm}%")->orWhere('username', 'LIKE', "%{$searchTerm}%"));
+        $followingQuery->whereHas('following', fn($q) => $q->where('name', 'LIKE', "%{$searchTerm}%")->orWhere('username', 'LIKE', "%{$searchTerm}%"));
     }
 
-    // 3. الترتيب الأبجدي
-    if ($request->sort === 'alpha') {
-        $query->join('users', 'followings.follower_id', '=', 'users.id')
-              ->orderBy('users.name', 'asc')
-              ->select('followings.*');
-    }
+    $followers = $followersQuery->get();
+    $following = $followingQuery->get();
 
-    $followers = $query->paginate(9);
+    // IDs الناس اللي بتتبعهم (عشان نعرف مين mutual)
+    $followingIds = $following->pluck('following_id')->toArray();
 
-    // 4. تحديد المتابعة المتبادلة Mutual
-    $followingIds = Following::where('follower_id', auth()->id())
-                        ->pluck('following_id')
-                        ->toArray();
-
-    return view('my-followers', [
-        'followers'    => $followers,
-        'followingIds' => $followingIds,
-    ]);
+    return view('my-followers', compact('followers', 'following', 'followingIds'));
 }
+
 public function remove($id)
 {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
     Following::where('follower_id', $id)
               ->where('following_id', auth()->id())
               ->delete();
 
-    return back()->with('success', 'Follower removed.');
+    return back()->with('success', 'The follower was successfully removed.');
 }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Following $following)
+
+public function edit(Following $following)
     {
         //
     }

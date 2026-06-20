@@ -3,7 +3,7 @@
 <div>
     {{-- Messages window --}}
     <div id="messages-container"
-         style="height:450px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; background:#fff;"
+         style="height:65vh; min-height:500px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; background:#fff;"
          x-data
          x-on:message-sent.window="$el.scrollTop = $el.scrollHeight">
 

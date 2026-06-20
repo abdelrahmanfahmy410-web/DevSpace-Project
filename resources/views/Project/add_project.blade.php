@@ -36,7 +36,7 @@
 }
 
 .wp-sidebar {
-  flex: 0 0 320px; /* Fixed width for sidebar like WordPress */
+  flex: 0 0 360px; /* Fixed width for sidebar like WordPress */
   position: sticky;
   top: 84px; /* Account for topbar (60px) + some spacing */
   display: flex;
@@ -125,6 +125,8 @@
 
 .wp-layout .form-input,
 .wp-layout .form-textarea {
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px 14px;
   font-size: 14px;
   color: #2c3338;
@@ -134,11 +136,42 @@
   transition: border-color .05s ease-in-out, box-shadow .05s ease-in-out;
 }
 
+/* Specific styles to fix textarea behavior and layout */
+.wp-layout .form-textarea {
+  resize: none; /* Disable manual resizing */
+  height: 140px; /* Fixed height to prevent layout shifts */
+  overflow-y: auto; /* Vertical scroll for long text */
+  white-space: pre-wrap; /* Ensure text wraps */
+  word-wrap: break-word; /* Prevent long unbroken words from causing horizontal overflow */
+}
+
 .wp-layout .form-input:focus,
 .wp-layout .form-textarea:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 1px var(--color-primary);
   outline: none;
+}
+
+/* ── Input Icon Wrappers ── */
+.wp-layout .input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.wp-layout .input-icon-wrap svg {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  fill: #646970;
+  pointer-events: none; /* Let clicks pass through to input */
+  z-index: 2; /* Ensure icon is above the input */
+}
+
+.wp-layout .input-icon-wrap .form-input {
+  padding-left: 38px; /* Room for the icon */
 }
 
 /* Make main Title input larger like WordPress */
@@ -193,24 +226,73 @@
 /* Live Preview in Sidebar */
 .wp-sidebar .preview-panel {
   padding: 16px;
-  background: #1d2327; /* Dark like a WP preview box */
-  color: #fff;
 }
 .wp-sidebar .preview-label {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   margin-bottom: 12px;
-  color: rgba(255,255,255,0.6);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #50575e;
+  border-bottom: 1px solid #c3c4c7;
   padding-bottom: 8px;
 }
 
 .wp-sidebar .preview-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #f6f7f7;
+  border: 1px solid #dcdde1;
   border-radius: 6px;
   padding: 16px;
+  color: #1d2327; /* Ensure text is dark and visible */
+  /* Prevent text from stretching the div horizontally */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* Prevent the div from growing vertically and pushing elements */
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.wp-sidebar .preview-name {
+  color: #1d2327;
+  font-weight: 600;
+}
+.wp-sidebar .preview-type,
+.wp-sidebar .preview-desc {
+  color: #50575e;
+}
+
+/* Drag and Drop Zone */
+.file-drop-zone {
+  border: 2px dashed #c3c4c7;
+  border-radius: 6px;
+  padding: 30px 20px;
+  text-align: center;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.file-drop-zone:hover {
+  background: #f1f1f1;
+  border-color: #8c8f94;
+}
+.file-drop-zone.dragover {
+  background: #eef2f6;
+  border-color: #2271b1;
+}
+.file-drop-zone svg {
+  width: 32px;
+  height: 32px;
+  fill: #8c8f94;
+  margin-bottom: 12px;
+}
+.file-drop-zone p {
+  margin: 0;
+  font-size: 14px;
+  color: #50575e;
+  font-weight: 500;
+}
+.file-drop-zone .form-hint {
+  margin-top: 6px;
 }
 
 /* Responsive */
@@ -329,15 +411,24 @@
                   <label class="form-label" for="type_input">
                     Type <span class="req">*</span>
                   </label>
-                  <input
-                    type="text"
+                  <select
                     id="type_input"
                     name="type"
                     class="form-input"
-                    placeholder="e.g. Web Development, AI/ML, IoT…"
-                    maxlength="100"
-                    oninput="updatePreview(); document.getElementById('typeError').classList.remove('show'); this.classList.remove('error');"
-                  />
+                    onchange="updatePreview(); document.getElementById('typeError').classList.remove('show'); this.classList.remove('error');"
+                  >
+                    <option value="" disabled selected>Select a project type...</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Mobile Development">Mobile Development</option>
+                    <option value="AI/ML">AI/ML</option>
+                    <option value="IoT">IoT</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Cybersecurity">Cybersecurity</option>
+                    <option value="Cloud Computing">Cloud Computing</option>
+                    <option value="Game Development">Game Development</option>
+                    <option value="UI/UX Design">UI/UX Design</option>
+                    <option value="Other">Other</option>
+                  </select>
                   <div class="field-error" id="typeError" style="margin-top:8px;">
                     <svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                     Please enter a project type.
@@ -375,7 +466,7 @@
                 <div class="form-group" style="margin-bottom:0;">
                   <label class="form-label">Skills</label>
                   <div id="skills-checkbox-container" class="skills-checkbox-grid">
-                    <p class="form-hint">Please select a specialization to view available skills...</p>
+                    <input type="text" class="form-input" placeholder="Select specializations to load skills..." disabled style="grid-column: 1 / -1; width: 100%; background-color: #f6f7f7; cursor: not-allowed;">
                   </div>
                 </div>
 
@@ -399,16 +490,27 @@
               </div>
               <div class="card-body">
                 <div class="form-group">
-                  <label class="form-label">Team Members</label>
+                  <label class="form-label" style="margin-bottom: 12px; display: block;">Team Members</label>
                   <div id="team-members-container" class="team-members-list">
-                    <p class="form-hint">No team members added yet. Click the button below to add one.</p>
+                    <div class="empty-state-card" style="text-align: center; padding: 24px; border: 1px dashed #c3c4c7; border-radius: 6px; background: #f9f9f9;">
+                      <svg viewBox="0 0 24 24" style="width:32px; height:32px; fill:#8c8f94; margin-bottom:12px;"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                      <p style="margin:0 0 12px 0; font-size:14px; color:#50575e;">No team members added yet.</p>
+                      <button type="button" class="btn btn-secondary" onclick="addTeamMemberField()">
+                        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;margin-right:6px;">
+                          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                        </svg>
+                        Add Team Member
+                      </button>
+                    </div>
                   </div>
-                  <button type="button" class="btn btn-secondary" onclick="addTeamMemberField()" style="margin-top:12px;">
-                    <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;margin-right:6px;">
-                      <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                    </svg>
-                    Add Team Member
-                  </button>
+                  <div id="team-add-btn-wrapper" style="display: none; margin-top:12px;">
+                    <button type="button" class="btn btn-secondary" onclick="addTeamMemberField()">
+                      <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;margin-right:6px;">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                      </svg>
+                      Add Another Member
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -436,20 +538,24 @@
               </div>
               <div class="card-body">
                 <div class="form-group" style="margin-bottom:0;">
-                  <label class="form-label" for="project_image">
+                  <label class="form-label">
                     Cover Images <span class="opt">(optional)</span>
                   </label>
-                  <input
-                    type="file"
-                    id="project_image"
-                    name="project_images[]"
-                    multiple
-                    class="form-input"
-                    accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                    onchange="previewImage(this)"
-                    style="padding: 8px 12px; cursor: pointer;"
-                  />
-                  <p class="form-hint">JPG, PNG, GIF, SVG — max 2MB</p>
+                  <div class="file-drop-zone" id="imageDropZone" onclick="document.getElementById('project_image').click()">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    <p>Drag & drop or click to upload</p>
+                    <p class="form-hint" style="margin-top: 4px;">JPG, PNG, GIF, SVG — max 2MB</p>
+                    <input
+                      type="file"
+                      id="project_image"
+                      name="project_images[]"
+                      multiple
+                      class="form-input"
+                      accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                      onchange="previewImage(this)"
+                      style="display: none;"
+                    />
+                  </div>
                   <div id="imagePreviewWrapper" style="display:none; margin-top:12px;"></div>
                 </div>
               </div>
@@ -470,20 +576,24 @@
               </div>
               <div class="card-body">
                 <div class="form-group" style="margin-bottom:0;">
-                  <label class="form-label" for="project_video">
+                  <label class="form-label">
                     Project Videos <span class="opt">(optional)</span>
                   </label>
-                  <input
-                    type="file"
-                    id="project_video"
-                    name="project_videos[]"
-                    multiple
-                    class="form-input"
-                    accept="video/*"
-                    onchange="previewVideo(this)"
-                    style="padding: 8px 12px; cursor: pointer;"
-                  />
-                  <p class="form-hint">MP4, WebM, Ogg — max 50MB</p>
+                  <div class="file-drop-zone" id="videoDropZone" onclick="document.getElementById('project_video').click()">
+                    <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                    <p>Drag & drop or click to upload</p>
+                    <p class="form-hint" style="margin-top: 4px;">MP4, WebM, Ogg — max 50MB</p>
+                    <input
+                      type="file"
+                      id="project_video"
+                      name="project_videos[]"
+                      multiple
+                      class="form-input"
+                      accept="video/*"
+                      onchange="previewVideo(this)"
+                      style="display: none;"
+                    />
+                  </div>
                   <div id="videoPreviewWrapper" style="display:none; margin-top:12px;"></div>
                 </div>
               </div>
@@ -620,11 +730,11 @@
     const skillsContainer = document.getElementById('skills-checkbox-container');
 
     if (!selectedOptions || selectedOptions.length === 0) {
-      skillsContainer.innerHTML = '<p class="form-hint">Please select a specialization to view available skills...</p>';
+      skillsContainer.innerHTML = '<input type="text" class="form-input" placeholder="Select specializations to load skills..." disabled style="grid-column: 1 / -1; width: 100%; background-color: #f6f7f7; cursor: not-allowed;">';
       return;
     }
 
-    skillsContainer.innerHTML = '<p class="form-hint" style="color:#6b7280;">Loading skills…</p>';
+    skillsContainer.innerHTML = '<input type="text" class="form-input" placeholder="Loading skills…" disabled style="grid-column: 1 / -1; width: 100%; background-color: #f6f7f7; cursor: not-allowed; color:#6b7280;">';
 
     const fetchPromises = selectedOptions.map(specId => {
       let url = "{{ route('projects.get_skills', ':id') }}".replace(':id', specId);
@@ -872,8 +982,10 @@
 
   window.addTeamMemberField = function () {
     const container = document.getElementById("team-members-container");
-    const placeholder = container.querySelector(".form-hint");
-    if (placeholder) placeholder.remove();
+    const emptyState = container.querySelector(".empty-state-card");
+    if (emptyState) emptyState.remove();
+
+    document.getElementById('team-add-btn-wrapper').style.display = 'block';
 
     teamMemberCount++;
     const id = "team-member-" + teamMemberCount;
@@ -919,9 +1031,48 @@
 
     const container = document.getElementById("team-members-container");
     if (container.children.length === 0) {
-      container.innerHTML = '<p class="form-hint">No team members added yet. Click the button below to add one.</p>';
+      container.innerHTML = `
+        <div class="empty-state-card" style="text-align: center; padding: 24px; border: 1px dashed #c3c4c7; border-radius: 6px; background: #f9f9f9;">
+          <svg viewBox="0 0 24 24" style="width:32px; height:32px; fill:#8c8f94; margin-bottom:12px;"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          <p style="margin:0 0 12px 0; font-size:14px; color:#50575e;">No team members added yet.</p>
+          <button type="button" class="btn btn-secondary" onclick="addTeamMemberField()">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;margin-right:6px;">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+            </svg>
+            Add Team Member
+          </button>
+        </div>
+      `;
+      document.getElementById('team-add-btn-wrapper').style.display = 'none';
     }
   };
+
+  // Drag and drop logic for file uploads
+  document.addEventListener("DOMContentLoaded", () => {
+    ['imageDropZone', 'videoDropZone'].forEach(id => {
+      const zone = document.getElementById(id);
+      if(zone) {
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          zone.classList.add('dragover');
+        });
+        zone.addEventListener('dragleave', () => {
+          zone.classList.remove('dragover');
+        });
+        zone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          zone.classList.remove('dragover');
+          const inputId = id === 'imageDropZone' ? 'project_image' : 'project_video';
+          const input = document.getElementById(inputId);
+          if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            input.files = e.dataTransfer.files;
+            if(inputId === 'project_image') previewImage(input);
+            else previewVideo(input);
+          }
+        });
+      }
+    });
+  });
 
 </script>
 </body>

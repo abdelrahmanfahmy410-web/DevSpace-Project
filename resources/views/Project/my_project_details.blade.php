@@ -159,7 +159,7 @@
                                     </div>
                                     <div class="member-actions">
                                         <div class="member-role">{{ $member->pivot->role ?? 'Member' }}</div>
-                                        <a href="{{ route('member.profile', $member->id) }}" class="btn-member btn-profile">View Profile</a>
+                                        <a href="{{ route('member.other_profile', $member->id) }}" class="btn-member btn-profile">View Profile</a>
                                     </div>
                                 </div>
                             @endforeach

@@ -27,92 +27,145 @@
     </button>
 </div>
 
-    @php
-        $mutualIds     = $followers->filter(fn($f) => $f->follower && in_array($f->follower_id, $followingIds))->pluck('follower_id');
-        $allCount      = $followers->whereNotNull('follower')->count();
-        $followerCount = $allCount - $mutualIds->count();
-        $mutualCount   = $mutualIds->count();
-    @endphp
+   @php
+    $mutualIds     = $followers->filter(fn($f) => $f->follower && in_array($f->follower_id, $followingIds))->pluck('follower_id');
+    $allCount      = $followers->whereNotNull('follower')->count();
+    $followerCount = $allCount - $mutualIds->count();
+    $mutualCount   = $mutualIds->count();
+    $followingCount = $following->count();
+@endphp
 
-    <div class="chips" id="filterChips">
-        <button class="chip active" data-filter="all" onclick="filterChips(this, 'all')">
-            <span class="chip-dot"></span> All ({{ $allCount }})
+<div class="chips" id="filterChips">
+    <button class="chip active" data-filter="all" onclick="filterChips(this, 'all')">
+        <span class="chip-dot"></span> All ({{ $allCount + $followingCount }})
+    </button>
+    <button class="chip" data-filter="follower" onclick="filterChips(this, 'follower')">
+        <span class="chip-dot"></span> Followers ({{ $followerCount }})
         </button>
-        <button class="chip" data-filter="follower" onclick="filterChips(this, 'follower')">
-            <span class="chip-dot"></span> Followers ({{ $followerCount }})
-        </button>
-        <button class="chip" data-filter="mutual" onclick="filterChips(this, 'mutual')">
-            <span class="chip-dot"></span> Following ({{ $mutualCount }})
+    <button class="chip" data-filter="mutual" onclick="filterChips(this, 'mutual')">
+        <span class="chip-dot"></span> Mutual ({{ $mutualCount }})
+    </button>
+    <button class="chip" data-filter="following" onclick="filterChips(this, 'following')">
+        <span class="chip-dot"></span> Following ({{ $followingCount }})
         </button>
     </div>
 
     {{-- Followers list --}}
     <div class="followers-list" id="followersList">
-        @if($followers->count() > 0)
-            @foreach ($followers as $item)
-                @if($item->follower)
-                    @php
-                        $ismutual  = in_array($item->follower_id, $followingIds);
-                        $badgeType = $ismutual ? 'following' : 'follower';
+    @if($followers->count() > 0 || $following->count() > 0)
 
-                        // جلب التخصص من: user -> developer -> specialization -> name
-                        $specialty = optional(optional($item->follower->developer)->specialization)->name;
-                    @endphp
-                    <div class="row"
-                         data-name="{{ strtolower($item->follower->name) }}"
-                         data-username="{{ strtolower($item->follower->username ?? '') }}"
-                         data-type="{{ $badgeType }}">
+        {{-- Followers --}}
+        @foreach ($followers as $item)
+            @if($item->follower)
+                @php
+                    $ismutual  = in_array($item->follower_id, $followingIds);
+                    $badgeType = $ismutual ? 'mutual' : 'follower';
+                    $specialty = optional(optional($item->follower->developer)->specialization)->name;
+                @endphp
+                <div class="row"
+                     data-name="{{ strtolower($item->follower->name) }}"
+                     data-username="{{ strtolower($item->follower->username ?? '') }}"
+                     data-type="{{ $badgeType }}">
 
-                        <img class="avatar"
-                             src="{{ $item->follower->profile_picture ? asset('storage/' . $item->follower->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($item->follower->name) . '&background=random' }}"
-                             alt="{{ $item->follower->name }}">
+                    <img class="avatar"
+                         src="{{ $item->follower->profile_picture ? asset('storage/' . $item->follower->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($item->follower->name) . '&background=random' }}"
+                         alt="{{ $item->follower->name }}">
 
-                        <div class="row-info">
-                            <p class="row-name">{{ $item->follower->name }}</p>
-                            <p class="row-username">{{ $item->follower->email ?? '' }}</p>
-
-                            <div class="row-skills">
-                                @if($specialty)
-                                    <span class="skill-tag">{{ $specialty }}</span>
-                                @else
-                                    <span class="skill-tag skill-tag--empty">No specialty listed</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="row-right">
-                            <div class="badge-dots-row">
-                                <span class="badge badge-{{ $badgeType }}">{{ $ismutual ? 'Following' : 'Follower' }}</span>
-                                <div class="dropdown-wrap">
-                                    <button class="dots-btn" onclick="toggleDropdown(this)" type="button" aria-label="Options">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a href="{{ route('member.profile', $item->follower->id) }}" class="dropdown-item">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                            View Profile
-                                        </a>
-                                        <button type="button" class="dropdown-item danger"
-                                            onclick="openRemoveModal('{{ $item->follower->id }}', '{{ $item->follower->name }}')">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-                                            Remove Follower
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- View Profile button --}}
-                            <a href="{{ route('member.profile', $item->follower->id) }}" class="btn-view-profile">
-                                View Profile
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                            </a>
+                    <div class="row-info">
+                        <p class="row-name">{{ $item->follower->name }}</p>
+                        <p class="row-username">{{ $item->follower->email ?? '' }}</p>
+                        <div class="row-skills">
+                            @if($specialty)
+                                <span class="skill-tag">{{ $specialty }}</span>
+                            @else
+                                <span class="skill-tag skill-tag--empty">No specialty listed</span>
+                            @endif
                         </div>
                     </div>
-                @endif
-            @endforeach
-        @else
-            <p class="no-results">No followers found.</p>
-        @endif
+
+                    <div class="row-right">
+                        <div class="badge-dots-row">
+                            <span class="badge badge-{{ $badgeType }}">
+                                {{ $ismutual ? 'Mutual' : 'Follower' }}
+                            </span>
+                            <div class="dropdown-wrap">
+                                <button class="dots-btn" onclick="toggleDropdown(this)" type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ route('member.other_profile', $item->follower->id) }}" class="dropdown-item">View Profile</a>
+                                    <button type="button" class="dropdown-item danger"
+                                        onclick="openRemoveModal('{{ $item->follower->id }}', '{{ $item->follower->name }}')">
+                                        Remove Follower
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{{ route('member.other_profile', $item->follower->id) }}" class="btn-view-profile">
+                            View Profile
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                    </div>
+                </div>
+            @endif
+        @endforeach
+
+        {{-- Following --}}
+        @foreach ($following as $item)
+            @if($item->following)
+                @php
+                    $specialty = optional(optional($item->following->developer)->specialization)->name;
+                @endphp
+                <div class="row"
+                     data-name="{{ strtolower($item->following->name) }}"
+                     data-username="{{ strtolower($item->following->username ?? '') }}"
+                     data-type="following">
+
+                    <img class="avatar"
+                         src="{{ $item->following->profile_picture ? asset('storage/' . $item->following->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($item->following->name) . '&background=random' }}"
+                         alt="{{ $item->following->name }}">
+
+                    <div class="row-info">
+                        <p class="row-name">{{ $item->following->name }}</p>
+                        <p class="row-username">{{ $item->following->email ?? '' }}</p>
+                        <div class="row-skills">
+                            @if($specialty)
+                                <span class="skill-tag">{{ $specialty }}</span>
+                            @else
+                                <span class="skill-tag skill-tag--empty">No specialty listed</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="row-right">
+                        <div class="badge-dots-row">
+                            <span class="badge badge-following">Following</span>
+                            <div class="dropdown-wrap">
+                                <button class="dots-btn" onclick="toggleDropdown(this)" type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                                </button>
+                                <div class="dropdown-menu">
+                                   <a href="{{ route('member.other_profile', $item->following->id) }}" class="dropdown-item">View Profile</a>   
+                                    {{-- Unfollow --}}
+                                    <form action="{{ route('user.follow', $item->following->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item danger">Unfollow</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{{ route('member.other_profile', $item->following->id) }}" class="btn-view-profile">
+                            View Profile
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                    </div>
+                </div>
+            @endif
+        @endforeach
+
+    @else
+        <p class="no-results">No connections found.</p>
+    @endif
     </div>
 </div>
 
@@ -167,10 +220,12 @@ function applyFilters() {
         const matchSearch = !q || name.includes(q) || uname.includes(q);
         let matchFilter = true;
         if (activeFilter === 'follower') matchFilter = type === 'follower';
-        else if (activeFilter === 'mutual') matchFilter = type === 'following';
+        else if (activeFilter === 'mutual') matchFilter = type === 'mutual';
+        else if (activeFilter === 'following') matchFilter = type === 'following';
         row.style.display = (matchSearch && matchFilter) ? '' : 'none';
     });
 }
+
 
 function toggleDropdown(btn) {
     const menu = btn.nextElementSibling;

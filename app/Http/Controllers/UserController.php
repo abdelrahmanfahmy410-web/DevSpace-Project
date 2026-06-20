@@ -48,7 +48,7 @@ class UserController extends Controller
     $request->session()->regenerate();
     Auth::login($user);
     
-    return redirect('/')->with('success', 'Logged in successfully!');
+    return redirect('/dashboard')->with('success', 'Logged in successfully!');
 }
 
 

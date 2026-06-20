@@ -536,7 +536,7 @@
                                         </a>
                                     @endif
                                 </div>
-                                <a href="{{ route('projects.show', $project->id) }}" class="view-btn">
+                                <a href="{{ route('projects.my_details', $project->id) }}" class="view-btn">
                                     View
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </a>

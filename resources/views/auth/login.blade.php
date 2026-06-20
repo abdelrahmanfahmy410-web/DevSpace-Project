@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - DevSpace</title>
-
+    <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 </head>
@@ -57,11 +57,9 @@
                 <button type="submit" class="login-btn">Login to DevSpace</button>
             </form>
 
-            <div class="role-selection-wrapper" style="margin-top: 15px; text-align: center;">
-                <a href="{{ url('/select-role') }}" class="role-btn" style="display: block; text-decoration: none; padding: 12px; background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 6px; font-weight: 500; font-family: 'DM Sans', sans-serif; transition: all 0.2s;">
-                    Select Your Role 
-                </a>
-            </div>
+            <p class="join-footer-note" style="margin-left: 40px; margin-top: 20px;">
+        Want to join as <a href="/join"> a Developer/Mentor/Investor?  Join us here</a>
+    </p>
 
         </div>
     </div>

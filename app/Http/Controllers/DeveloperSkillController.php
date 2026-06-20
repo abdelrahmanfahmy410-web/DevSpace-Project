@@ -91,5 +91,54 @@ class DeveloperSkillController extends Controller
         return redirect('/dashboard')
             ->with('success', 'Skills updated successfully!');
     }
+    public function editmentor()
+    {
+        $skills      = Skill::all();
+        $id          = auth()->id();
+        $developer   = DB::table('mentors')->where('user_id', $id)->first();
+        $developerId = $developer->id;
+
+        $developerSkills = DB::table('mentors_skills')
+            ->where('mentor_id', $developerId)
+            ->pluck('skill_id')
+            ->toArray();
+
+        return view('mentor.skills', [
+            'skills'          => $skills,
+            'developerSkills' => $developerSkills,
+            'id'              => $id,
+            'update_url'      => url('/mentor/skills/' . $id . '/update'),
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updatementor(Request $request)
+    {
+        //   dd($request->all());
+        $id          = auth()->id();
+        $developer   = DB::table('mentors')->where('user_id', $id)->first();
+        $developerId = $developer->id;
+
+        DB::table('mentors_skills')
+            ->where('mentor_id', $developerId)
+            ->delete();
+
+        if ($request->has('skills')) {
+            $data = [];
+            foreach ($request->skills as $skillId) {
+                $data[] = [
+                    'mentor_id' => $developerId,
+                    'skill_id'     => $skillId,
+                ];
+            }
+            DB::table('mentors_skills')->insert($data);
+        }
+
+        return redirect('/dashboard')
+            ->with('success', 'Skills updated successfully!');
+    }
+
 
 }

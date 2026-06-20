@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $user->name }} | Developer Profile</title>
+@extends('layouts.app')
+
+@section('title', '{{ $user->name }} | Developer Profile')
+
+@section('content')
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +10,7 @@
     
     <style>
         /* Mapping your exact design system parameters into Tailwind variables */
+    
         :root {
             --font-sans: 'DM Sans', sans-serif;
             --color-brand-green: #1A7A4A;
@@ -247,5 +247,4 @@
     </div>
 
     @livewireScripts
-</body>
-</html>
+@endsection

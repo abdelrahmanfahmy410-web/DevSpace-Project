@@ -84,6 +84,8 @@ Route::post('/developer/skills/update', [DeveloperSkillController::class, 'updat
 Route::get('/mentor/register', [MentorController::class, 'create'])->name('mentor.register');
 Route::post('/mentor/register', [MentorController::class, 'store'])->name('mentor.store');
 Route::get('/mentor/{mentor}', [MentorController::class, 'show'])->name('mentor.show');
+Route::get('/mentor/skills/edit', [DeveloperSkillController::class, 'editmentor']);
+Route::post('/mentor/skills/update', [DeveloperSkillController::class, 'updatementor']);
 
 // ----------------------------------------------------
 // Project Routes (CRUD & Management)

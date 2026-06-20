@@ -7,7 +7,8 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/css_template.css') }}" />
-<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" /> 
+<link rel="stylesheet" href="{{ asset('css/toaster.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 @endpush
 

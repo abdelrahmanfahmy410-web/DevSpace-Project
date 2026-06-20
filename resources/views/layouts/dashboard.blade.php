@@ -174,6 +174,12 @@
                 <h3 class="card-title">
                     {{ $isInvestor ? 'My Area Of Interest' : 'My Expertise' }}
                 </h3>
+                    @if ($isDeveloper)
+                    <a href="/developer/skills/edit" class="btn btn-outline btn--sm">update Skills</a>
+                @else
+                    <a href="/mentor/skills/edit" class="btn btn-outline btn--sm">update Skills</a>
+                @endif
+                
             </div>
 
             <div class="skills">
@@ -187,18 +193,15 @@
                         </div>
                     @endif
                 @else
-                    @forelse($skills as $skill)
+                  <div>
+                      @forelse($skills as $skill)
                         <span class="skill">{{ $skill->name }}</span>
                     @empty
                         <div class="empty-state empty-state--sm">
                             <p>No skills added yet.</p>
-                            @if ($isDeveloper)
-                                <a href="/developer/skills/edit" class="btn btn-outline btn--sm">Add Skills</a>
-                            @else
-                                <a href="/mentor/skills/edit" class="btn btn-outline btn--sm">Add Skills</a>
-                            @endif
                         </div>
                     @endforelse
+                  </div>
                 @endif
             </div>
         </div>

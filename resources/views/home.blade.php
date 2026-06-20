@@ -3,7 +3,20 @@
 @section('title', 'DevSpace — Where Developers Take Flight')
 
 @push('styles')
+
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .layout__main{
+            padding: 0;
+        }
+    </style>
 @endpush
 
 @section('content')

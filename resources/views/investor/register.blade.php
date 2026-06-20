@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="{{ asset('css/css_template.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/investor-register.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/toaster.css') }}">
 
-    
 </head>
 
 <body>
@@ -20,7 +20,7 @@
             <h1 class="register-title">Investor Registration</h1>
         </div>
 
-        <form method="POST" action="{{ route('investor.store'gir) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('investor.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="form-card">

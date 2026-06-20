@@ -325,20 +325,33 @@ class ProjectController extends Controller
     /**
      * Display projects assigned to the current user via team roles.
      */
-    public function myProjects()
-{
-    if (Auth::user()->id != null) {
-        $projects = Project::whereHas('teamRoleRecords', function ($query) {
+public function myProjects(Request $request)
+    {
+        $search = $request->input('search');
+        $type   = $request->input('type');
+
+        // 
+        $query = Project::whereHas('teamRoleRecords', function ($query) {
             $query->where('user_id', auth()->id())
                   ->where(function($q) {
                       $q->where('status', 'approved')
                         ->orWhere('role', 'Project Creator');
                   });
-        })->latest()->get();
-    }
+        })->with(['skills', 'specializations', 'media']);
 
-    return view('Project.my-projects', compact('projects'));
-}
+        // إضافة الفلاتر
+        $query->when($search, function($q, $search) {
+            return $q->where('title', 'like', "%{$search}%");
+        });
+
+        $query->when($type, function($q, $type) {
+            return $q->where('type', $type);
+        });
+
+        $projects = $query->latest()->paginate(9)->withQueryString();
+
+        return view('Project.my-projects', compact('projects', 'search', 'type'));
+    }
 
     public function addMedia(Project $project)
     {
@@ -368,22 +381,42 @@ class ProjectController extends Controller
     /**
      * Display user's wishlist
      */
-    public function wishlist()
-    {
-        if (Auth::user()->id != null) {
-            $projects = auth()->user()->wishlist()
-                ->with(['skills', 'specializations', 'media'])
-                ->latest()
-                ->paginate(12)
-                ->withQueryString();
-        }
-
-        $specializations = \App\Models\Specialization::orderBy('name')->get();
-        $skills          = \App\Models\Skill::orderBy('name')->get();
-
-        return view('Project.wishlist', compact('projects', 'specializations', 'skills'));
+  public function wishlist(Request $request)
+{
+    if (!auth()->check()) {
+        return redirect()->route('login');
     }
 
+    $query = auth()->user()->wishlist()->with(['skills', 'specializations', 'media']);
+
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+ 
+    if ($request->filled('type')) {
+        $query->where('type', $request->type);
+    }
+
+   
+    if ($request->filled('specialization')) {
+        $query->whereHas('specializations', function($q) use ($request) {
+            $q->where('specializations.id', $request->specialization);
+        });
+    }
+
+    if ($request->filled('skill')) {
+        $query->whereHas('skills', function($q) use ($request) {
+            $q->where('skills.id', $request->skill);
+        });
+    }
+
+    $projects = $query->latest()->paginate(12)->withQueryString();
+
+    $specializations = \App\Models\Specialization::orderBy('name')->get();
+    $skills = \App\Models\Skill::orderBy('name')->get();
+
+    return view('Project.wishlist', compact('projects', 'specializations', 'skills'));
+}
     /**
      * Redirect to member profile based on role
      */

@@ -122,7 +122,13 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap gap-2 mt-6 w-full border-t border-slate-200 pt-4">
+            <div class="flex flex-wrap gap-2 mt-5 w-full">
+<form action="{{ route('user.follow', $user->id) }}" method="POST">
+    @csrf
+    <button type="submit">
+        {{ auth()->user()->following->contains($user->id) ? 'Unfollow' : 'Follow' }}
+    </button>
+</form>
 
                             @auth
                                 @if(auth()->id() !== $user->id)

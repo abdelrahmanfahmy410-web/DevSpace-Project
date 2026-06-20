@@ -22,21 +22,26 @@ use App\Http\Controllers\HomeController;
 
 
 
-//all users
-Route::get('/', function () {
-    return view('home', ['fullWidth' => true, 'active' => '']);
-});
-//home
+//home for all users 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/join', fn() => view('layouts.join'))->name('join');
 ////////////////////
+Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
+Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+
+
+//all users
+
 Route::get('/add-area-of-interest',[AreaOfInterestController::class, 'create'])->name('area_of_interest.create');
 Route::post('/add-area-of-interest',[AreaOfInterestController::class, 'store'])->name('area_of_interest.store');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
 //investor Routes
 Route::get('/investor/register',[InvestorController::class, 'create']);
-
+Route::get('/investor/edit', [InvestorController::class, 'edit'])->name('investor.edit');
+Route::get('/investor/profile', [InvestorController::class, 'showProfile'])->name('investor.profile');
 // ----------------------------------------------------
 // All Users & General Routes
 // ----------------------------------------------------
@@ -55,14 +60,14 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 // ----------------------------------------------------
 // Investor Routes
 // ----------------------------------------------------
-Route::get('/investor/register', [InvestorController::class, 'create']);
-Route::post('/investor/register', [InvestorController::class, 'store']);
+Route::get('/investor/register', [InvestorController::class, 'create'])->name('investor.register');
+Route::post('/investor/register', [InvestorController::class, 'store'])->name('investor.store');
 
 // ----------------------------------------------------
 // Developer Routes
 // ----------------------------------------------------
 Route::get('/developer/register', [DeveloperController::class, 'create'] )->name('developer.register');
-Route::post('/developer/register', [DeveloperController::class, 'store']);
+Route::post('/developer/register', [DeveloperController::class, 'store'])->name('developer.store');
 //Route::get('/developer/profile', [DeveloperController::class, 'show'])->name('developer.profile');
 Route::get('/developer/edit', [DeveloperController::class, 'edit'])->name('developer.edit');
 Route::post('/developer/update', [DeveloperController::class, 'update'])->name('developer.update');
@@ -148,6 +153,7 @@ Route::get('/member/profile', [UserController::class, 'showMemberProfile'])
     ->name('member.other_profile')
     ->middleware('auth');
 // ----------------------------------------------------
+Route::post('/user/follow/{user}', [FollowingController::class, 'toggleFollow'])->name('user.follow');    // ----------------------------------------------------
 // API / AJAX Routes
 // ----------------------------------------------------
 Route::get('/api/skills-by-specialization/{specialization}', [ProjectController::class, 'getSkillsBySpecialization'])
@@ -200,9 +206,7 @@ Route::post('/team-roles/{teamRole}/reject', [TeamRoleController::class, 'reject
 // ----------------------------------------------------
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
 
-    // Dashboard
-    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-
+Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     //All users 
     Route::get('/users', [AdminController::class, 'users'])->name('users.index');
 

@@ -41,11 +41,7 @@ class User extends Authenticatable
     {
        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     }
-    //watchlist
-    public function watchlist()
-    {
-        return $this->hasMany(Project::class, 'watchlist');
-    }
+    
     //
     public function areaOfInterests()
     {
@@ -109,17 +105,21 @@ class User extends Authenticatable
     return $this->hasMany(TeamRole::class);
 } 
 
-// app/Models/User.php
-public function isAdmin(): bool
-{
-    return DB::table('user_roles')
-        ->join('roles', 'roles.id', '=', 'user_roles.role_id')
-        ->where('user_roles.user_id', $this->id)
-        ->where('roles.name', 'admin')
-        ->exists();
-}
 public function following(): BelongsToMany
 {
     return $this->belongsToMany(User::class, 'followings', 'follower_id', 'following_id')->withTimestamps();
 }
+
+public function followers()
+{
+   
+    return $this->belongsToMany(User::class, 'followings', 'following_id', 'follower_id')
+                ->withTimestamps();
+}
+//// is Admin error
+public function isAdmin(): bool
+{
+    return $this->roles()->where('name', 'admin')->exists();
+}
+
 }

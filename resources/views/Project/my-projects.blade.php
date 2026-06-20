@@ -362,6 +362,7 @@
             .stats-row { grid-template-columns: 1fr; }
             .projects-grid { grid-template-columns: 1fr; }
         }
+        
     </style>
 @endsection
 @php

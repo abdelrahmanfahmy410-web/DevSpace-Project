@@ -3,93 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investor Register</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+    <title>Investor Registration — ITI Hive</title>
+    
+    <link rel="stylesheet" href="{{ asset('css/css_template.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/investor-register.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    
 </head>
+
 <body>
-    <div>
-        @include('../layouts.toaster')
-    </div>
-    <div class="register-page">
-        <div class="register-container">
-            <div class="register-header">
-                <div class="register-eyebrow"><span class="eyebrow-dot"></span>Investor Registration</div>
-                <h1 class="register-title">Create your Investor Account</h1>
-                <p class="register-subtitle">Join ITI Hive to discover and connect with graduate projects.</p>
-            </div>
+@include('layouts.toaster')
+<div class="register-page">
+    <div class="register-container">
+        <div class="register-header">
+            <h1 class="register-title">Investor Registration</h1>
+        </div>
 
-            <form method="POST" action="/investor/register" enctype="multipart/form-data">
-                @csrf
+        <form method="POST" action="{{ route('investor.store'gir) }}" enctype="multipart/form-data">
+            @csrf
 
-                <div class="form-card">
-                    <div class="form-card-header">
-                        <div class="form-card-icon">&#128100;</div>
-                        <div>
-                            <div class="form-card-title">Account Details</div>
-                            <div class="form-card-sub">Your login credentials</div>
-                        </div>
+            <div class="form-card">
+
+                <div class="form-card-header">
+                    <div class="form-card-icon">
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
                     </div>
-                    <div class="form-card-body">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Full Name <span class="required">*</span></label>
-                            <input id="name" type="text" name="name" class="form-input" required autofocus>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email <span class="required">*</span></label>
-                            <input id="email" type="email" name="email" class="form-input" required>
-                        </div>
-                        <div class="form-group-row">
-                            <div class="form-group">
-                                <label for="password" class="form-label">Password <span class="required">*</span></label>
-                                <input id="password" type="password" name="password" class="form-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password_confirmation" class="form-label">Confirm Password <span class="required">*</span></label>
-                                <input id="password_confirmation" type="password" name="password_confirmation" class="form-input" required>
-                            </div>
-                        </div>
+
+                    <div>
+                        <div class="form-card-title">Become an Investor</div>
+                        <div class="form-card-sub">Join ITI Hive to discover and connect with graduate projects</div>
                     </div>
                 </div>
 
-                <div class="form-card">
-                    <div class="form-card-header">
-                        <div class="form-card-icon">&#128221;</div>
-                        <div>
-                            <div class="form-card-title">Profile Information</div>
-                            <div class="form-card-sub">Tell us more about your investor profile</div>
+                <div class="form-card-body layout-container">
+
+                    <!-- LEFT COLUMN -->
+                    <div class="left-column">
+
+                        <div class="avatar-upload-wrapper">
+                            <label class="form-label">Profile Picture</label>
+                            <div class="avatar-preview-box" onclick="document.getElementById('profile_picture').click()">
+                                <img id="avatarPreview" src="" style="display:none;">
+                                <span id="avatarPlaceholder" class="avatar-placeholder">
+                                    <i class="fa-solid fa-camera"></i><br>
+                                    Upload Photo
+                                </span>
+                            </div>
+                            <input id="profile_picture" type="file" name="profile_picture" accept="image/*" style="display:none" onchange="previewAvatar(this)">
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fa-solid fa-address-card"></i>
+                                Bio
+                            </label>
+                            <textarea name="bio" class="form-textarea" placeholder="Share a brief bio or investment focus...">{{ old('bio') }}</textarea>
+                        </div>
+
                     </div>
-                    <div class="form-card-body">
-                        <div class="form-group">
-                            <label for="bio" class="form-label">Bio <span class="optional">(optional)</span></label>
-                            <textarea id="bio" name="bio" class="form-textarea" placeholder="Share a brief bio or investment focus"></textarea>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="right-column">
+
+                        <div class="form-group-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-user"></i>
+                                    Full Name *
+                                </label>
+                                <input type="text" name="name" class="form-input" placeholder="Enter your full name" required value="{{ old('name') }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-envelope"></i>
+                                    Email Address *
+                                </label>
+                                <input type="email" name="email" class="form-input" placeholder="example@gmail.com" required value="{{ old('email') }}">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="linkedin" class="form-label">LinkedIn Profile <span class="optional">(optional)</span></label>
-                            <input id="linkedin" type="url" name="linkedin" class="form-input" placeholder="https://">
+
+                        <div class="form-group-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-lock"></i>
+                                    Password *
+                                </label>
+                                <input type="password" name="password" class="form-input" placeholder="Enter password" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                    Confirm Password *
+                                </label>
+                                <input type="password" name="password_confirmation" class="form-input" placeholder="Confirm password" required>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="organization" class="form-label">Organization <span class="optional">(optional)</span></label>
-                            <input id="organization" type="text" name="organization" class="form-input" placeholder="Firm, incubator, or institution">
+
+                        <div class="form-group-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-building"></i>
+                                    Organization
+                                </label>
+                                <input type="text" name="organization" class="form-input" placeholder="Firm or institution" value="{{ old('organization') }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fa-brands fa-linkedin"></i>
+                                    LinkedIn Profile
+                                </label>
+                                <input type="url" name="linkedin" class="form-input" placeholder="https://linkedin.com/in/..." value="{{ old('linkedin') }}">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="profile_picture" class="form-label">Profile Picture <span class="optional">(optional)</span></label>
-                            <input id="profile_picture" type="file" name="profile_picture" class="form-input">
-                        </div>
+
                     </div>
                 </div>
 
                 <div class="form-footer">
-                    <p class="form-footer-note">🔒 Your data is encrypted and secure</p>
-                    <div class="form-footer-actions">
-                        <button type="submit" class="btn btn-primary">Create Investor Account</button>
+                    <div class="form-footer-note">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Your information is secure and protected
                     </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Create Investor Account
+                    </button>
                 </div>
-            </form>
-        </div>
+
+            </div>
+        </form>
     </div>
+</div>
+
+
+<script>
+    function previewAvatar(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('avatarPreview').src = e.target.result;
+                document.getElementById('avatarPreview').style.display = 'block';
+                document.getElementById('avatarPlaceholder').style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
 </body>
 </html>

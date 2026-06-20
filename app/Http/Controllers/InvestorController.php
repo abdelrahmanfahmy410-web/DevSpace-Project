@@ -79,11 +79,13 @@ class InvestorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Investor $investor)
-    {
-        //
-    }
-
+  public function edit()
+{
+    $user = auth()->user();
+    $investor = $user->investor;
+    
+    return view('investor.edit', compact('user', 'investor'));
+}
     /**
      * Update the specified resource in storage.
      */
@@ -98,5 +100,24 @@ class InvestorController extends Controller
     public function destroy(Investor $investor)
     {
         //
+   
+     }
+public function showProfile()
+{
+
+    if (!auth()->check()) {
+        return redirect()->route('login'); 
     }
+
+    $user = auth()->user();
+    
+    $investor = $user->investor;
+  
+    if (!$investor) {
+     
+        return back()->with('error', 'Investor profile not found.');
+    }
+
+    return view('investor.profile', compact('user', 'investor'));
+}
 }

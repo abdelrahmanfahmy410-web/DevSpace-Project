@@ -45,8 +45,8 @@ class UserController extends Controller
     }
 
     // 4. regenerate session and log the user in
-    $request->session()->regenerate();
     Auth::login($user);
+    $request->session()->regenerate();
     
     return redirect('/dashboard')->with('success', 'Logged in successfully!');
 }
@@ -170,5 +170,6 @@ public function logout()
     Auth::logout();
     return redirect('/login');
 }
+
 
 }

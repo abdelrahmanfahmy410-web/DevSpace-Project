@@ -121,18 +121,5 @@ public function edit(Following $following)
     {
         //
     }
-public function toggleFollow(User $user)
-{
-    // نتأكد هل فيه يوزر عامل login؟
-    if (!auth()->check()) {
-        return redirect()->route('login')->with('error', 'يجب تسجيل الدخول أولاً');
-    }
-
-    // لو دخل هنا، معناه إن اليوزر موجود ومسجل دخول
-    auth()->user()->following()->toggle($user->id);
-
-    return back();
-}
-
 
 }

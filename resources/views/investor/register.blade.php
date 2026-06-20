@@ -20,7 +20,7 @@
             <h1 class="register-title">Investor Registration</h1>
         </div>
 
-        <form method="POST" action="{{ route('investor.store'gir) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('investor.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="form-card">

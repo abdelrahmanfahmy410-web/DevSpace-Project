@@ -1,8 +1,8 @@
 @extends('layouts.app_dashboard')
 
 @section('page-title', 'Dashboard')
-@section('head')
-   <style>
+@push('styles')
+<style>
      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
@@ -364,7 +364,8 @@
         }
         
     </style>
-@endsection
+@push('styles')
+
 @php
     $roleNames = auth()->user()->roles->pluck('name')->map(fn($r) => strtolower($r))->toArray();
     $isDeveloper = in_array('developer', $roleNames);

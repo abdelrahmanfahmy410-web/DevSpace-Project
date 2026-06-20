@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $user->name }} | Developer Profile</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+@extends('layouts.app')
+
+@section('title', $user->name . ' | Developer Profile')
+
+@push('styles')
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            },
+            theme: {
+                extend: {
+                    boxShadow: {
+                        '2xs': '0 1px 1px 0 rgb(0 0 0 / 0.05)',
+                        'xs': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
@@ -283,6 +297,8 @@
         </div>
     </div>
 
-    @livewireScripts
-</body>
-</html>
+    @push('scripts')
+        @livewireScripts
+    @endpush
+</div>
+@endsection

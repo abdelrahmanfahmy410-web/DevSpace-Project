@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $developer->user?->name ?? 'Developer Profile' }} - Profile</title>
-    
+@extends('layouts.app')
+
+@section('title', ($developer->user?->name ?? 'Developer Profile') . ' - Profile')
+
+@push('styles')
     {{-- ربط ملف الـ CSS المينيماليست الفاخر من الـ public folder مباشرة --}}
     <link rel="stylesheet" href="{{ asset('developer_reg_style.css') }}">
-    
-    {{-- مكتبة FontAwesome للأيقونات --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body style="background-color: var(--color-bg-light, #f8fafc); margin: 0; padding: 0; font-family: sans-serif;">
+@endpush
+
+@section('content')
+<div style="background-color: var(--color-bg-light, #f8fafc); margin: 0; padding: 0; font-family: sans-serif; min-height: 100vh;">
 <div class="container section" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
     {{-- تقسيم الصفحة لعمودين باستخدام الـ Grid الخاص بيكِ --}}
     <div class="grid-2">
@@ -99,5 +96,5 @@
     </div>
 </div>
 
-</body>
-</html>
+</div>
+@endsection

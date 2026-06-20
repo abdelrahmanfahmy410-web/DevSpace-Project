@@ -306,7 +306,7 @@
 
                     {{-- Pagination Controls --}}
                     <nav class="pagination-wrapper" aria-label="Pagination">
-                        {{ $projects->appends(request()->query())->links() }}
+                        {{ $projects->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </nav>
                 @endif
             </div>

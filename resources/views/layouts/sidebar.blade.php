@@ -91,7 +91,7 @@
             My Wishlist Projects
         </a>
 
-        <a href="{{ route('followers.index') }}" @class(['menu-link', 'active' => request()->routeIs('followers.*')])
+        <a href="{{route('followers.show')}}" @class(['menu-link', 'active' => request()->routeIs('followers.*')])
                 @if (request()->routeIs('followers.*')) aria-current="page" @endif>
                 <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />

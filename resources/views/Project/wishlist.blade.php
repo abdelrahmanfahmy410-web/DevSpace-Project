@@ -26,7 +26,7 @@
         </p>
         <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
 
-        <form action="{{ route('wishlist') }}" method="GET">
+        <form action="{{ route('wishlist.index') }}" method="GET">
             <div class="filter-group">
                 <label for="search">Search Keywords</label>
                 <input type="text" name="search" id="search" class="form-control-custom" placeholder="Project name..." value="{{ request('search') }}">
@@ -54,7 +54,7 @@
             <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 10px; font-weight: 600;">Apply Filters</button>
                 @if(request()->hasAny(['search', 'type', 'skill']))
-                    <a href="{{ route('wishlist') }}" class="btn btn-outline" style="width: 100%; padding: 10px; text-align: center;">Clear Filters</a>
+                    <a href="{{ route('wishlist.index') }}" class="btn btn-outline" style="width: 100%; padding: 10px; text-align: center;">Clear Filters</a>
                 @endif
             </div>
         </form>
@@ -66,6 +66,22 @@
             <a href="{{ route('projects.index') }}" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Browse All</a>
         </header>
 
+        <div class="grid-cards">
+            @forelse($projects as $project)
+                <div class="card" id="project-card-{{ $project->id }}">
+                    <div class="card__body" style="padding: 16px;">
+                        <h3 class="heading-4" style="margin-bottom: 8px;">{{ $project->title }}</h3>
+                        <p class="text-muted" style="font-size: 0.88rem; margin-bottom: 12px;">
+                            {{ Str::limit($project->description, 100) }}
+                        </p>
+                        @if($project->type)
+                            <span class="badge" style="background: #e8f5ee; color: #1A7A4A; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem;">
+                                {{ ucfirst($project->type) }}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="card__footer">
+                        <div class="card__actions-right">
                             <a href="{{ route('projects.my_details', $project->id) }}" class="btn btn-primary" style="font-size: 13px; padding: 6px 14px;">
                                 View Project
                             </a>
@@ -107,4 +123,4 @@ document.querySelectorAll('.wishlist-btn').forEach(button => {
     });
 });
 </script>
-@endsection 
+@endsection

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB; // add this
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -105,11 +105,9 @@ class User extends Authenticatable
     return $this->hasMany(TeamRole::class);
 } 
 
-public function following()
+public function following(): BelongsToMany
 {
-    
-    return $this->belongsToMany(User::class, 'followings', 'follower_id', 'following_id')
-                ->withTimestamps();
+    return $this->belongsToMany(User::class, 'followings', 'follower_id', 'following_id')->withTimestamps();
 }
 
 public function followers()

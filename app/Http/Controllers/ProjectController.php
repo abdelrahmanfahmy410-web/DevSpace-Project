@@ -273,14 +273,14 @@ class ProjectController extends Controller
   //assigned projects for the current user
 
     public function assignedProjects(Request $request)
-{
+   {
     $userId = auth()->id();
     $search = $request->input('search');
 
     $projects = Project::whereHas('teamRoleRecords', function ($q) use ($userId) {
         $q->where('user_id', $userId)
         ->where('role', '!=', 'Project Creator') // Exclude projects where the user is the creator
-        ->where('status', 'pending'); // Only include projects where the user's role is pending
+        ->whereIn('status',  ['pending', 'approved']); // Only include projects where the user's role is pending or approved
         })
 
     ->when($search, function ($query) use ($search) {

@@ -152,6 +152,7 @@
                     @if ($project->team_roles->isNotEmpty())
                         <div class="project-list">
                             @foreach ($project->team_roles as $member)
+                                @if($member->pivot->status == 'approved')
                                 <div class="project-list-item">
                                     <div class="member-info">
                                         <strong>{{ $member->name ?? 'Team member' }}</strong>
@@ -162,6 +163,7 @@
                                         <a href="{{ route('member.other_profile', $member->id) }}" class="btn-member btn-profile">View Profile</a>
                                     </div>
                                 </div>
+                            @endif
                             @endforeach
                         </div>
                     @else

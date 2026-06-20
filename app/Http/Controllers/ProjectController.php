@@ -139,7 +139,8 @@ class ProjectController extends Controller
         // Ensure the creator is added to the team
         if (! $project->team_roles()->where('user_id', auth()->id())->exists()) {
             $project->team_roles()->attach(auth()->id(), [
-                'role' => 'Project Creator',
+                'role'   => 'Project Creator',
+                'status' => 'approved',
             ]);
         }
 

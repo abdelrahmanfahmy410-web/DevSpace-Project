@@ -588,6 +588,7 @@
                     @if ($project->team_roles->isNotEmpty())
                         <div class="project-list">
                             @foreach ($project->team_roles as $member)
+                            @if($member->status == 'approved')
                                 <div class="project-list-item">
                                     <div class="member-info">
                                         <strong>{{ $member->name ?? 'Team member' }}</strong>
@@ -610,6 +611,7 @@
                                         </a>
                                     </div>
                                 </div>
+                            @endif
                             @endforeach
                         </div>
                     @else

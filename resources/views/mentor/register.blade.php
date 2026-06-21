@@ -12,7 +12,7 @@
 </head>
 
 <body>
-@include('layouts.toaster')
+@extends('layouts.toaster')
 
 <div class="register-page">
     <div class="register-container">

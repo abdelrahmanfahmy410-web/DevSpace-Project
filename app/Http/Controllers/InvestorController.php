@@ -43,9 +43,11 @@ class InvestorController extends Controller
             'organization' => 'required|string|max:255'
         ]);
       //save img
+    //  dd($request->all());
       $imagePath = null;
       if ($request->hasFile('profile_picture')) {
         $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+      }
         $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -66,7 +68,7 @@ class InvestorController extends Controller
               ]);
               auth()->login($user);
               return redirect('/');  
-    }     
+    
     }
     /**
      * Display the specified resource.
